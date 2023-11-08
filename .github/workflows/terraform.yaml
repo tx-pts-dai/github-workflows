@@ -1,0 +1,125 @@
+name: Terraform
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "The environment name"
+        type: string
+        required: false
+
+      account_id:
+        description: "The AWS Account ID"
+        type: number
+        required: false
+
+      role_name:
+        description: "The role name to assume"
+        type: string
+        required: false
+
+      aws_region:
+        description: "The AWS region"
+        type: string
+        required: false
+        default: eu-central-1
+
+      terraform_version:
+        description: "The Terraform version to use"
+        type: string
+        required: false
+        default: 1.5.6
+
+      state_bucket:
+        description: "The S3 bucket to store the state"
+        type: string
+        required: false
+
+      state_key:
+        description: "The S3 key to store the state"
+        type: string
+        required: false
+
+      terraform_dir:
+        description: "The directory where the Terraform files are located"
+        type: string
+        required: false
+        default: .
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    concurrency:
+      group: ${{ github.head_ref || github.run_id }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ inputs.account_id }}:role/${{ inputs.role_name }}
+          aws-region: ${{ inputs.aws_region }}
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+
+      - name: Terraform Init
+        id: init
+        run: >
+          terraform
+          -chdir="${{ inputs.terraform_dir }}"
+          init
+          -backend-config="key=${{ inputs.state_key }}"
+          -backend-config="bucket=${{ inputs.state_bucket }}"
+          -reconfigure
+
+      - name: Terraform Format
+        id: fmt
+        run: >
+          terraform
+          -chdir="${{ inputs.terraform_dir }}"
+          fmt
+          -check
+          -recursive
+
+      - name: Terraform Validate
+        id: validate
+        run: >
+          terraform
+          -chdir="${{ inputs.terraform_dir }}"
+          validate
+
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: >
+          terraform
+          -chdir="${{ inputs.terraform_dir }}"
+          plan
+          -no-color
+          -input=false
+          -lock=false
+          -var="environment=${{ inputs.environment }}"
+          -var="github_repo=${{ github.event.repository.name }}"
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: >
+          terraform
+          -chdir="${{ inputs.terraform_dir }}"
+          apply
