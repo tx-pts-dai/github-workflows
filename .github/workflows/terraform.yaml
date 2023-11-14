@@ -2,54 +2,71 @@ name: Terraform
 on:
   workflow_call:
     inputs:
-      environment:
-        description: "The environment name"
-        type: string
-        required: false
-
-      account_id:
-        description: "The AWS Account ID"
-        type: number
-        required: false
-
-      role_name:
-        description: "The role name to assume"
-        type: string
-        required: false
-
-      aws_region:
+      aws-region:
         description: "The AWS region"
         type: string
         required: false
         default: eu-central-1
 
-      terraform_version:
-        description: "The Terraform version to use"
+      aws-role-duration-seconds:
+        description: "Session duration to request for the give role"
+        type: number
+        required: false
+        default: 7200
+
+      aws-role-arn:
+        description: "ARN of the role to assume"
         type: string
         required: false
-        default: 1.5.6
+        default: ""
 
-      state_bucket:
-        description: "The S3 bucket to store the state"
+      tflint-version:
+        description: "tflint version to use"
         type: string
         required: false
+        default: v0.48.0
 
-      state_key:
-        description: "The S3 key to store the state"
-        type: string
-        required: false
-
-      terraform_dir:
+      terraform-dir:
         description: "The directory where the Terraform files are located"
         type: string
         required: false
         default: .
 
+      terraform-version:
+        # should we compute it from the main.tf files ? or tfenv ? or latest ?
+        description: "The Terraform version to use"
+        type: string
+        required: false
+        default: 1.6.1
+
+      terraform-init-parameters:
+        description: "The terraform init parameters"
+        type: string
+        required: false
+        default: ""
+
+      terraform-var-file:
+        description: "The terraform apply/plan/validate var file to use"
+        type: string
+        required: false
+        default: ""
+
+      terraform-var:
+        description: "The terraform apply/plan var to use"
+        type: string
+        required: false
+        default: ""
+
+      github-default-branch:
+        description: "default branch of the repos"
+        type: string
+        required: false
+        default: main
+
 jobs:
   terraform:
     name: Terraform
     runs-on: ubuntu-latest
-
     concurrency:
       group: ${{ github.head_ref || github.run_id }}
       cancel-in-progress: false
@@ -58,25 +75,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v3
-      #   with:
-      #     role-to-assume: arn:aws:iam::${{ inputs.account_id }}:role/${{ inputs.role_name }}
-      #     aws-region: ${{ inputs.aws_region }}
+      - name: Configure AWS Credentials via IAM role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ inputs.aws-role-arn }}
+          aws-region: ${{ inputs.aws-region }}
 
-      # - uses: hashicorp/setup-terraform@v2
-      #   with:
-      #     terraform_version: ${{ inputs.terraform_version }}
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform-version }}
 
-      # - name: Terraform Init
-      #   id: init
-      #   run: >
-      #     terraform
-      #     -chdir="${{ inputs.terraform_dir }}"
-      #     init
-      #     -backend-config="key=${{ inputs.state_key }}"
-      #     -backend-config="bucket=${{ inputs.state_bucket }}"
-      #     -reconfigure
+      - name: Terraform Init
+        id: init
+        run: >
+          terraform
+          -chdir="${{ inputs.terraform-dir }}"
+          init "${{ inputs.terraform-init-parameters }}"
 
       # - name: Terraform Format
       #   id: fmt
