@@ -1,0 +1,30 @@
+# Automate the lookup of project configs from a central config server
+
+name: Project Configs
+
+on:
+  workflow_call:
+    inputs:
+      # TODO: Add org input
+      repository:
+        description: The repo name
+        type: string
+        required: true
+    outputs:
+      project_config:
+        description: Project config data
+        value: ${{ jobs.config.outputs.project_config }}
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      project_config: ${{ steps.config.outputs.config }}
+    steps:
+      - name: Checkout to repository
+        uses: actions/checkout@v4
+
+      - name: Get config data
+        id: config
+        run: echo "config=$(jq -c '.["${{ inputs.repository }}"]' .github/config.json)" >> $GITHUB_OUTPUT
+        # run: curl -s https://configserver/config/project-xzy/ghaction >> $GITHUB_ENV

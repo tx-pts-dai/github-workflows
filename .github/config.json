@@ -1,0 +1,34 @@
+{
+  "github-workflows": [
+    {
+      "environment": "sandbox",
+      "region": "eu-central-1",
+      "account_id": 123456789012,
+      "role_name": "iac",
+      "bucket_name": "iac-terraform-state",
+      "bucket_key": "sandbox",
+      "terraform_dir": "terraform",
+      "pr_comment": false
+    },
+    {
+      "environment": "dev",
+      "region": "eu-central-1",
+      "account_id": 123456789012,
+      "role_name": "iac",
+      "bucket_name": "iac-terraform-state",
+      "bucket_key": "dev",
+      "terraform_dir": "terraform",
+      "pr_comment": false
+    },
+    {
+      "environment": "prod",
+      "region": "eu-central-1",
+      "account_id": 987654312321,
+      "role_name": "iac",
+      "bucket_name": "iac-terraform-state",
+      "bucket_key": "prod",
+      "terraform_dir": "terraform",
+      "pr_comment": true
+    }
+  ]
+}

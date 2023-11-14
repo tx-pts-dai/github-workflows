@@ -1,0 +1,44 @@
+name: Call Resuable Workflows - Static
+
+on:
+  workflow_dispatch:
+
+  # push:
+  # pull_request:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  # config:
+  #   users: ./.github/workflows/config.yaml
+  #   with:
+  #     project: ${{ github.project }}
+
+  # build:
+  #   name: Call Build Workflow
+  #   uses: ./.github/workflows/build.yaml
+
+  call-terraform:
+    needs: build
+    strategy:
+      matrix: # Matrix can be fetched from a file or from a workflow. $\{{ fromJson(needs.config.outputs.stdout) }}
+        config:
+          - environemnt: dev
+            region: eu-central-1
+            account_id: 123456789012
+            role_name: iac
+            bucket_name: iac-terraform-state
+            bucket_key: dev
+
+
+    name: Call Terraform Workflow
+    uses: ./.github/workflows/tf-apply-main.yaml # git@github.com:tx-pts-dai/shared-github-workflows/.github/workflows.terraform.yaml:main
+    with:
+      environment: ${{ matrix.config.environment }}
+      region: ${{ matrix.config.region }}
+      account_id: ${{ matrix.config.account_id }}
+      role_name: ${{ matrix.config.role_name }}
+      bucket_name: ${{ matrix.config.bucket_name }}
+      bucket_key: ${{ matrix.config.bucket_key }}

@@ -1,0 +1,34 @@
+name: Call Workflow - Dynamic
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  project_config:
+    uses: ./.github/workflows/project-config.yaml
+    with:
+      repository: ${{ github.event.repository.name }}
+
+  terraform:
+    needs: project_config
+    strategy:
+      fail-fast: false
+      matrix: # Matrix can be fetched from a file or from a workflow. $\{{ fromJson(needs.config.outputs.stdout) }}
+        config: ${{ fromJson(needs.project_config.outputs.project_config) }}
+
+    name: TF Workflow
+    uses: ./.github/workflows/tf-plan-apply.yaml
+    with:
+      environment: ${{ matrix.config.environment }}
+      region: ${{ matrix.config.region }}
+      account_id: ${{ matrix.config.account_id }}
+      role_name: ${{ matrix.config.role_name }}
+      state_bucket: ${{ matrix.config.state_bucket }}
+      state_key: ${{ matrix.config.state_key }}
+      terraform_dir: ${{ matrix.config.terraform_dir }}
+      pr_comment: ${{ matrix.config.pr_comment }}

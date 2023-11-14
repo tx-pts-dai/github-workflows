@@ -1,0 +1,203 @@
+name: 'Terraform Plan/Apply'
+
+on:
+  workflow_call:
+    inputs:
+      terraform_version:
+        description: "The Terraform version to use"
+        type: string
+        required: false
+        default: 1.5.6
+
+      terraform_dir:
+        description: "The directory where the Terraform files are located"
+        type: string
+        required: false
+        default: terraform
+
+      state_key:
+        description: "The S3 key to store the state"
+        type: string
+        required: false
+
+      state_bucket:
+        description: "The S3 bucket to store the state"
+        type: string
+        required: false
+
+      region:
+        description: "The AWS region"
+        type: string
+        required: false
+
+      account_id:
+        description: "The AWS Account ID"
+        type: number
+        required: false
+
+      role_name:
+        description: "The role name to assume"
+        type: string
+        required: false
+
+      environment:
+        description: "The environment name"
+        type: string
+        required: false
+
+      pr_comment:
+        type: boolean
+        description: "Comment on PR with Terraform Plan"
+        required: false
+        default: false
+
+jobs:
+  terraform-plan:
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
+    defaults:
+      run:
+        working-directory: ${{ inputs.terraform_dir }}
+    outputs:
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_wrapper: false
+        terraform_version: ${{ inputs.terraform_version }}
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Format
+      run: terraform fmt -check
+
+    # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
+    - name: Terraform Plan
+      id: tf-plan
+      run: |
+        export exitcode=0
+        terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+
+        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+
+        if [ $exitcode -eq 1 ]; then
+          echo Terraform Plan Failed!
+          exit 1
+        else
+          exit 0
+        fi
+
+    - name: Publish Terraform Plan
+      uses: actions/upload-artifact@v3
+      with:
+        name: tfplan
+        path: tfplan
+
+    - name: Create String Output
+      id: tf-plan-string
+      run: |
+        TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+
+        delimiter="$(openssl rand -hex 8)"
+        echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+        echo "# Terraform Plan Output: ${{ inputs.environment }}" >> $GITHUB_OUTPUT
+        echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo '```terraform' >> $GITHUB_OUTPUT
+        echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+        echo '```' >> $GITHUB_OUTPUT
+        echo "</details>" >> $GITHUB_OUTPUT
+        echo "${delimiter}" >> $GITHUB_OUTPUT
+
+    - name: Publish Terraform Plan to Task Summary
+      env:
+        SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+      run: |
+        echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+
+    - name: Push Terraform Output to PR
+      if: github.ref != 'refs/heads/main' && inputs.pr_comment == true
+      uses: actions/github-script@v7
+      env:
+        SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
+      # https://github.com/actions/github-script/blob/main/dist/index.js
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          });
+
+          const botComment = comments.find(comment => {
+            return comment.user.type === 'Bot' && comment.body.includes('Terraform Plan Output: ${{ inputs.environment }}');
+          });
+
+          const summary = `${process.env.SUMMARY}`;
+          const footer = `*Pusher: @${context.actor}, Action: \`${context.event_name}\`, Working Directory: \`${{ inputs.terraform_dir }}\`, Workflow: \`${context.workflow}\`*`;
+          if (botComment) {
+            github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: `${summary}\n${footer}`
+            });
+          } else {
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `${summary}\n${footer}`
+            });
+          }
+
+  terraform-apply:
+    name: 'Terraform Apply'
+    if: github.ref == 'refs/heads/main' && needs.terraform-plan.outputs.tfplanExitCode == 2
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [terraform-plan]
+
+    permissions:
+      id-token: write
+      contents: read
+
+    defaults:
+      run:
+        working-directory: ${{ inputs.terraform_dir }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ inputs.terraform_version }}
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init
+
+    # Download saved plan from artifacts
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v3
+      with:
+        name: tfplan
+
+    # Terraform Apply
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan

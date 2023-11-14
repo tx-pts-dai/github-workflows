@@ -1,3 +1,4 @@
+# Continuous main branch deployment with Terraform
 name: Terraform
 on:
   workflow_call:
@@ -53,7 +54,6 @@ jobs:
     permissions:
       contents: read
       id-token: write
-      pull-requests: write
 
     concurrency:
       group: ${{ github.head_ref || github.run_id }}
@@ -74,36 +74,28 @@ jobs:
           terraform_version: ${{ inputs.terraform_version }}
 
       - name: Terraform Init
-        id: init
-        run: >
-          terraform
+        run: terraform
           -chdir="${{ inputs.terraform_dir }}"
           init
           -backend-config="key=${{ inputs.state_key }}"
           -backend-config="bucket=${{ inputs.state_bucket }}"
-          -reconfigure
 
       - name: Terraform Format
-        id: fmt
-        run: >
-          terraform
+        run: terraform
           -chdir="${{ inputs.terraform_dir }}"
           fmt
           -check
           -recursive
 
       - name: Terraform Validate
-        id: validate
-        run: >
-          terraform
+        run: terraform
           -chdir="${{ inputs.terraform_dir }}"
           validate
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        run: >
-          terraform
+        run: terraform
           -chdir="${{ inputs.terraform_dir }}"
           plan
           -no-color
@@ -114,11 +106,11 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
+        if: steps.plan.outcome == "failure"
         run: exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == "refs/heads/main" && github.event_name == "push"
         run: >
           terraform
           -chdir="${{ inputs.terraform_dir }}"
