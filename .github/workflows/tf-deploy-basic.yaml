@@ -1,0 +1,142 @@
+on:
+  workflow_call:
+    inputs:
+      account_id:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+      feedback:
+        required: false
+        type: boolean
+        default: false
+      region:
+        required: true
+        type: string
+      role:
+        type: string
+        required: true
+        default: cicd-iac
+      state_file:
+        required: false
+        type: string
+      state_bucket:
+        required: false
+        type: string
+      terraform_dir:
+        description: "The directory where the Terraform files are located"
+        type: string
+        required: false
+        default: .
+      terraform_version:
+        description: "The Terraform version to use"
+        type: string
+        required: false
+        default: 1.5.6
+      var_file:
+        required: false
+        type: string
+
+jobs:
+  terraform_deployment:
+    name: Deployment
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    concurrency:
+      group: ${{ github.head_ref || github.run_id }} # TODO parallel execution on plan vs sequential on apply to discuss
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.terraform_dir }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ inputs.account_id }}:role/${{ inputs.role }}
+          aws-region: ${{ inputs.region }}
+
+      - name: Terraform setup
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+
+      - name: Terraform Init
+        run: |
+          tf_args=""
+          if [ "${{ inputs.state_file }}" != "" ]; then
+             tf_args='-backend-config="key=${{ inputs.state_file }}" -backend-config="bucket=${{ inputs.state_bucket }}" -reconfigure'
+          fi
+          terraform init ${tf_args}
+
+      - name: Terraform Format
+        run: terraform fmt -recursive -check
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan # TODO discuss artifact topic
+        run: |
+          tf_args=''
+          if [ "${{ inputs.var_file }}" == false ]; then
+            tf_args='-var-file="environments/${{ matrix.environment }}.tfvars"'
+          fi
+
+          terraform plan \
+           -input=false \
+           -lock=false \
+           -var="environment=${{ inputs.environment }}" \
+           -var="github_repo=${{ github.event.repository.name }}" \
+           -out="plan" \
+           ${tf_args}
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false "plan"
+
+      - uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request' && ${{ inputs.feedback }} == true
+        env:
+          PLAN: "terraform\n${{ steps.plan_prod.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const environmentString = `Environment: PROD`;
+            const output = `#### ${environmentString}
+            * Terraform Format and Style 🖌\`${{ steps.fmt_prod.outcome }}\`
+            * Terraform Initialization ⚙️\`${{ steps.init_prod.outcome }}\`
+            * Terraform Validation 🤖${{ steps.validate_prod.outputs.stdout }}
+            * Terraform Plan 📖\`${{ steps.plan_prod.outcome }}\`
+            <details><summary>Show Plan</summary>
+            \`\`\`${process.env.PLAN}\`\`\`
+            </details>
+            *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            const comments = await github.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            const planComment = comments.data.find(c => c.body.includes(environmentString));
+            if (planComment) {
+              await github.issues.updateComment({
+                issue_number: context.issue.number,
+                comment_id: planComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            } else {
+              await github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            }
