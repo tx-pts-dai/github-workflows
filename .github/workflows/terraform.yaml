@@ -128,4 +128,4 @@ jobs:
           terraform
           -chdir='${{ inputs.terraform-dir }}'
           apply
-          -input=tfplan < /dev/null
+          -input=false tfplan < /dev/null
