@@ -126,6 +126,6 @@ jobs:
         if: github.ref == 'refs/heads/${{ inputs.github-default-branch }}' && github.event_name == 'push'
         run: >
           terraform
-          -chdir='${{ inputs.terraform- dir }}'
+          -chdir='${{ inputs.terraform-dir }}'
           apply
           -input=tfplan < /dev/null
