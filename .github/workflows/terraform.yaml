@@ -89,8 +89,8 @@ jobs:
         id: init
         run: >
           terraform
-          -chdir="${{ inputs.terraform-dir }}"
-          init "${{ inputs.terraform-init-parameters }}"
+          -chdir=${{ inputs.terraform-dir }}
+          init ${{ inputs.terraform-init-parameters }}
 
       # - name: Terraform Format
       #   id: fmt
