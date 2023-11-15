@@ -119,7 +119,7 @@ jobs:
           plan
           -input=false
           -lock=false
-          -var-file="${{ inputs.terraform-var-file }}
+          -var-file="${{ inputs.terraform-var-file }}"
           ${{ inputs.terraform-var }} -out=tfplan < /dev/null
 
       - name: Terraform Apply
