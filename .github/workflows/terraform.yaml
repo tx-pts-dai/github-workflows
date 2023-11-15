@@ -45,7 +45,7 @@ on:
         required: false
         default: ''
 
-      terraform-action-var-file:
+      terraform-var-file:
         description: 'The terraform apply/plan/validate var file to use'
         type: string
         required: false
