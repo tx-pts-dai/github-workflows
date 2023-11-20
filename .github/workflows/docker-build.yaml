@@ -1,0 +1,58 @@
+name: Docker
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        description: 'Name of the Docker image to build'
+        type: string
+        required: false
+        default: ${{ github.event.repository.name }}
+      image_tag:
+        description: 'Tag of the Docker image to build'
+        type: string
+        required: false
+        default: ${{ github.sha }}
+      docker_context:
+        description: 'Path to the build context'
+        type: string
+        required: false
+        default: .
+      artifact_retention_days:
+        description: 'Number of days to retain the artifact'
+        type: number
+        required: false
+        default: 5
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and export
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.docker_context }}
+          # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
+          tags: ${{ inputs.image_name }}:${{ inputs.image_tag }}
+          outputs: type=docker,dest=/tmp/${{ inputs.image_name }}.tar
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.image_name }}-${{ inputs.image_tag }}
+          path: /tmp/${{ inputs.image_name }}.tar
+          retention-days: ${{ inputs.artifact_retention_days }}

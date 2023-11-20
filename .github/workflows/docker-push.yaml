@@ -1,0 +1,72 @@
+name: Docker
+
+on:
+  workflow_call:
+    inputs:
+      aws_account_id:
+        description: 'AWS Account ID'
+        type: string
+        required: true
+      aws_region:
+        description: 'AWS Region'
+        type: string
+        required: true
+      aws_role_name:
+        description: 'AWS Role Name'
+        type: string
+        required: true
+      image_name:
+        description: 'Name of the Docker image to build'
+        type: string
+        required: false
+        default: ${{ github.event.repository.name }}
+      image_tag:
+        description: 'Tag of the Docker image to build'
+        type: string
+        required: false
+        default: ${{ github.sha }}
+      docker_context:
+        description: 'Path to the build context'
+        type: string
+        required: false
+        default: .
+      artifact_retention_days:
+        description: 'Number of days to retain the artifact'
+        type: number
+        required: false
+        default: 5
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  push:
+    name: Push to ECR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.image_name }}-${{ inputs.image_tag }}
+          path: /tmp
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ inputs.image_name }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          docker load -i /tmp/$REPOSITORY.tar
+          docker tag $REPOSITORY:$IMAGE_TAG $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
