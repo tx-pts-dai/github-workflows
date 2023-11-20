@@ -54,7 +54,7 @@ jobs:
       id-token: write
       pull-requests: write
     concurrency:
-      group: ${{ github.head_ref || github.run_id }} # TODO discuss this since it does not have the same expected behaviour
+      group: ${{ inputs.environment }} # ${{ github.head_ref || github.run_id }} # The order is random, so need to find another way to apply in a specific order
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -66,8 +66,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::${{ inputs.account_id }}:role/${{ inputs.role }}
-          aws-region: ${{ inputs.region }}
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
+          aws-region: ${{ inputs.aws_region }}
 
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
@@ -78,7 +78,7 @@ jobs:
         id: init
         run: |
           tf_args=""
-          if [ "${{ inputs.state_key }}" != "" ] && [ "${{ inputs.tf_state_bucket }}" != "" ]; then
+          if [ "${{ inputs.tf_state_key }}" != "" ] && [ "${{ inputs.tf_state_bucket }}" != "" ]; then
              tf_args='-backend-config=key=${{ inputs.tf_state_key }} -backend-config=bucket=${{ inputs.tf_state_bucket }}'
           fi
           terraform init ${tf_args}
@@ -95,7 +95,7 @@ jobs:
         id: plan
         run: |
           tf_args=''
-          if [ "${{ inputs.var_file }}" == false ]; then
+          if [ "${{ inputs.tf_var_file }}" == false ]; then
             tf_args='-var-file="environments/${{ matrix.environment }}.tfvars"'
           fi
 
@@ -104,6 +104,7 @@ jobs:
            -lock=false \
            -var="environment=${{ inputs.environment }}" \
            -var="github_repo=${{ github.event.repository.name }}" \
+           -var="region=${{ inputs.aws_region }}" \
            -out="plan" \
            ${tf_args}
 
@@ -120,50 +121,51 @@ jobs:
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
 
-          echo "$TERRAFORM_PLAN" >> $GITHUB_STEP_SUMMARY
+          echo "$GITHUB_OUTPUT" >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false "plan"
 
-      - uses: actions/github-script@0.9.0
-        if: github.event_name == 'pull_request' && ${{ inputs.feedback }} == true
-        env:
-          PLAN: "terraform\n${{ steps.plan_prod.outputs.stdout }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          # TODO discuss how to handle multiple environments and fix inputs
-          script: |
-            const environmentString = `Environment: PROD`;
-            const output = `#### ${environmentString}
-            * Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            * Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            * Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
-            * Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-            <details><summary>Show Plan</summary>
-            \`\`\`${process.env.PLAN}\`\`\`
-            </details>
-            *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
-            const comments = await github.issues.listComments({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 100
-            });
-            const planComment = comments.data.find(c => c.body.includes(environmentString));
-            if (planComment) {
-              await github.issues.updateComment({
-                issue_number: context.issue.number,
-                comment_id: planComment.id,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              });
-            } else {
-              await github.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              });
-            }
+      #### It runs even wih tf_feedback == false
+      # - uses: actions/github-script@0.9.0
+      #   if: github.event_name == 'pull_request' && ${{ inputs.tf_feedback }} == true
+      #   env:
+      #     PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     # TODO discuss how to handle multiple environments and fix inputs
+      #     script: |
+      #       const environmentString = `Environment: PROD`;
+      #       const output = `#### ${environmentString}
+      #       * Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+      #       * Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+      #       * Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
+      #       * Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+      #       <details><summary>Show Plan</summary>
+      #       \`\`\`${process.env.PLAN}\`\`\`
+      #       </details>
+      #       *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+      #       const comments = await github.issues.listComments({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         per_page: 100
+      #       });
+      #       const planComment = comments.data.find(c => c.body.includes(environmentString));
+      #       if (planComment) {
+      #         await github.issues.updateComment({
+      #           issue_number: context.issue.number,
+      #           comment_id: planComment.id,
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           body: output
+      #         });
+      #       } else {
+      #         await github.issues.createComment({
+      #           issue_number: context.issue.number,
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           body: output
+      #         });
+      #       }
