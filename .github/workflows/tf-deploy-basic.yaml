@@ -54,7 +54,8 @@ jobs:
       id-token: write
       pull-requests: write
     concurrency:
-      group: ${{ inputs.environment }} # ${{ github.head_ref || github.run_id }} # The order is random, so need to find another way to apply in a specific order
+      group: ${{ github.workflow }}-${{ github.ref }}
+      #group: ${{ github.head_ref || github.run_id }} # The order is random, so need to find another way to apply in a specific order
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -64,7 +65,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
           aws-region: ${{ inputs.aws_region }}
@@ -94,20 +95,36 @@ jobs:
       - name: Terraform Plan # TODO discuss artifact topic
         id: plan
         run: |
+          export exitcode=0
+
           tf_args=''
           if [ "${{ inputs.tf_var_file }}" == false ]; then
             tf_args='-var-file="environments/${{ matrix.environment }}.tfvars"'
           fi
 
           terraform plan \
+           -detailed-exitcode \
+           -no-color \
            -input=false \
            -lock=false \
            -var="environment=${{ inputs.environment }}" \
            -var="github_repo=${{ github.event.repository.name }}" \
            -var="region=${{ inputs.aws_region }}" \
            -out="plan" \
-           ${tf_args}
+           ${tf_args} || exitcode=$?
 
+          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+
+          if [ $exitcode -eq 1 ]; then
+            echo Terraform Plan Failed!
+            exit 1
+          else
+            exit 0
+          fi
+
+      - name: Create String Output
+        id: tf-plan-string
+        run: |
           TERRAFORM_PLAN=$(terraform show -no-color plan)
 
           delimiter="$(openssl rand -hex 8)"
@@ -121,10 +138,14 @@ jobs:
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
 
-          echo "$GITHUB_OUTPUT" >> $GITHUB_STEP_SUMMARY
+      - name: Publish Terraform Plan to Task Summary
+        env:
+          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+        run: |
+          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && ${{ steps.plan.outputs.exitcode }} == '2' # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
         run: terraform apply -auto-approve -input=false "plan"
 
       #### It runs even wih tf_feedback == false
