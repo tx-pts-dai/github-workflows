@@ -1,6 +1,11 @@
 on:
   workflow_call:
     inputs:
+      artifact_path:
+        description: "The path of the artifacts to download"
+        type: string
+        required: false
+        default: ""
       aws_account_id:
         description: "The AWS account ID"
         type: string
@@ -69,6 +74,11 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
           aws-region: ${{ inputs.aws_region }}
+
+      - uses: actions/download-artifact@v3
+        if: ${{ inputs.download_path }} != ""
+        with:
+          path: ${{ inputs.artifact_path }}
 
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
@@ -145,48 +155,46 @@ jobs:
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && ${{ steps.plan.outputs.exitcode }} == '2' # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.plan.outputs.exitcode == '2' # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
         run: terraform apply -auto-approve -input=false "plan"
 
-      #### It runs even wih tf_feedback == false
-      # - uses: actions/github-script@0.9.0
-      #   if: github.event_name == 'pull_request' && ${{ inputs.tf_feedback }} == true
-      #   env:
-      #     PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     # TODO discuss how to handle multiple environments and fix inputs
-      #     script: |
-      #       const environmentString = `Environment: PROD`;
-      #       const output = `#### ${environmentString}
-      #       * Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-      #       * Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-      #       * Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
-      #       * Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-      #       <details><summary>Show Plan</summary>
-      #       \`\`\`${process.env.PLAN}\`\`\`
-      #       </details>
-      #       *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
-      #       const comments = await github.issues.listComments({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         per_page: 100
-      #       });
-      #       const planComment = comments.data.find(c => c.body.includes(environmentString));
-      #       if (planComment) {
-      #         await github.issues.updateComment({
-      #           issue_number: context.issue.number,
-      #           comment_id: planComment.id,
-      #           owner: context.repo.owner,
-      #           repo: context.repo.repo,
-      #           body: output
-      #         });
-      #       } else {
-      #         await github.issues.createComment({
-      #           issue_number: context.issue.number,
-      #           owner: context.repo.owner,
-      #           repo: context.repo.repo,
-      #           body: output
-      #         });
-      #       }
+      - uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request' && inputs.tf_feedback == true
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const environmentString = `Environment: PROD`;
+            const output = `#### ${environmentString}
+            * Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            * Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            * Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
+            * Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            <details><summary>Show Plan</summary>
+            \`\`\`${process.env.PLAN}\`\`\`
+            </details>
+            *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            const comments = await github.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            const planComment = comments.data.find(c => c.body.includes(environmentString));
+            if (planComment) {
+              await github.issues.updateComment({
+                issue_number: context.issue.number,
+                comment_id: planComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            } else {
+              await github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            }
