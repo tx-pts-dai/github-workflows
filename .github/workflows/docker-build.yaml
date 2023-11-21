@@ -8,11 +8,6 @@ on:
         type: string
         required: false
         default: ${{ github.event.repository.name }}
-      image_tag:
-        description: 'Tag of the Docker image to build'
-        type: string
-        required: false
-        default: ${{ github.sha }}
       docker_context:
         description: 'Path to the build context'
         type: string
@@ -45,7 +40,7 @@ jobs:
         with:
           context: ${{ inputs.docker_context }}
           # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
-          tags: ${{ inputs.image_name }}:${{ inputs.image_tag }}
+          tags: ${{ inputs.image_name }}:${{ github.sha }}
           outputs: type=docker,dest=/tmp/${{ inputs.image_name }}.tar
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -53,6 +48,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.image_name }}-${{ inputs.image_tag }}
+          name: ${{ inputs.image_name }}-${{ github.sha }}
           path: /tmp/${{ inputs.image_name }}.tar
           retention-days: ${{ inputs.artifact_retention_days }}

@@ -48,7 +48,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: ${{ inputs.image_name }}-${{ inputs.image_tag }}
+          name: ${{ inputs.image_name }}-${{ github.sha }}
           path: /tmp
 
       - name: Configure AWS credentials
@@ -65,8 +65,16 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ inputs.image_name }}
+          SOURCE_TAG: ${{ github.sha }}
           IMAGE_TAG: ${{ inputs.image_tag }}
+          BRANCH: ${{ github.head_ref }}
         run: |
           docker load -i /tmp/$REPOSITORY.tar
-          docker tag $REPOSITORY:$IMAGE_TAG $REGISTRY/$REPOSITORY:$IMAGE_TAG
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:$SOURCE_TAG
+          docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+          if [ $BRANCH == 'main' ] or [ $BRANCH == 'master' ]; then
+            docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:latest
+          fi
+
+          docker image push --all-tags $REPOSITORY:$SOURCE_TAG
