@@ -1,0 +1,53 @@
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        description: "The Node.js version to use"
+        type: string
+        required: false
+        default: 20
+      source_dir:
+        description: "The directory where the Lambda source code is located"
+        type: string
+        required: false
+        default: src
+      build_dir:
+        description: "The directory where the Lambda build artifacts are located"
+        type: string
+        required: false
+        default: dist
+      artifact_retention_days:
+        description: "Number of days to retain the artifact"
+        type: number
+        required: false
+        default: 5
+jobs:
+  build:
+    name: Build Lamda Layer
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.source_dir }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        id: build
+        run: |
+          fname=$(basename ${{ inputs.source_dir }})
+          fpath=${{ inputs.build_dir }}/$fname-v${{ inputs.node_version }}.zip
+          mkdir -p nodejs ${{ inputs.build_dir }}
+          npm install --omit=dev
+          mv node_modules nodejs/
+          zip -r $fpath nodejs
+          echo "file_name=$fname" >> $GITHUB_OUTPUT
+          echo "file_path=$fpath" >> $GITHUB_OUTPUT
+
+      - name: Archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.build.outputs.file_name }}-${{ inputs.node_version }}
+          path: ${{ inputs.source_dir }}/${{ steps.build.outputs.file_path }}
+          if-no-files-found: error
+          retention-days: ${{ inputs.artifact_retention_days }}
