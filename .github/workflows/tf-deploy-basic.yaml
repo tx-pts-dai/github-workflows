@@ -1,6 +1,11 @@
 on:
   workflow_call:
     inputs:
+      artifact_path:
+        description: "The path of the artifacts to download"
+        type: string
+        required: false
+        default: ""
       aws_account_id:
         description: "The AWS account ID"
         type: string
@@ -18,6 +23,11 @@ on:
         description: "The environment name"
         type: string
         required: true
+      tf_deploy_override:
+        description: "If true, terraform apply will run regardless of branch"
+        type: boolean
+        required: false
+        default: false
       tf_dir:
         description: "The directory where the Terraform files are located"
         type: string
@@ -36,8 +46,12 @@ on:
         description: "The name of the S3 key to store the Terraform state"
         required: false
         type: string
-      tf_var_file:
-        description: "The name of the Terraform variable file"
+      tf_var_files:
+        description: "Comma separated list of Terraform variable files to pass to the plan command"
+        required: false
+        type: string
+      tf_vars:
+        description: "Comma separated list of Terraform variables to pass to the plan command"
         required: false
         type: string
       tf_version:
@@ -54,7 +68,7 @@ jobs:
       id-token: write
       pull-requests: write
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: ${{ github.workflow }}-${{ inputs.environment }}
       #group: ${{ github.head_ref || github.run_id }} # The order is random, so need to find another way to apply in a specific order
     runs-on: ubuntu-latest
     defaults:
@@ -69,6 +83,11 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
           aws-region: ${{ inputs.aws_region }}
+
+      - uses: actions/download-artifact@v3
+        if: ${{ inputs.download_path }} != ""
+        with:
+          path: ${{ inputs.artifact_path }}
 
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
@@ -92,17 +111,48 @@ jobs:
         id: validate
         run: terraform validate
 
-      - name: Terraform Plan # TODO discuss artifact topic
+      - name: Terraform Plan
         id: plan
         run: |
+          # Terraform Pan Script
+          # As this script grows, it may be worth moving into its own file.
+          #
+          # This script is responsible for running the terraform plan command and saving the output to a file.
+          # Exit codes:
+          # 0 - No changes
+          # 1 - Error
+          # 2 - Changes
+          #
+          # TODO: State lock is required if plan is being saved to a file. Are all backends supported?
+
           export exitcode=0
 
-          tf_args=''
-          if [ "${{ inputs.tf_var_file }}" == false ]; then
-            tf_args='-var-file="environments/${{ matrix.environment }}.tfvars"'
-          fi
+          echo "Current working directory: $(pwd)"
 
-          terraform plan \
+          tf_args=''
+
+          IFS_OLD=$IFS
+
+          IFS=',' read -ra ADDR <<< "${{ inputs.tf_vars }}"
+          for var in "${ADDR[@]}"; do
+            tf_args+=" -var '$var'"
+          done
+
+          IFS=',' read -ra ADDR <<< "${{ inputs.tf_var_files }}"
+          for var_file in "${ADDR[@]}"; do
+            tf_args+=" -var-file=$var_file"
+          done
+
+          IFS=$IFS_OLD
+
+          echo "Debug: tf_args=$tf_args"
+
+          ls environments/
+          ls
+
+          echo "Debug: end of ls"
+
+          terraform -chdir=${{ inputs.tf_dir }} plan \
            -detailed-exitcode \
            -no-color \
            -input=false \
@@ -145,48 +195,46 @@ jobs:
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && ${{ steps.plan.outputs.exitcode }} == '2' # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.plan.outputs.exitcode == '2' || inputs.tf_deploy_override == true # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
         run: terraform apply -auto-approve -input=false "plan"
 
-      #### It runs even wih tf_feedback == false
-      # - uses: actions/github-script@0.9.0
-      #   if: github.event_name == 'pull_request' && ${{ inputs.tf_feedback }} == true
-      #   env:
-      #     PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     # TODO discuss how to handle multiple environments and fix inputs
-      #     script: |
-      #       const environmentString = `Environment: PROD`;
-      #       const output = `#### ${environmentString}
-      #       * Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-      #       * Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-      #       * Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
-      #       * Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-      #       <details><summary>Show Plan</summary>
-      #       \`\`\`${process.env.PLAN}\`\`\`
-      #       </details>
-      #       *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
-      #       const comments = await github.issues.listComments({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         per_page: 100
-      #       });
-      #       const planComment = comments.data.find(c => c.body.includes(environmentString));
-      #       if (planComment) {
-      #         await github.issues.updateComment({
-      #           issue_number: context.issue.number,
-      #           comment_id: planComment.id,
-      #           owner: context.repo.owner,
-      #           repo: context.repo.repo,
-      #           body: output
-      #         });
-      #       } else {
-      #         await github.issues.createComment({
-      #           issue_number: context.issue.number,
-      #           owner: context.repo.owner,
-      #           repo: context.repo.repo,
-      #           body: output
-      #         });
-      #       }
+      - uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request' && inputs.tf_feedback == true
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const environmentString = `Environment: PROD`;
+            const output = `#### ${environmentString}
+            * Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            * Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            * Terraform Validation 🤖${{ steps.validate.outcome }}
+            * Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            <details><summary>Show Plan</summary>
+            \`\`\`${process.env.PLAN}\`\`\`
+            </details>
+            *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            const comments = await github.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            const planComment = comments.data.find(c => c.body.includes(environmentString));
+            if (planComment) {
+              await github.issues.updateComment({
+                issue_number: context.issue.number,
+                comment_id: planComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            } else {
+              await github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+            }
