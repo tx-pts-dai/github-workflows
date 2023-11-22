@@ -131,11 +131,9 @@ jobs:
 
           tf_args=''
 
-          IFS_OLD=$IFS
-
           IFS=',' read -ra ADDR <<< "${{ inputs.tf_vars }}"
           for var in "${ADDR[@]}"; do
-            tf_args+=" -var '$var'"
+            tf_args+=" -var $var"
           done
 
           IFS=',' read -ra ADDR <<< "${{ inputs.tf_var_files }}"
@@ -143,16 +141,7 @@ jobs:
             tf_args+=" -var-file=$var_file"
           done
 
-          IFS=$IFS_OLD
-
-          echo "Debug: tf_args=$tf_args"
-
-          ls environments/
-          ls
-
-          echo "Debug: end of ls"
-
-          terraform -chdir=${{ inputs.tf_dir }} plan \
+          terraform plan \
            -detailed-exitcode \
            -no-color \
            -input=false \
