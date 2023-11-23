@@ -1,7 +1,7 @@
 on:
   workflow_call:
     inputs:
-      artifact_path:
+      github_artifact_path:
         description: "The path of the artifacts to download"
         type: string
         required: false
@@ -33,7 +33,7 @@ on:
         type: string
         required: false
         default: .
-      tf_feedback:
+      github_feedback:
         description: "Whether to post a comment on the PR with the Terraform plan"
         required: false
         type: boolean
@@ -114,7 +114,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          # Terraform Pan Script
+          # Terraform Plan Script
           # As this script grows, it may be worth moving into its own file.
           #
           # This script is responsible for running the terraform plan command and saving the output to a file.
@@ -149,7 +149,7 @@ jobs:
            -var="environment=${{ inputs.environment }}" \
            -var="github_repo=${{ github.event.repository.name }}" \
            -var="region=${{ inputs.aws_region }}" \
-           -out="plan" \
+           -out="tfplan" \
            ${tf_args} || exitcode=$?
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
@@ -185,7 +185,7 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.plan.outputs.exitcode == '2' || inputs.tf_deploy_override == true # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
-        run: terraform apply -auto-approve -input=false "plan"
+        run: terraform apply -auto-approve -input=false "tfplan"
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request' && inputs.tf_feedback == true
