@@ -164,7 +164,7 @@ jobs:
       - name: Create String Output
         id: tf-plan-string
         run: |
-          TERRAFORM_PLAN=$(terraform show -no-color plan)
+          TERRAFORM_PLAN=$(terraform show -no-color tfplan)
 
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
@@ -185,7 +185,7 @@ jobs:
 
       - name: Terraform Apply
         if: ((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && github.event_name == 'push' && steps.plan.outputs.exitcode == '2') || inputs.tf_deploy_override == true # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
-        run: terraform apply -auto-approve -input=false "plan"
+        run: terraform apply -auto-approve -input=false "tfplan"
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request' && inputs.tf_feedback == true
