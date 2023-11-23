@@ -2,7 +2,7 @@ on:
   workflow_call:
     inputs:
       github_artifact_path:
-        description: "The path of the artifacts to download"
+        description: "The path to save the artifacts"
         type: string
         required: false
         default: ""
@@ -85,9 +85,9 @@ jobs:
           aws-region: ${{ inputs.aws_region }}
 
       - uses: actions/download-artifact@v3
-        if: ${{ inputs.download_path }} != ""
+        if: ${{ inputs.github_artifact_path }} != ""
         with:
-          path: ${{ inputs.artifact_path }}
+          path: ${{ inputs.github_artifact_path }}
 
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
@@ -184,8 +184,8 @@ jobs:
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.plan.outputs.exitcode == '2' || inputs.tf_deploy_override == true # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
-        run: terraform apply -auto-approve -input=false "tfplan"
+        if: ((github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && github.event_name == 'push' && steps.plan.outputs.exitcode == '2') || inputs.tf_deploy_override == true # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
+        run: terraform apply -auto-approve -input=false "plan"
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request' && inputs.tf_feedback == true
