@@ -11,7 +11,7 @@ jobs:
   # test_terraform_deploy_basic:
   #   uses: ./.github/workflows/tf-deploy-basic.yaml
   #   with:
-  #     artifact_path: path/to/artifacts
+  #     github_artifact_path: path/to/artifacts
   #     aws_account_id: 123456789012
   #     aws_region: us-east-1
   #     aws_role_name: cicd-iac
