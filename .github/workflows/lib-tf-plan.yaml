@@ -1,0 +1,140 @@
+on:
+  workflow_call:
+    inputs:
+      aws_region:
+        description: "The AWS region"
+        required: true
+        type: string
+      environment:
+        description: "The environment name"
+        type: string
+        required: true
+      tf_var_files:
+        description: "Comma separated list of Terraform variable files to pass to the plan command"
+        required: false
+        type: string
+      tf_vars:
+        description: "Comma separated list of Terraform variables to pass to the plan command"
+        required: false
+        type: string
+      tf_dir:
+        description: "The directory where the Terraform files are located"
+        type: string
+        required: false
+        default: .
+      tf_state_key:
+        description: "The name of the S3 key to store the Terraform state"
+        required: false
+        type: string
+jobs:
+  terraform_plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.tf_dir }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: Terraform setup
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Init
+        run: |
+          # tf_args=""
+          # if [ "${{ inputs.tf_state_key }}" != "" ] && [ "${{ inputs.tf_state_bucket }}" != "" ]; then
+          #    tf_args='-backend-config=key=${{ inputs.tf_state_key }} -backend-config=bucket=${{ env.tf_state_bucket }}'
+          # fi
+          # terraform init ${tf_args}
+          terraform init -backend-config=key=${{ inputs.tf_state_key }} -backend-config=bucket=${{ secrets.TF_STATE_BUCKET }}
+
+      - name: Plan
+        id: plan
+        run: |
+          # Terraform Plan Script
+          # As this script grows, it may be worth moving into its own file.
+          #
+          # This script is responsible for running the terraform plan command and saving the output to a file.
+          # Exit codes:
+          # 0 - No changes
+          # 1 - Error
+          # 2 - Changes
+          #
+          # TODO: State lock is required if plan is being saved to a file. Are all backends supported?
+
+          export exitcode=0
+
+          echo "Current working directory: $(pwd)"
+
+          tf_args=''
+
+          IFS=',' read -ra ADDR <<< "${{ inputs.tf_vars }}"
+          for var in "${ADDR[@]}"; do
+            tf_args+=" -var $var"
+          done
+
+          IFS=',' read -ra ADDR <<< "${{ inputs.tf_var_files }}"
+          for var_file in "${ADDR[@]}"; do
+            tf_args+=" -var-file=$var_file"
+          done
+
+          terraform plan \
+           -detailed-exitcode \
+           -no-color \
+           -input=false \
+           -lock=false \
+           -var="environment=${{ inputs.environment }}" \
+           -var="github_repo=${{ github.event.repository.name }}" \
+           -var="region=${{ inputs.aws_region }}" \
+           -out="tfplan" \
+           ${tf_args} || exitcode=$?
+
+          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+
+          if [ $exitcode -eq 1 ]; then
+            echo Terraform Plan Failed!
+            exit 1
+          else
+            exit 0
+          fi
+
+      - name: Create String Output
+        id: tf-plan-string
+        run: |
+          TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+
+          delimiter="$(openssl rand -hex 8)"
+          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+          echo "# Terraform Plan Output: ${{ inputs.environment }}" >> $GITHUB_OUTPUT
+          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo '```terraform' >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo "</details>" >> $GITHUB_OUTPUT
+          echo "${delimiter}" >> $GITHUB_OUTPUT
+
+      - name: Publish Terraform Plan to Task Summary
+        env:
+          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+        run: |
+          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Artifact
+        if: steps.plan.outputs.exitcode == '2'
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: tfplan

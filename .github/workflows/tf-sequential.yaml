@@ -1,0 +1,102 @@
+name: Terraform Sequential Workflow
+on:
+  workflow_call:
+    inputs:
+      github_artifact_path:
+        description: "The path to save the artifacts"
+        type: string
+        required: false
+        default: ""
+      # aws_account_id:
+      #   description: "The AWS account ID"
+      #   type: string
+      #   required: true
+      aws_region:
+        description: "The AWS region"
+        required: true
+        type: string
+      # aws_role_name:
+      #   description: "The name of the role to assume with OIDC"
+      #   type: string
+      #   required: true
+      #   default: cicd-iac
+      environment:
+        description: "The environment name"
+        type: string
+        required: true
+      tf_deploy_override:
+        description: "If true, terraform apply will run regardless of branch"
+        type: boolean
+        required: false
+        default: false
+      tf_dir:
+        description: "The directory where the Terraform files are located"
+        type: string
+        required: false
+        default: .
+      github_feedback:
+        description: "Whether to post a comment on the PR with the Terraform plan"
+        required: false
+        type: boolean
+        default: false
+      tf_state_bucket:
+        description: "The name of the S3 bucket to store the Terraform state"
+        required: false
+        type: string
+      tf_state_key:
+        description: "The name of the S3 key to store the Terraform state"
+        required: false
+        type: string
+      tf_var_files:
+        description: "Comma separated list of Terraform variable files to pass to the plan command"
+        required: false
+        type: string
+      tf_vars:
+        description: "Comma separated list of Terraform variables to pass to the plan command"
+        required: false
+        type: string
+      tf_version:
+        description: "The Terraform version to use"
+        type: string
+        required: false
+        default: 1.5.6
+
+jobs:
+  # terraform_aws_auth:
+  #   uses: ./.github/workflows/lib-aws-auth.yaml
+  #   with:
+  #     # aws_account_id: ${{ inputs.aws_account_id }}
+  #     aws_region: ${{ inputs.aws_region }}
+  #     # aws_role_name: ${{ inputs.aws_role_name }}
+  #     environment: ${{ inputs.environment }}
+  #   secrets: inherit
+
+  terraform_plan:
+    uses: ./.github/workflows/lib-tf-plan.yaml
+    with:
+      aws_region: ${{ inputs.aws_region }}
+      environment: ${{ inputs.environment }}
+      tf_var_files: ${{ inputs.tf_var_files }}
+      tf_vars: ${{ inputs.tf_vars }}
+      tf_dir: ${{ inputs.tf_dir }}
+      tf_state_key: ${{ inputs.tf_state_key }}
+    secrets: inherit
+
+  # terraform_summary:
+  #   if: github.event_name == 'pull_request'
+  #   needs: [terraform_plan]
+  #   uses: ./.github/workflows/lib-tf-summary.yaml
+  #   with:
+  #     environment: ${{ inputs.environment }}
+
+  terraform_apply:
+    # if: (github.ref_name == github.event.repository.default_branch && github.event_name == 'push' && steps.plan.outputs.exitcode == '2')
+    if: github.ref_name == github.event.repository.default_branch && github.event_name == 'push'
+    needs: [terraform_plan]
+    uses: ./.github/workflows/lib-tf-apply.yaml
+    with:
+      aws_region: ${{ inputs.aws_region }}
+      environment: ${{ inputs.environment }}
+      tf_dir: ${{ inputs.tf_dir }}
+      tf_state_key: ${{ inputs.tf_state_key }}
+    secrets: inherit

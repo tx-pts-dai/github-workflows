@@ -1,0 +1,36 @@
+on:
+  workflow_call:
+    inputs:
+      # aws_account_id:
+      #   description: "The AWS account ID"
+      #   type: string
+      #   required: true
+      aws_region:
+        description: "The AWS region"
+        required: true
+        type: string
+      # aws_role_name:
+      #   description: "The name of the role to assume with OIDC"
+      #   type: string
+      #   required: true
+      environment:
+        description: "The environment name"
+        type: string
+        required: true
+jobs:
+  aws_auth:
+    permissions:
+      contents: read
+      id-token: write
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
+          aws-region: ${{ inputs.aws_region }}

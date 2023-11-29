@@ -1,0 +1,40 @@
+on:
+  workflow_call:
+    inputs:
+      # tf_state_bucket:
+      #   description: "The name of the S3 bucket to store the Terraform state"
+      #   required: false
+      #   type: string
+      tf_state_key:
+        description: "The name of the S3 key to store the Terraform state"
+        required: false
+        type: string
+      tf_dir:
+        description: "The directory where the Terraform files are located"
+        type: string
+        required: false
+        default: .
+jobs:
+  terraform_init:
+    name: Init
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.tf_dir }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform setup
+        uses: hashicorp/setup-terraform@v3
+        # with:
+        #   terraform_version: ${{ inputs.tf_version }}
+
+      - run: |
+          # tf_args=""
+          # if [ "${{ inputs.tf_state_key }}" != "" ] && [ "${{ inputs.tf_state_bucket }}" != "" ]; then
+          #    tf_args='-backend-config=key=${{ inputs.tf_state_key }} -backend-config=bucket=${{ env.tf_state_bucket }}'
+          # fi
+          # terraform init ${tf_args}
+          terraform init -backend-config=key=${{ inputs.tf_state_key }} -backend-config=bucket=${{ secrets.TF_STATE_BUCKET }}

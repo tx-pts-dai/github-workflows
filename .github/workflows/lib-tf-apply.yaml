@@ -1,0 +1,54 @@
+on:
+  workflow_call:
+    inputs:
+      aws_region:
+        description: "The AWS region"
+        required: true
+        type: string
+      environment:
+        description: "The environment name"
+        type: string
+        required: true
+      tf_dir:
+        description: "The directory where the Terraform files are located"
+        type: string
+        required: false
+        default: .
+      tf_state_key:
+        description: "The name of the S3 key to store the Terraform state"
+        required: true
+        type: string
+jobs:
+  terraform_apply:
+    name: Apply
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.tf_dir }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: Terraform setup
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: tfplan
+          path: tfplan
+          if-no-files-found: error
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false "tfplan"

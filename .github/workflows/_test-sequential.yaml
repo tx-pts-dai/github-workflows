@@ -1,0 +1,25 @@
+name: Test Sequential Workflow
+
+on:
+  # push:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  terraform_sequential:
+    uses: ./.github/workflows/tf-sequential.yaml
+    with:
+      # aws_account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+      aws_region: eu-central-1
+      # aws_role_name: ${{ secrets.AWS_ROLE_NAME }}
+      environment: sandbox
+      tf_dir: tests/terraform
+      tf_version: 1.5.6
+      tf_state_key: github-workflows/sequential.tfstate
+      # tf_state_bucket: ${{ secrets.TF_STATE_BUCKET }}
+    secrets: inherit

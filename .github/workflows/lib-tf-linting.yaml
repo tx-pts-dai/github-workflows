@@ -1,0 +1,10 @@
+on:
+  workflow_call:
+
+jobs:
+  terraform_lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -recursive -check
