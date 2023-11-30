@@ -125,8 +125,6 @@ jobs:
           #
           # TODO: State lock is required if plan is being saved to a file. Are all backends supported?
 
-          export exitcode=0
-
           echo "Current working directory: $(pwd)"
 
           tf_args=''
@@ -150,21 +148,15 @@ jobs:
            -var="github_repo=${{ github.event.repository.name }}" \
            -var="region=${{ inputs.aws_region }}" \
            -out="tfplan" \
-           ${tf_args} || exitcode=$?
-
-          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-
-          if [ $exitcode -eq 1 ]; then
-            echo Terraform Plan Failed!
-            exit 1
-          else
-            exit 0
-          fi
+           ${tf_args}
+        continue-on-error: true
 
       - name: Create String Output
         id: tf-plan-string
         run: |
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+
+          echo "Plan exit code: ${{ steps.plan.outputs.exitcode }}"
 
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
@@ -184,11 +176,11 @@ jobs:
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
-        if: (github.ref_name == github.event.repository.default_branch && github.event_name == 'push' && steps.plan.outputs.exitcode == '2') || inputs.tf_deploy_override == true # https://developer.hashicorp.com/terraform/cli/commands/plan#detailed-exitcode
+        if: (github.ref_name == github.event.repository.default_branch && github.event_name == 'push' && steps.plan.outputs.exitcode == '2') || inputs.tf_deploy_override == true
         run: terraform apply -auto-approve -input=false "tfplan"
 
       - uses: actions/github-script@0.9.0
-        if: github.event_name == 'pull_request' && inputs.tf_feedback == true
+        if: github.event_name == 'pull_request' && inputs.github_feedback == true
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
