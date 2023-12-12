@@ -87,10 +87,11 @@ jobs:
 
       - name: LS
         run:
-          apt update
-          apt install tree -y
           pwd
           ls /home/runner/work/examples/examples/.github/actions/config/
+          apt-get update
+          apt-get install tree -y
+
           tree
 
       - name: Config
