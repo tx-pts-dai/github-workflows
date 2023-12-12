@@ -1,0 +1,13 @@
+name: 'Set config variables'
+description: 'Configures environment variables for a workflow'
+inputs:
+  config_file:
+    description: 'Path to the file containing the environment variables'
+    required: false
+    default: ./.github/config/*
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        sed "" ${{ inputs.config_file }} >> $GITHUB_ENV
+      shell: bash
