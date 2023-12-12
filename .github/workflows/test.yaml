@@ -92,7 +92,7 @@ jobs:
           apt-get update
           apt-get install tree -y
 
-          tree
+          tree -a
 
       - name: Config
         id: config
