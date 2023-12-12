@@ -85,6 +85,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: LS
+        run:
+          apt update
+          apt install tree -y
+          pwd
+          ls /home/runner/work/examples/examples/.github/actions/config/
+          tree
+
       - name: Config
         id: config
         uses: ./.github/actions/config/action.yaml

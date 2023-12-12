@@ -71,6 +71,7 @@ jobs:
       group: ${{ github.workflow }}-${{ inputs.environment }}
       #group: ${{ github.head_ref || github.run_id }} # The order is random, so need to find another way to apply in a specific order
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     defaults:
       run:
         working-directory: ${{ inputs.tf_dir }}
