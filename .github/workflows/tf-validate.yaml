@@ -1,0 +1,48 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "The environment name"
+        type: string
+        required: true
+      tf_dir:
+        description: "The directory where the Terraform files are located"
+        type: string
+        required: false
+        default: .
+      tf_state_bucket:
+        description: "The name of the S3 bucket to store the Terraform state"
+        required: false
+        type: string
+      tf_state_key:
+        description: "The name of the S3 key to store the Terraform state"
+        required: false
+        type: string
+      tf_var_files:
+        description: "Comma separated list of Terraform variable files to pass to the plan command"
+        required: false
+        type: string
+      tf_vars:
+        description: "Comma separated list of Terraform variables to pass to the plan command"
+        required: false
+        type: string
+
+jobs:
+  terraform_validate:
+    name: Validate
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.tf_dir }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: terraform validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: ${{ inputs.tf_dir }}

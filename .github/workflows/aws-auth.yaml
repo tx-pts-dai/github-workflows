@@ -1,0 +1,53 @@
+name: AWS Auth
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Environment'
+        type: string
+        required: true
+
+      # aws_region:
+      #   description: 'AWS region'
+      #   type: string
+      #   required: true
+      # aws_role_name:
+      #   description: 'AWS role'
+      #   type: string
+      #   required: true
+      # aws_account_id:
+      #   description: 'AWS account ID'
+      #   type: string
+      #   required: true
+    outputs:
+      aws_access_key_id:
+        description: 'AWS access key ID'
+        value: ${{ jobs.aws_auth.outputs.aws_access_key_id }}
+      aws_secret_access_key:
+        description: 'AWS secret access key'
+        value: ${{ jobs.aws_auth.outputs.aws_secret_access_key }}
+      aws_session_token:
+        description: 'AWS session token'
+        value: ${{ jobs.aws_auth.outputs.aws_session_token }}
+
+jobs:
+  aws_auth:
+    name: AWS Auth Output
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    outputs:
+      aws_access_key_id: ${{ steps.aws-auth.outputs.aws-access-key-id }}
+      aws_secret_access_key: ${{ steps.aws-auth.outputs.aws-secret-access-key }}
+      aws_session_token: ${{ steps.aws-auth.outputs.aws-session-token }}
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Configure AWS Credentials
+        id: aws-auth
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.aws_account_id }}:role/${{ secrets.aws_role_name }}
+          aws-region: eu-west-1 # Region shouldn't matter since v2 tokens are global
+          output-credentials: true
+          mask-aws-account-id: no

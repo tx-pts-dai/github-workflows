@@ -41,3 +41,16 @@ jobs:
     #   aws_role_name: cicd-iac
     #   image_name: test-docker-build
     #   image_tag: ${{ github.ref_head }}
+
+  test_terraform_validate:
+    uses: ./.github/workflows/tf-validate.yaml
+    with:
+      environment: sandbox
+      tf_dir: tests/terraform
+
+  test_terraform_pr_plan:
+    uses: ./.github/workflows/tf-pr-plan.yaml
+    with:
+      environment: sandbox
+      tf_dir: tests/terraform
+    secrets: inherit

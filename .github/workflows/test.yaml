@@ -59,11 +59,6 @@ on:
         type: string
         required: false
         default: 1.5.6
-      config_file:
-        description: "The path to the config file"
-        type: string
-        required: false
-        default: ./.github/config/config.yaml
 
 jobs:
   terraform_deployment:
@@ -74,31 +69,14 @@ jobs:
       pull-requests: write
     concurrency:
       group: ${{ github.workflow }}-${{ inputs.environment }}
-      #group: ${{ github.head_ref || github.run_id }} # The order is random, so need to find another way to apply in a specific order
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     defaults:
       run:
         working-directory: ${{ inputs.tf_dir }}
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: LS
-        run: |
-          echo "Listing dir $(ls -a .github/actions/config/)"
-
-      - name: Config
-        id: config
-        uses: ./.github/actions/config/action.yaml
-        with:
-          config_file: ${{ inputs.config_file }}
-
-      - name: Echo config
-        run: |
-          env
-
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4

@@ -1,3 +1,14 @@
+terraform {
+  backend "s3" {}
+  required_version = "1.5.7"
+
+  required_providers {
+    random = {
+      source = "hashicorp/random"
+    }
+  }
+}
+
 resource "random_pet" "this" {
   length = 2
 }
