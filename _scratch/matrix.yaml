@@ -1,0 +1,25 @@
+name: Workflow Matrix Config
+
+on:
+  workflow_call:
+    inputs:
+      # TODO: Add org input
+      repository:
+        description: The repo name
+        type: string
+        required: true
+    outputs:
+      config:
+        description: Project config data
+        value: ${{ jobs.config.outputs.config }}
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      config: ${{ steps.config.outputs.config }}
+    steps:
+      - name: Get config data
+        id: config
+        # Get org variable with matrix data and output only this repo's data as a single line json string
+        run: echo "config=$(echo ${{ vars.WORKFLOW_MATRIX }} | jq -r '."${{ inputs.repository }}".deployments' | jq -c | jq -R)" >> $GITHUB_OUTPUT

@@ -1,3 +1,6 @@
+# Its not possible to output AWS Crendentials from a workflow run.
+# You could need to store them in a secretstore and then use them in another
+# workflow run.
 name: AWS Auth
 
 on:
@@ -7,19 +10,6 @@ on:
         description: 'Environment'
         type: string
         required: true
-
-      # aws_region:
-      #   description: 'AWS region'
-      #   type: string
-      #   required: true
-      # aws_role_name:
-      #   description: 'AWS role'
-      #   type: string
-      #   required: true
-      # aws_account_id:
-      #   description: 'AWS account ID'
-      #   type: string
-      #   required: true
     outputs:
       aws_access_key_id:
         description: 'AWS access key ID'

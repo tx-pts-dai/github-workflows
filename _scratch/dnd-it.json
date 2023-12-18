@@ -1,0 +1,26 @@
+{
+  "fuw-factsheets": {
+    "repository": "fuw-factsheets",
+    "branch": "main",
+    "deployments": [
+      {
+        "environment": "sandbox",
+        "regions": "eu-central-1",
+        "account_id": 123456789012,
+        "role_name": "cicd-iac"
+      },
+      {
+        "environment": "sandbox",
+        "regions": "eu-central-1",
+        "account_id": 123456789012,
+        "role_name": "cicd-iac"
+      },
+      {
+        "environment": "sandbox",
+        "regions": "eu-central-1",
+        "account_id": 123456789012,
+        "role_name": "cicd-iac"
+      }
+    ]
+  }
+}

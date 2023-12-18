@@ -1,0 +1,37 @@
+name: Bootstrap
+
+on:
+  push:
+    paths:
+      - "deploy/bootstrap/**"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  matrix_config:
+    name: Matrix Config
+    uses: ./.github/workflows/matrix.yaml
+    with:
+      repository: ${{ github.event.repository.name }}
+
+  bootstrap:
+    needs: matrix_config
+    name: Bootstrap Project
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.matrix_config.outputs.config) }}
+
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-deploy-basic.yaml@swibrow/rename-inputs
+    with:
+      environment: ${{ matrix.config.environment }}
+      aws_region: ${{ matrix.config.region }}
+      aws_role_name: ${{ matrix.config.role }}
+      aws_account_id: ${{ matrix.config.account_id }}
+      tf_state_bucket: tf-state-${{ matrix.config.account_id }}
+      tf_state_key: ${{ github.event.repository.name }}/bootstrap.tfstate
+      tf_dir: deploy/bootstrap
+      tf_version: 1.5.6
