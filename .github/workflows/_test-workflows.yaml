@@ -32,6 +32,9 @@ jobs:
       docker_context: tests/docker
       artifact_retention_days: 1
 
+  test_terraform_matrix_plan:
+    uses: ./.github/workflows/lib-tf-plan-config-matrix.yaml
+
     # Enable once we have access to dai sandbox account
     # test_docker_push_ecr:
     # uses: ./.github/workflows/docker-push-ecr.yaml
