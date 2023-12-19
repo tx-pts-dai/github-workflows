@@ -1,4 +1,4 @@
-name: Plan
+name: Destroy
 
 on:
   workflow_call:
@@ -31,6 +31,10 @@ on:
         description: 'Name of the key to store the terraform state in'
         type: string
         required: true
+      tf_var_file_extra:
+        description: 'Path to the terraform variables file'
+        type: string
+        required: false
 
 permissions:
   contents: read
@@ -40,7 +44,7 @@ permissions:
 jobs:
   plan:
     runs-on: ubuntu-latest
-    name: Create a plan
+    name: Destroying ${{ inputs.environment }} environment
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Is this needed? https://docs.github.com/en/actions/using-workflows/reusing-workflows
     steps:
@@ -54,10 +58,9 @@ jobs:
           aws-region: ${{ inputs.aws_region }}
 
       - name: terraform plan
-        uses: dflook/terraform-plan@v1
+        uses: dflook/terraform-destroy@v1
         with:
           path: ${{ inputs.tf_dir }}
-          label: ${{ inputs.environment }}
           backend_config: |
             backend=s3
             bucket=${{ inputs.tf_state_bucket }}
@@ -68,3 +71,4 @@ jobs:
             region="${{ inputs.aws_region }}"
           var_file: |
             ${{ inputs.tf_dir }}/environment/${{ inputs.environment }}.tfvars
+            ${{ inputs.tf_var_file_extra }}

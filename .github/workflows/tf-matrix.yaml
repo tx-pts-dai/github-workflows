@@ -1,25 +1,27 @@
+name: Matrix workflow
+
 on:
   workflow_call:
     inputs:
       config_path:
-        description: 'Path to config file'
+        description: 'Path to the config file'
         type: string
         required: false
-
-run-name: Deploying to all environments by @${{ github.actor }}
+        default: '.github/config.yaml'
 
 jobs:
   config:
-    uses: ./.github/workflows/lib-config.yaml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-  check:
-    needs: config
-    uses: ./.github/workflows/lib-tf-check.yaml
-    with:
-      tf_dir: ${{ needs.config.outputs.tf_dir }}
+      - name: Test matrix config
+        uses: tx-pts-dai/config-export-action@v0.0.2
+        with:
+          config_path: ${{ inputs.config_path }}
 
-  plan:
-    needs: [config, check]
+  test_terraform_plan_matrix:
+    needs: [config]
     strategy:
       matrix:
         include: ${{ fromJson(needs.config.outputs.matrix) }}
@@ -33,8 +35,8 @@ jobs:
       tf_state_key: ${{ matrix.tf_state_key }}
       tf_dir: ${{ matrix.tf_dir }}
 
-  apply:
-    needs: [config, plan]
+  test_terraform_apply_matrix:
+    needs: [config, test_terraform_plan_matrix]
     strategy:
       matrix:
         include: ${{ fromJson(needs.config.outputs.matrix) }}
