@@ -50,12 +50,27 @@ jobs:
       docker_context: tests/docker
       docker_push: false
 
-    # Enable once we have access to dai sandbox account
-    # test_docker_push_ecr:
-    # uses: ./.github/workflows/docker-push-ecr.yaml
-    # with:
-    #   aws_account_id: 123456789012
-    #   aws_region: us-east-1
-    #   aws_role_name: cicd-iac
-    #   image_name: test-docker-build
-    #   image_tag: ${{ github.ref_head }}
+  test_docker_push_ecr:
+    needs: test_docker_build
+    uses: ./.github/workflows/docker-push-ecr.yaml
+    with:
+      aws_account_id: 911453050078
+      aws_region: us-east-1
+      aws_role_name: cicd-iac
+      image_name: test-docker-build
+      image_tag: ${{ github.sha }}
+
+  test_config_export:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Config Export
+      id: config_export
+      uses: tx-pts-dai/config-export-action@v0.0.2
+      with:
+        config_path: .github/config.yaml
+        environment: sandbox
+
+    - name: Output Config
+      run: echo "tf_state_bucket:${{ steps.config_export.outputs.tf_state_bucket }}"

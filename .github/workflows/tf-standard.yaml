@@ -1,0 +1,150 @@
+name: Standard workflow
+
+on:
+  workflow_call:
+    inputs:
+      integration_environment:
+        description: 'Environment to deploy to'
+        type: string
+        default: 'dev'
+      tf_dir:
+        description: 'Path to the terraform directory'
+        type: string
+        required: false
+        default: '.'
+      config_enabled:
+        description: 'Enable workflow config file'
+        type: boolean
+        required: false
+        default: false
+      config_path:
+        description: 'Path to the config file'
+        type: string
+        required: false
+        default: '.github/config.yaml'
+
+run-name: Terraform Workflow triggered by @${{ github.actor }}
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test matrix config
+        uses: tx-pts-dai/config-export-action@v0.0.2
+        with:
+          config_path: ${{ inputs.config_path }}
+
+  checks:
+    runs-on: ubuntu-latest
+    name: Validate Terraform
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: dflook/terraform-fmt-check@v1
+        with:
+          path: ${{ inputs.tf_dir }}
+
+      - name: terraform validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: ${{ inputs.tf_dir }}
+
+  integration:
+    if: github.event_name == 'pull_request'
+    needs: [checks]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get config
+        id: config
+        uses: tx-pts-dai/config-export-action@v0.0.2
+        with:
+          config_path: ${{ inputs.config_path }}
+          environment: ${{ inputs.integration_environment }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ steps.config.outputs.aws_account_id }}:role/${{ steps.config.outputs.aws_role_name }}
+          aws-region: ${{ steps.config.outputs.aws_region }}
+
+      - name: Use branch workspace
+        uses: dflook/terraform-new-workspace@v1
+        with:
+          path: ${{ steps.config.outputs.tf_dir }}
+          workspace: ${{ github.head_ref }}
+
+      - name: Deploy test infrastrucutre
+        uses: dflook/terraform-apply@v1
+        with:
+          workspace: ${{ github.head_ref }}
+          auto_approve: true
+          path: ${{ steps.config.outputs.tf_dir }}
+          label: ${{ inputs.integration_environment }}
+          backend_config: |
+            backend=s3
+            bucket=${{ steps.config.outputs.tf_state_bucket }}
+            key=${{ steps.config.outputs.tf_state_key }}
+          variables: |
+            environment="${{ inputs.integration_environment }}"
+            github_repo="${{ github.event.repository.name }}"
+            region="${{ steps.config.outputs.aws_region }}"
+          var_file: |
+            ${{ steps.config.outputs.tf_dir }}/environment/${{ inputs.integration_environment }}.tfvars
+
+  plan:
+    needs: [config]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        include: ${{ fromJson(needs.config.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ matrix.aws_account_id }}:role/${{ matrix.aws_role_name }}
+          aws-region: ${{ matrix.aws_region }}
+
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
+        with:
+          path: ${{ inputs.tf_dir }}
+          label: ${{ matrix.environment }}
+          add_github_comment: changes-only
+          backend_config: |
+            backend=s3
+            bucket=${{ matrix.tf_state_bucket }}
+            key=${{ matrix.tf_state_key }}
+          variables: |
+            environment="${{ matrix.environment }}"
+            github_repo="${{ github.event.repository.name }}"
+            region="${{ matrix.aws_region }}"
+          var_file: |
+            ${{ inputs.tf_dir }}/environment/${{ matrix.environment }}.tfvars
+
+  apply_dev:
+    if: github.ref_name == github.event.repository.default_branch && github.event_name == 'push'
+    needs: [plan]
+    name: Dev Apply
+    uses: ./.github/workflows/lib-tf-apply-config.yaml
+    with:
+      environment: dev
+      config_path: ${{ inputs.config_path }}
+
+  apply_prod:
+    if: github.ref_name == github.event.repository.default_branch && github.event_name == 'push'
+    needs: [plan]
+    name: Prod Apply
+    uses: ./.github/workflows/lib-tf-apply-config.yaml
+    with:
+      environment: prod
+      config_path: ${{ inputs.config_path }}

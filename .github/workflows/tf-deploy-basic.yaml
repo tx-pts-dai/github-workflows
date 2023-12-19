@@ -1,3 +1,4 @@
+name: Terraform Deploy Workflow
 on:
   workflow_call:
     inputs:

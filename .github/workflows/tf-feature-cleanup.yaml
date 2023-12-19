@@ -1,0 +1,23 @@
+name: Destroy pull request workspace
+
+on:
+  workflow_call:
+    inputs:
+      tf_dir:
+        description: 'Path to the Terraform directory'
+        type: string
+        required: false
+        default: '.'
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: terraform destroy
+        uses: dflook/terraform-destroy-workspace@v1
+        with:
+          path: ${{ inputs.tf_dir }}
+          workspace: ${{ github.head_ref }}
