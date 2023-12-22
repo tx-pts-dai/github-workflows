@@ -1,0 +1,35 @@
+name: Lint
+
+on:
+  workflow_call:
+    inputs:
+      tf_dir:
+        description: 'Path to the terraform configuration to validate'
+        type: string
+        required: false
+        default: '.'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate terraform configuration
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: terraform validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: ${{ inputs.tf_dir }}
+
+  fmt-check:
+    runs-on: ubuntu-latest
+    name: Check formatting of terraform files
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: terraform fmt
+        uses: dflook/terraform-fmt-check@v1
+        with:
+          path: ${{ inputs.tf_dir }}

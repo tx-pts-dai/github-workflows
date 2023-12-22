@@ -1,0 +1,10 @@
+defaults:
+  tf_dir: tests/terraform
+environment:
+  sandbox:
+    aws_account_id: 911453050078
+    aws_region: us-east-1
+    aws_role_name: cicd-iac
+    tf_dir: tests/terraform
+    tf_state_bucket: tf-state-911453050078
+    tf_state_key: tests/single_sandbox.tfstate

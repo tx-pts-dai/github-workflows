@@ -1,0 +1,13 @@
+name: Test Reusable Standard Workflow
+run-name: TF Standard Workflow by @${{ github.actor }}
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Standard Workflow
+    uses: ./.github/workflows/tf-standard.yaml
+    with:
+      config_path: .github/config_standard.yaml
