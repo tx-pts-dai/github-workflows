@@ -144,9 +144,6 @@ jobs:
            -no-color \
            -input=false \
            -lock=false \
-           -var="environment=${{ inputs.environment }}" \
-           -var="github_repo=${{ github.event.repository.name }}" \
-           -var="region=${{ inputs.aws_region }}" \
            -out="tfplan" \
            ${tf_args}
         continue-on-error: true
