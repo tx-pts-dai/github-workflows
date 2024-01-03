@@ -152,12 +152,13 @@ jobs:
         id: tf-plan-string
         run: |
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+          TERRAFORM_SUMMARY_HEADER=$(grep -E -i 'No changes|Plan: ' <<< "$TERRAFORM_PLAN")
 
           echo "Plan exit code: ${{ steps.plan.outputs.exitcode }}"
 
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
-          echo "# Terraform Plan Output: ${{ inputs.environment }}" >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_SUMMARY_HEADER" >> $GITHUB_OUTPUT
           echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo '```terraform' >> $GITHUB_OUTPUT
