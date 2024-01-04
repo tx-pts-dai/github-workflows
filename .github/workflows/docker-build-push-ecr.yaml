@@ -73,6 +73,6 @@ jobs:
           cache-to: type=gha,mode=max
           push: true
           tags: |
-            $REGISTRY/$REPOSITORY:$SOURCE_TAG
-            $REGISTRY/$REPOSITORY:$IMAGE_TAG
-            $REGISTRY/$REPOSITORY:latest
+            ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.SOURCE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest
