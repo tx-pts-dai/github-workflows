@@ -63,7 +63,6 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ inputs.image_name }}
-          SOURCE_TAG: ${{ github.sha }}
           IMAGE_TAG: ${{ inputs.image_tag }}
           BRANCH: ${{ github.head_ref }}
         with:
@@ -73,7 +72,5 @@ jobs:
           cache-to: type=gha,mode=max
           push: true
           tags: |
-            ${{ env.REPOSITORY }}:${{ env.SOURCE_TAG }}
-            ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.SOURCE_TAG }}
             ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
             ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest
