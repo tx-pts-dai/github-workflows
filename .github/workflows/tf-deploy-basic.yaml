@@ -61,8 +61,7 @@ on:
         default: 1.5.6
 
 jobs:
-  terraform_deployment:
-    name: Deployment
+  terraform:
     permissions:
       contents: read
       id-token: write
