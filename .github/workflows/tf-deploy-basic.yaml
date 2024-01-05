@@ -61,8 +61,7 @@ on:
         default: 1.5.6
 
 jobs:
-  terraform_deployment:
-    name: Deployment
+  terraform:
     permissions:
       contents: read
       id-token: write
@@ -172,6 +171,11 @@ jobs:
           SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+
+      # Added this step because otherwise the UI shows a green checkmark
+      - name: Exit if Terraform Plan failed
+        if: steps.plan.outputs.exitcode == '1'
+        run: exit 1
 
       - name: Terraform Apply
         if: (github.ref_name == github.event.repository.default_branch && github.event_name == 'push' && steps.plan.outputs.exitcode == '2') || inputs.tf_deploy_override == true
