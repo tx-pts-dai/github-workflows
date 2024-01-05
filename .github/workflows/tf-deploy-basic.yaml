@@ -174,7 +174,7 @@ jobs:
 
       # Added this step because otherwise the UI shows a green checkmark
       - name: Exit if Terraform Plan failed
-        if: ${{ steps.plan.outputs.exitcode == '1' }}
+        if: steps.plan.outputs.exitcode == '1'
         run: exit 1
 
       - name: Terraform Apply
