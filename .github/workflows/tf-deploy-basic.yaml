@@ -61,8 +61,7 @@ on:
         default: 1.5.6
 
 jobs:
-  terraform_deployment:
-    name: Deployment
+  terraform:
     permissions:
       contents: read
       id-token: write
@@ -84,8 +83,8 @@ jobs:
           role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
           aws-region: ${{ inputs.aws_region }}
 
-      - uses: actions/download-artifact@v3
-        if: ${{ inputs.github_artifact_path }} != ""
+      - uses: actions/download-artifact@v4
+        if: inputs.github_artifact_path != ''
         with:
           path: ${{ inputs.github_artifact_path }}
 
@@ -139,14 +138,21 @@ jobs:
             tf_args+=" -var-file=$var_file"
           done
 
+          tf_plan_exitcode=0
           terraform plan \
            -detailed-exitcode \
            -no-color \
            -input=false \
            -lock=false \
            -out="tfplan" \
-           ${tf_args}
-        continue-on-error: true
+           ${tf_args} || tf_plan_exitcode=$?
+
+          echo "exitcode=$tf_plan_exitcode" >> $GITHUB_OUTPUT
+          echo "exitcode: $tf_plan_exitcode"
+          if [ $tf_plan_exitcode -eq 1 ]; then
+            echo Terraform Plan Failed!
+            exit 1
+          fi
 
       - name: Create String Output
         id: tf-plan-string
