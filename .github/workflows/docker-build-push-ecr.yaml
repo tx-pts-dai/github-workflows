@@ -43,7 +43,6 @@ permissions:
 
 jobs:
   build:
-    name: Build Image
     runs-on: ubuntu-latest
 
     steps:
