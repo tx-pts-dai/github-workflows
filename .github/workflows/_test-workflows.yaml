@@ -41,6 +41,7 @@ jobs:
       image_name: test-docker-build-push
       image_tag: ${{ github.head_ref }}
       docker_context: tests/docker
+      docker_push: false
 
     # Enable once we have access to dai sandbox account
     # test_docker_push_ecr:
