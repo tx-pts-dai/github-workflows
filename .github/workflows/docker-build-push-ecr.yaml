@@ -74,5 +74,5 @@ jobs:
           push: ${{ inputs.docker_push }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}
-            ${{ github.ref_name == github.event.repository.default_branch && format('{0}/{1}:latest', env.REGISTRY, env.REPOSITORY) }}
-            ${{ inputs.image_tag != '' && format('{0}/{1}:{2}', env.REGISTRY, env.REPOSITORY, inputs.image_tag) }}
+            ${{ (github.ref_name == github.event.repository.default_branch && format('{0}/{1}:latest', env.REGISTRY, env.REPOSITORY)) || '' }}
+            ${{ (inputs.image_tag != '' && format('{0}/{1}:{2}', env.REGISTRY, env.REPOSITORY, inputs.image_tag)) || '' }}
