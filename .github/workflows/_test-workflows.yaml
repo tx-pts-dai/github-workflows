@@ -32,6 +32,17 @@ jobs:
       docker_context: tests/docker
       artifact_retention_days: 1
 
+  test_docker_build_push_ecr:
+    uses: ./.github/workflows/docker-build-push-ecr.yaml
+    with:
+      aws_account_id: ${{ vars.aws_account_id }}
+      aws_region: ${{ vars.aws_region }}
+      aws_role_name: ${{ vars.aws_role_name }}
+      image_name: test-docker-build-push
+      image_tag: ${{ github.head_ref }}
+      docker_context: tests/docker
+      docker_push: false
+
     # Enable once we have access to dai sandbox account
     # test_docker_push_ecr:
     # uses: ./.github/workflows/docker-push-ecr.yaml
