@@ -40,6 +40,7 @@ jobs:
       aws_role_name: ${{ vars.aws_role_name }}
       image_name: test-docker-build-push
       image_tag: ${{ github.head_ref }}
+      docker_context: tests/docker
 
     # Enable once we have access to dai sandbox account
     # test_docker_push_ecr:
