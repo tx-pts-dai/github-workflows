@@ -25,7 +25,6 @@ on:
         description: "Tag of the Docker image to build"
         type: string
         required: false
-        default: ${{ github.sha }}
       docker_context:
         description: "Path to the build context"
         type: string
@@ -67,7 +66,6 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ inputs.image_name }}
-          IMAGE_TAG: ${{ inputs.image_tag }}
           BRANCH: ${{ github.head_ref }}
         with:
           context: ${{ inputs.docker_context }}
@@ -78,4 +76,4 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest
             ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}
-            ${{ env.IMAGE_TAG != github.sha && format('{0}/{1}:{2}', env.REGISTRY, env.REPOSITORY, env.IMAGE_TAG) }}
+            ${{ inputs.image_tag != '' && format('{0}/{1}:{2}', env.REGISTRY, env.REPOSITORY, inputs.image_tag) }}
