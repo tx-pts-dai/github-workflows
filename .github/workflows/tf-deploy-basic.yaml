@@ -185,7 +185,7 @@ jobs:
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request' && inputs.github_feedback == true
         env:
-          PLAN: "terraform\n${{ steps.tf-plan-string.outputs.summary }}"
+          PLAN: "${{ steps.tf-plan-string.outputs.summary }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -195,9 +195,7 @@ jobs:
             * Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             * Terraform Validation 🤖${{ steps.validate.outcome }}
             * Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-            <details><summary>Show Plan</summary>
-            \`\`\`${process.env.PLAN}\`\`\`
-            </details>
+            ${process.env.PLAN}
             *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
             const comments = await github.issues.listComments({
               issue_number: context.issue.number,
