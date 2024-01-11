@@ -61,8 +61,7 @@ on:
         default: 1.5.6
 
 jobs:
-  terraform_deployment:
-    name: Deployment
+  terraform:
     permissions:
       contents: read
       id-token: write
@@ -84,8 +83,8 @@ jobs:
           role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
           aws-region: ${{ inputs.aws_region }}
 
-      - uses: actions/download-artifact@v3
-        if: ${{ inputs.github_artifact_path }} != ""
+      - uses: actions/download-artifact@v4
+        if: inputs.github_artifact_path != ''
         with:
           path: ${{ inputs.github_artifact_path }}
 
@@ -93,6 +92,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ inputs.tf_version }}
+          terraform_wrapper: false
 
       - name: Terraform Init
         id: init
@@ -139,22 +139,25 @@ jobs:
             tf_args+=" -var-file=$var_file"
           done
 
+          tf_plan_exitcode=0
           terraform plan \
            -detailed-exitcode \
-           -no-color \
            -input=false \
            -lock=false \
            -out="tfplan" \
-           ${tf_args}
-        continue-on-error: true
+           ${tf_args} || tf_plan_exitcode=$?
+
+          echo "exitcode=$tf_plan_exitcode" >> $GITHUB_OUTPUT
+          if [ $tf_plan_exitcode -eq 1 ]; then
+            echo Terraform Plan Failed!
+            exit 1
+          fi
 
       - name: Create String Output
         id: tf-plan-string
         run: |
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i 'No changes|Plan: ' <<< "$TERRAFORM_PLAN")
-
-          echo "Plan exit code: ${{ steps.plan.outputs.exitcode }}"
 
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
@@ -180,7 +183,7 @@ jobs:
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request' && inputs.github_feedback == true
         env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          PLAN: "${{ steps.tf-plan-string.outputs.summary }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -190,9 +193,8 @@ jobs:
             * Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             * Terraform Validation 🤖${{ steps.validate.outcome }}
             * Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-            <details><summary>Show Plan</summary>
-            \`\`\`${process.env.PLAN}\`\`\`
-            </details>
+
+            ${process.env.PLAN}
             *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
             const comments = await github.issues.listComments({
               issue_number: context.issue.number,
