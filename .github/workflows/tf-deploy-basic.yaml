@@ -83,10 +83,10 @@ jobs:
           role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
           aws-region: ${{ inputs.aws_region }}
 
-      - uses: actions/download-artifact@v3
-        if: ${{ inputs.github_artifact_path }} != ""
+      - uses: actions/download-artifact@v4
         with:
           path: ${{ inputs.github_artifact_path }}
+          merge-multiple: true
 
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
