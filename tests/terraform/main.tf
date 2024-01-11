@@ -13,3 +13,11 @@ output "random_pet" {
 output "random_id" {
   value = random_id.this.id
 }
+
+variable "var1" {
+  type = string
+}
+
+variable "var2" {
+  type = string
+}

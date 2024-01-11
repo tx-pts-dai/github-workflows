@@ -8,22 +8,19 @@ on:
 
 jobs:
   # Enable once we have access to dai sandbox account
-  # test_terraform_deploy_basic:
-  #   uses: ./.github/workflows/tf-deploy-basic.yaml
-  #   with:
-  #     github_artifact_path: path/to/artifacts
-  #     aws_account_id: 123456789012
-  #     aws_region: us-east-1
-  #     aws_role_name: cicd-iac
-  #     environment: sandbox
-  #     tf_deploy_override: true
-  #     tf_dir: tests/terraform
-  #     tf_feedback: true
-  #     tf_state_bucket: my-tf-state-bucket
-  #     tf_state_key: my/tf/state
-  #     tf_var_file: true
-  #     tf_vars: var1=value1,var2=value2
-  #     tf_version: 1.5.6
+  test_terraform_deploy_basic:
+    uses: ./.github/workflows/tf-deploy-basic.yaml
+    with:
+      github_artifact_path: path/to/artifacts
+      aws_account_id: ${{ vars.aws_account_id }}
+      aws_region: ${{ vars.aws_region }}
+      aws_role_name: ${{ vars.aws_role_name }}
+      environment: sandbox
+      github_feedback: true
+      tf_deploy_override: true
+      tf_dir: tests/terraform
+      tf_vars: var1=value1,var2=value2
+      tf_version: 1.6.6
 
   test_docker_build:
     uses: ./.github/workflows/docker-build.yaml
