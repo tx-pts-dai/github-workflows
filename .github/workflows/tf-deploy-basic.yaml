@@ -142,7 +142,6 @@ jobs:
           tf_plan_exitcode=0
           terraform plan \
            -detailed-exitcode \
-           -no-color \
            -input=false \
            -lock=false \
            -out="tfplan" \
