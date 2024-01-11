@@ -148,7 +148,6 @@ jobs:
            -out="tfplan" \
            ${tf_args} || tf_plan_exitcode=$?
 
-          echo "exitcode: $tf_plan_exitcode"
           echo "exitcode=$tf_plan_exitcode" >> $GITHUB_OUTPUT
           if [ $tf_plan_exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
@@ -195,6 +194,7 @@ jobs:
             * Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             * Terraform Validation 🤖${{ steps.validate.outcome }}
             * Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
             ${process.env.PLAN}
             *Pusher: Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
             const comments = await github.issues.listComments({
