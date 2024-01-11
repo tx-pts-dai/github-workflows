@@ -92,6 +92,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ inputs.tf_version }}
+          terraform_wrapper: false
 
       - name: Terraform Init
         id: init
@@ -145,12 +146,10 @@ jobs:
            -input=false \
            -lock=false \
            -out="tfplan" \
-           ${tf_args}
+           ${tf_args} || tf_plan_exitcode=$?
 
-          echo $?
-
-          echo "exitcode=$tf_plan_exitcode" >> $GITHUB_OUTPUT
           echo "exitcode: $tf_plan_exitcode"
+          echo "exitcode=$tf_plan_exitcode" >> $GITHUB_OUTPUT
           if [ $tf_plan_exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
             exit 1
@@ -161,8 +160,6 @@ jobs:
         run: |
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i 'No changes|Plan: ' <<< "$TERRAFORM_PLAN")
-
-          echo "Plan exit code: ${{ steps.plan.outputs.exitcode }}"
 
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
