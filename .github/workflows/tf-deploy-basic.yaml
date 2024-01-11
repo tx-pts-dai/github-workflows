@@ -138,13 +138,22 @@ jobs:
             tf_args+=" -var-file=$var_file"
           done
 
+          tf_plan_exitcode=0
           terraform plan \
            -detailed-exitcode \
            -no-color \
            -input=false \
            -lock=false \
            -out="tfplan" \
-           ${tf_args}
+           ${tf_args} || tf_plan_exitcode=$?
+
+          echo "exitcode=$tf_plan_exitcode" >> $GITHUB_OUTPUT
+          if [ $tf_plan_exitcode -eq 1 ]; then
+            echo Terraform Plan Failed!
+            exit 1
+          else
+            exit 0
+          fi
         continue-on-error: true
 
       - name: Create String Output
@@ -177,7 +186,7 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: (github.ref_name == github.event.repository.default_branch && github.event_name == 'push' && steps.plan.outputs.exitcode == '2') || inputs.tf_deploy_override == true
+        if: (github.ref_name == github.event.repository.default_branch && github.event_name == 'push') || inputs.tf_deploy_override == true
         run: terraform apply -auto-approve -input=false "tfplan"
 
       - uses: actions/github-script@0.9.0
