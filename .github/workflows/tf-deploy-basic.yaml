@@ -86,7 +86,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: ${{ inputs.github_artifact_path }}
-          merge-multiple: true
 
       - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
