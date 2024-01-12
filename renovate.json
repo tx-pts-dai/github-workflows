@@ -1,0 +1,5 @@
+{
+  "extends": ["config:recommended"],
+  "reviewers": ["team:DAI-Team"],
+  "enabledManagers": ["github-actions"]
+}
