@@ -105,6 +105,10 @@ jobs:
             tf_args="$tf_args -backend-config=key='${{ inputs.tf_state_key}}'"
           fi
 
+          echo terraform init \
+           -input=false \
+           ${tf_args}
+
           terraform init \
            -input=false \
            ${tf_args}
