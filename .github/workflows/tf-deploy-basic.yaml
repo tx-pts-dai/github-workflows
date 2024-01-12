@@ -145,7 +145,7 @@ jobs:
           done
 
           tf_plan_exitcode=0
-          echo terraform plan \
+          terraform plan \
            -detailed-exitcode \
            -input=false \
            -lock=false \
