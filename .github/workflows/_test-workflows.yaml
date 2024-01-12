@@ -4,97 +4,51 @@ name: Test Reusable Workflows
 on:
   pull_request:
     branches:
-      - fix-tf-init
+      - main
 
 jobs:
   # Enable once we have access to dai sandbox account
-  test_terraform_deploy_basic_1:
+  test_terraform_deploy_basic:
     uses: ./.github/workflows/tf-deploy-basic.yaml
     with:
-      # github_artifact_path: path/to/artifacts
-      aws_account_id: 911453050078
-      aws_region: eu-west-1
-      # aws_role_name: ${{ vars.aws_role_name }}
+      github_artifact_path: path/to/artifacts
+      aws_account_id: ${{ vars.aws_account_id }}
+      aws_region: ${{ vars.aws_region }}
+      aws_role_name: ${{ vars.aws_role_name }}
       environment: sandbox
       github_feedback: true
-      tf_deploy_override: false
+      tf_deploy_override: true
       tf_dir: tests/terraform
       tf_vars: var1=value1,var2=value2
       tf_version: 1.6.6
 
-  test_terraform_deploy_basic_2:
-    uses: ./.github/workflows/tf-deploy-basic.yaml
+  test_docker_build:
+    uses: ./.github/workflows/docker-build.yaml
     with:
-      # github_artifact_path: path/to/artifacts
-      aws_account_id: 911453050078
-      aws_region: eu-west-1
-      # aws_role_name: ${{ vars.aws_role_name }}
-      environment: sandbox
-      github_feedback: true
-      tf_state_bucket: tf-state-911453050078
-      tf_deploy_override: false
-      tf_dir: tests/terraform
-      tf_vars: var1=value1,var2=value2
-      tf_version: 1.6.6
+      image_name: test-docker-build
+      docker_context: tests/docker
+      artifact_retention_days: 1
 
-  test_terraform_deploy_basic_3:
-    uses: ./.github/workflows/tf-deploy-basic.yaml
+  test_docker_build_push_ecr:
+    uses: ./.github/workflows/docker-build-push-ecr.yaml
     with:
-      # github_artifact_path: path/to/artifacts
-      aws_account_id: 911453050078
-      aws_region: eu-west-1
-      # aws_role_name: ${{ vars.aws_role_name }}
-      environment: sandbox
-      tf_state_key: this-is-a-test
-      github_feedback: true
-      tf_deploy_override: false
-      tf_dir: tests/terraform
-      tf_vars: var1=value1,var2=value2
-      tf_version: 1.6.6
+      aws_account_id: ${{ vars.aws_account_id }}
+      aws_region: ${{ vars.aws_region }}
+      aws_role_name: ${{ vars.aws_role_name }}
+      image_name: test-docker-build-push
+      image_tag: ${{ github.head_ref }}
+      docker_context: tests/docker
+      docker_push: false
 
-  test_terraform_deploy_basic_4:
-    uses: ./.github/workflows/tf-deploy-basic.yaml
+  test_docker_build_push_ecr_no_image_tag:
+    uses: ./.github/workflows/docker-build-push-ecr.yaml
     with:
-      # github_artifact_path: path/to/artifacts
-      aws_account_id: 911453050078
-      aws_region: eu-west-1
-      # aws_role_name: ${{ vars.aws_role_name }}
-      environment: sandbox
-      tf_state_bucket: tf-state-911453050078
-      tf_state_key: this-is-a-test
-      github_feedback: true
-      tf_deploy_override: false
-      tf_dir: tests/terraform
-      tf_vars: var1=value1,var2=value2
-      tf_version: 1.6.6
-
-  # test_docker_build:
-  #   uses: ./.github/workflows/docker-build.yaml
-  #   with:
-  #     image_name: test-docker-build
-  #     docker_context: tests/docker
-  #     artifact_retention_days: 1
-
-  # test_docker_build_push_ecr:
-  #   uses: ./.github/workflows/docker-build-push-ecr.yaml
-  #   with:
-  #     aws_account_id: ${{ vars.aws_account_id }}
-  #     aws_region: ${{ vars.aws_region }}
-  #     aws_role_name: ${{ vars.aws_role_name }}
-  #     image_name: test-docker-build-push
-  #     image_tag: ${{ github.head_ref }}
-  #     docker_context: tests/docker
-  #     docker_push: false
-
-  # test_docker_build_push_ecr_no_image_tag:
-  #   uses: ./.github/workflows/docker-build-push-ecr.yaml
-  #   with:
-  #     aws_account_id: ${{ vars.aws_account_id }}
-  #     aws_region: ${{ vars.aws_region }}
-  #     aws_role_name: ${{ vars.aws_role_name }}
-  #     image_name: test-docker-build-push
-  #     docker_context: tests/docker
-  #     docker_push: false
+      aws_account_id: ${{ vars.aws_account_id }}
+      aws_region: ${{ vars.aws_region }}
+      aws_role_name: ${{ vars.aws_role_name }}
+      image_name: test-docker-build-push
+      docker_context: tests/docker
+      docker_push: false
 
     # Enable once we have access to dai sandbox account
     # test_docker_push_ecr:
