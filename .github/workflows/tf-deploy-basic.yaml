@@ -98,11 +98,16 @@ jobs:
         id: init
         run: |
           tf_args=""
-          if [ "${{ inputs.tf_state_key }}" != "" ] && [ "${{ inputs.tf_state_bucket }}" != "" ]; then
-             tf_args='-backend-config=key=${{ inputs.tf_state_key }} -backend-config=bucket=${{ inputs.tf_state_bucket }}'
+          if [ "${{ inputs.tf_state_bucket }}" != "" ]; then
+            tf_args="$tf_args -backend-config=bucket='${{ inputs.tf_state_bucket }}'"
           fi
-          terraform init ${tf_args}
+          if [ "${{ inputs.tf_state_key }}" != "" ]; then
+            tf_args="$tf_args -backend-config=key='${{ inputs.tf_state_key}}'"
+          fi
 
+          terraform init \
+           -input=false \
+           ${tf_args}
       - name: Terraform Format
         id: fmt
         run: terraform fmt -recursive -check
@@ -140,7 +145,7 @@ jobs:
           done
 
           tf_plan_exitcode=0
-          terraform plan \
+          echo terraform plan \
            -detailed-exitcode \
            -input=false \
            -lock=false \
