@@ -17,7 +17,7 @@ on:
       aws_role_name:
         description: "The name of the role to assume with OIDC"
         type: string
-        required: true
+        required: false
         default: cicd-iac
       environment:
         description: "The environment name"
@@ -38,12 +38,8 @@ on:
         required: false
         type: boolean
         default: false
-      tf_state_bucket:
-        description: "The name of the S3 bucket to store the Terraform state"
-        required: false
-        type: string
-      tf_state_key:
-        description: "The name of the S3 key to store the Terraform state"
+      tf_backend_configs:
+        description: "Comma separated list of backend-configs to pass to the init command"
         required: false
         type: string
       tf_var_files:
@@ -97,10 +93,18 @@ jobs:
       - name: Terraform Init
         id: init
         run: |
-          tf_args=""
+          tf_args=''
+
+          IFS=',' read -ra ADDR <<< "${{ inputs.tf_backend_configs }}"
+          for var in "${ADDR[@]}"; do
+            tf_args+=" -backend-config=$var"
+          done
+
           if [ "${{ inputs.tf_state_key }}" != "" ] && [ "${{ inputs.tf_state_bucket }}" != "" ]; then
              tf_args='-backend-config=key=${{ inputs.tf_state_key }} -backend-config=bucket=${{ inputs.tf_state_bucket }}'
           fi
+
+          echo running terraform init ${tf_args}
           terraform init ${tf_args}
 
       - name: Terraform Format
