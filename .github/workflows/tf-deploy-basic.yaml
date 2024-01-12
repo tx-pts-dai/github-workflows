@@ -17,7 +17,7 @@ on:
       aws_role_name:
         description: "The name of the role to assume with OIDC"
         type: string
-        required: true
+        required: false
         default: cicd-iac
       environment:
         description: "The environment name"
