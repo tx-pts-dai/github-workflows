@@ -99,10 +99,10 @@ jobs:
         run: |
           tf_args=""
           if [ "${{ inputs.tf_state_bucket }}" != "" ]; then
-            tf_args="$tf_args -backend-config=bucket='${{ inputs.tf_state_bucket }}'"
+            tf_args="$tf_args -backend-config=bucket=${{ inputs.tf_state_bucket }}"
           fi
           if [ "${{ inputs.tf_state_key }}" != "" ]; then
-            tf_args="$tf_args -backend-config=key='${{ inputs.tf_state_key}}'"
+            tf_args="$tf_args -backend-config=key=${{ inputs.tf_state_key}}"
           fi
 
           echo running terraform init \
