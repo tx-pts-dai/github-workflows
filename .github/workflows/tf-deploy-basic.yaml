@@ -95,7 +95,8 @@ jobs:
         run: |
           tf_args=''
 
-          IFS=',' read -ra ADDR <<< "${{ inputs.tf_backend_configs }}"
+          // IFS=',' read -ra ADDR <<< "${{ inputs.tf_backend_configs }}"
+          read -ra ADDR <<< "${{ inputs.tf_backend_configs }}"
           for var in "${ADDR[@]}"; do
             tf_args+=" -backend-config=$var"
           done
