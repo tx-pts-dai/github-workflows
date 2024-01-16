@@ -26,19 +26,9 @@ on:
 run-name: Terraform Workflow triggered by @${{ github.actor }}
 
 jobs:
-  config:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Test matrix config
-        uses: tx-pts-dai/config-export-action@v0.0.2
-        with:
-          config_path: ${{ inputs.config_path }}
-
   checks:
     runs-on: ubuntu-latest
-    name: Validate Terraform
+    name: Terraform Checks
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,6 +46,10 @@ jobs:
     if: github.event_name == 'pull_request'
     needs: [checks]
     runs-on: ubuntu-latest
+    name: Deploy Integration
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -96,6 +90,22 @@ jobs:
             region="${{ steps.config.outputs.aws_region }}"
           var_file: |
             ${{ steps.config.outputs.tf_dir }}/environment/${{ inputs.integration_environment }}.tfvars
+
+  config:
+    name: Workflow Config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test matrix config
+        id: config
+        uses: tx-pts-dai/config-export-action@v0.0.2
+        with:
+          config_path: ${{ inputs.config_path }}
+
+      - name: Test config
+        run: |
+          echo "${{ fromJson(steps.config.outputs.matrix) }}"
 
   plan:
     needs: [config]
