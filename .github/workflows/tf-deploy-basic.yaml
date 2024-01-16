@@ -95,10 +95,11 @@ jobs:
         run: |
           tf_args=''
 
-          read -ra ADDR <<< "${{ inputs.tf_backend_configs }}"
           while read -r var; do
-            tf_args+=" -backend-config=$var"
-          done < "${{ inputs.tf_backend_configs }}"
+            if [ -n "$var" ]; then
+              tf_args+=" -backend-config=$var"
+            fi
+          done <<< "${{ inputs.tf_backend_configs }}"
 
           echo running terraform init -input=false ${tf_args}
           terraform init -input=false ${tf_args}
