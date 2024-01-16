@@ -157,7 +157,7 @@ jobs:
         id: tf-plan-string
         run: |
           TERRAFORM_PLAN=$(terraform show -no-color tfplan)
-          TERRAFORM_SUMMARY_HEADER=$(grep -E -i 'No changes|Plan: ' <<< "$TERRAFORM_PLAN")
+          TERRAFORM_SUMMARY_HEADER=$(grep -E -i 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
 
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
