@@ -19,5 +19,6 @@ variable "var1" {
 }
 
 variable "var2" {
-  type = string
+  type    = string
+  default = "baz"
 }

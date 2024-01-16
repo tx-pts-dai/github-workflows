@@ -28,7 +28,7 @@ on:
         description: "Path to the build context"
         type: string
         required: false
-        default: .
+        default: '.'
       docker_push:
         description: "Push Image to ECR"
         type: boolean

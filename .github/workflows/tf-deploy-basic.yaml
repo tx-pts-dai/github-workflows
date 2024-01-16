@@ -5,7 +5,6 @@ on:
         description: "The path to save the artifacts"
         type: string
         required: false
-        default: ""
       aws_account_id:
         description: "The AWS account ID"
         type: string
