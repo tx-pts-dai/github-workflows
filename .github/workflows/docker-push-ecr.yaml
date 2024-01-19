@@ -63,7 +63,7 @@ jobs:
           docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:$SOURCE_TAG
           docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
-          if [ '$BRANCH' == 'main' ] || [ '$BRANCH' == 'master' ]; then
+          if [ "$BRANCH" == 'main' ] || [ "$BRANCH" == 'master' ]; then
             docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:latest
           fi
 
