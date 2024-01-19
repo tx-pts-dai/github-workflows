@@ -4,24 +4,24 @@ on:
   workflow_call:
     inputs:
       aws_account_id:
-        description: "AWS Account ID"
+        description: 'AWS Account ID'
         type: string
         required: true
       aws_region:
-        description: "AWS Region"
+        description: 'AWS Region'
         type: string
         required: true
       aws_role_name:
-        description: "AWS Role Name"
+        description: 'AWS Role Name'
         type: string
         required: true
       image_name:
-        description: "Name of the Docker image to build"
+        description: 'Name of the Docker image to build'
         type: string
         required: false
         default: ${{ github.event.repository.name }}
       image_tag:
-        description: "Tag of the Docker image to build"
+        description: 'Tag of the Docker image to build'
         type: string
         required: false
         default: ${{ github.sha }}
@@ -63,7 +63,7 @@ jobs:
           docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:$SOURCE_TAG
           docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
-          if [ "$BRANCH" == 'main' ] || [ "$BRANCH" == 'master' ]; then
+          if [ '$BRANCH' == 'main' ] || [ '$BRANCH' == 'master' ]; then
             docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:latest
           fi
 
