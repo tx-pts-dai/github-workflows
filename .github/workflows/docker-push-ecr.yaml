@@ -4,24 +4,24 @@ on:
   workflow_call:
     inputs:
       aws_account_id:
-        description: 'AWS Account ID'
+        description: "AWS Account ID"
         type: string
         required: true
       aws_region:
-        description: 'AWS Region'
+        description: "AWS Region"
         type: string
         required: true
       aws_role_name:
-        description: 'AWS Role Name'
+        description: "AWS Role Name"
         type: string
         required: true
       image_name:
-        description: 'Name of the Docker image to build'
+        description: "Name of the Docker image to build"
         type: string
         required: false
         default: ${{ github.event.repository.name }}
       image_tag:
-        description: 'Tag of the Docker image to build'
+        description: "Tag of the Docker image to build"
         type: string
         required: false
         default: ${{ github.sha }}
@@ -57,7 +57,7 @@ jobs:
           REPOSITORY: ${{ inputs.image_name }}
           SOURCE_TAG: ${{ github.sha }}
           IMAGE_TAG: ${{ inputs.image_tag }}
-          BRANCH: ${{ github.head_ref }}
+          BRANCH: ${{ github.ref_name }}
         run: |
           docker load -i /tmp/$REPOSITORY.tar
           docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:$SOURCE_TAG
