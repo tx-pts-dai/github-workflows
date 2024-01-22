@@ -57,7 +57,7 @@ jobs:
           REPOSITORY: ${{ inputs.image_name }}
           SOURCE_TAG: ${{ github.sha }}
           IMAGE_TAG: ${{ inputs.image_tag }}
-          BRANCH: ${{ github.head_ref }}
+          BRANCH: ${{ github.ref_name }}
         run: |
           docker load -i /tmp/$REPOSITORY.tar
           docker tag $REPOSITORY:$SOURCE_TAG $REGISTRY/$REPOSITORY:$SOURCE_TAG
