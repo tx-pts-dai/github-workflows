@@ -47,7 +47,7 @@ on:
         required: false
         type: string
       tf_backend_configs:
-        description: "Comma separated list of backend-configs to pass to the init command"
+        description: "Newline separated list of backend-configs to pass to the init command"
         required: false
         type: string
       tf_var_files:
