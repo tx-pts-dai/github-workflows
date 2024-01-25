@@ -38,6 +38,14 @@ on:
         required: false
         type: boolean
         default: false
+      tf_state_bucket:
+        description: "Deprecated: The name of the S3 bucket to store the Terraform state"
+        required: false
+        type: string
+      tf_state_key:
+        description: "Deprecated: The name of the S3 key to store the Terraform state"
+        required: false
+        type: string
       tf_backend_configs:
         description: "Comma separated list of backend-configs to pass to the init command"
         required: false
@@ -100,6 +108,14 @@ jobs:
               tf_args+=" -backend-config=$var"
             fi
           done <<< "${{ inputs.tf_backend_configs }}"
+
+          # Still keep the old deprecated inputs
+          if [ "${{ inputs.tf_state_bucket }}" != "" ]; then
+            tf_args+=" -backend-config=bucket=${{ inputs.tf_state_bucket }}"
+          fi
+          if [ "${{ inputs.tf_state_key }}" != "" ]; then
+            tf_args+=" -backend-config=key=${{ inputs.tf_state_key}}"
+          fi
 
           echo running terraform init -input=false ${tf_args}
           terraform init -input=false ${tf_args}
