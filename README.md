@@ -18,7 +18,7 @@ jobs:
 
 ## Releases
 
-TODO: Create a release pipeline that automatically creates a new release with each PR merged to main.
+Release pipeline is triggered on each PR merged to main, which creates a new release incrementing automatically minor version.
 
 ## Testing
 
