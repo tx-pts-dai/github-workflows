@@ -1,0 +1,36 @@
+# Default release on push in main
+name: Release
+on:
+  push:
+    branches:
+    - main
+    
+jobs:
+ terraform:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Get tags
+      uses: actions-ecosystem/action-get-latest-tag@v1
+      with:
+        semver_only: true
+
+    - name: Retrieve version
+      run: echo "TAG_NAME=$(git tag | sort -g | tail -1 | awk -F. -v OFS=. '{$NF=$NF+1;print}')" >> $GITHUB_OUTPUT
+      id: version
+      
+    - name: Next version
+      run: echo ${{ steps.version.outputs.TAG_NAME }}
+      
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.TAG_NAME }}
+        generate_release_notes: true
