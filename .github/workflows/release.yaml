@@ -6,7 +6,7 @@ on:
     - main
     
 jobs:
- terraform:
+ release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -21,16 +21,20 @@ jobs:
         semver_only: true
 
     - name: Retrieve version
-      run: echo "TAG_NAME=$(git tag | sort -g | tail -1 | awk -F. -v OFS=. '{$NF=$NF+1;print}')" >> $GITHUB_OUTPUT
-      id: version
+      id: version 
+      run: | 
+        RELEASE_TAG=$(git tag | sort -g | tail -1 | awk -F. -v OFS=. '{$NF=$NF+1;print}')
+        if [ "$RELEASE_TAG" = "" ]; then 
+          echo "TAG_NAME=v0.0.1" >> $GITHUB_OUTPUT
+        else
+          echo "TAG_NAME=$RELEASE_TAG">> $GITHUB_OUTPUT
+        fi;
       
     - name: Next version
       run: echo ${{ steps.version.outputs.TAG_NAME }}
       
     - name: Release
       uses: softprops/action-gh-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.version.outputs.TAG_NAME }}
         generate_release_notes: true
