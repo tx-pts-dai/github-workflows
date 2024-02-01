@@ -1,0 +1,33 @@
+# Default release on push in main
+name: Release
+on:
+  push:
+    branches:
+    - main
+    
+jobs:
+ release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Retrieve version
+      id: version 
+      run: | 
+        git fetch --tags
+        RELEASE_TAG=$(git tag | sort -V | tail -1 | awk -F. '{print $1"."($2+1)"."$3}'
+        if [ "$RELEASE_TAG" = "" ]; then 
+          echo "TAG_NAME=v0.0.1" >> $GITHUB_OUTPUT
+        else
+          echo "TAG_NAME=$RELEASE_TAG">> $GITHUB_OUTPUT
+        fi;
+      
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.TAG_NAME }}
+        generate_release_notes: true
