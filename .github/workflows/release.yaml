@@ -19,7 +19,7 @@ jobs:
       id: version 
       run: | 
         git fetch --tags
-        RELEASE_TAG=$(git tag | sort -g | tail -1 | awk -F. -v OFS=. '{$NF=$NF+1;print}')
+        RELEASE_TAG=$(git tag | sort -V | tail -1 | awk -F. -v OFS=. '{$NF=$NF+1;print}')
         if [ "$RELEASE_TAG" = "" ]; then 
           echo "TAG_NAME=v0.0.1" >> $GITHUB_OUTPUT
         else
