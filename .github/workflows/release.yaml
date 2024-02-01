@@ -15,23 +15,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       
-    - name: Get tags
-      uses: actions-ecosystem/action-get-latest-tag@v1
-      with:
-        semver_only: true
-
     - name: Retrieve version
       id: version 
       run: | 
+        git fetch --tags
         RELEASE_TAG=$(git tag | sort -g | tail -1 | awk -F. -v OFS=. '{$NF=$NF+1;print}')
         if [ "$RELEASE_TAG" = "" ]; then 
           echo "TAG_NAME=v0.0.1" >> $GITHUB_OUTPUT
         else
           echo "TAG_NAME=$RELEASE_TAG">> $GITHUB_OUTPUT
         fi;
-      
-    - name: Next version
-      run: echo ${{ steps.version.outputs.TAG_NAME }}
       
     - name: Release
       uses: softprops/action-gh-release@v1
