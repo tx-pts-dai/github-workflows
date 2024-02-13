@@ -1,0 +1,18 @@
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/_test-tf-dflook-cleanup.yaml'
+      - '.github/workflows/tf-dflook-cleanup.yaml'
+      - 'tests/terraform/**'
+
+  push:
+    branches:
+      - main
+
+jobs:
+  test_tf_dflook_cleanup:
+    uses: ./.github/workflows/tf-dflook-cleanup.yaml
+    with:
+      environment: sandbox

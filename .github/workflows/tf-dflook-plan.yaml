@@ -37,8 +37,6 @@ on:
         description: "New line separated list of Terraform variable files to pass to the plan command"
         required: false
         type: string
-        default: ''
-
 jobs:
   terraform:
     permissions:

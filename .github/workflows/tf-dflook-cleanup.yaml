@@ -1,0 +1,56 @@
+# Workflow to cleanup feature branch resources
+#
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        type: string
+        required: true
+      aws_region:
+        description: "AWS region"
+        type: string
+        default: "eu-central-1"
+      aws_oidc_role_arn:
+        description: "AWS OIDC IAM role to assume"
+        type: string
+        default: "${{ vars.aws_oidc_role_arn }}"
+      build_type:
+        description: "Type of build: Docker | Lambda"
+        type: string
+        default: "${{ vars.build_type }}"
+      tf_dir:
+        description: "Terraform directory"
+        type: string
+        default: "${{ vars.tf_dir }}"
+      tf_backend_configs:
+        description: "Terraform backend config cli arguments"
+        type: string
+        default: "${{ vars.tf_backend_configs }}"
+
+jobs:
+  terraform:
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ inputs.aws_oidc_role_arn }}
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: terraform destroy
+        uses: dflook/terraform-destroy-workspace@v1
+        with:
+          path: ${{ inputs.tf_dir }}
+          workspace: ${{ github.head_ref }}
+          backend_config: ${{ inputs.tf_backend_configs }}
