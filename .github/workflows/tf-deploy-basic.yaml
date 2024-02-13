@@ -46,6 +46,10 @@ on:
         description: "The name of the S3 key to store the Terraform state"
         required: false
         type: string
+      tf_backend_configs:
+        description: "Newline separated list of backend-configs to pass to the init command"
+        required: false
+        type: string
       tf_var_files:
         description: "Comma separated list of Terraform variable files to pass to the plan command"
         required: false
@@ -98,6 +102,14 @@ jobs:
         id: init
         run: |
           tf_args=""
+
+          while read -r var; do
+            if [ -n "$var" ]; then
+              tf_args+=" -backend-config=$var"
+            fi
+          done <<< "${{ inputs.tf_backend_configs }}"
+
+          # Overwrite with the tf_state_bucket and tf_state_key variables
           if [ "${{ inputs.tf_state_bucket }}" != "" ]; then
             tf_args+=" -backend-config=bucket=${{ inputs.tf_state_bucket }}"
           fi
@@ -105,13 +117,9 @@ jobs:
             tf_args+=" -backend-config=key=${{ inputs.tf_state_key}}"
           fi
 
-          echo running terraform init \
-           -input=false \
-           ${tf_args}
+          echo running terraform init -input=false ${tf_args}
+          terraform init -input=false ${tf_args}
 
-          terraform init \
-           -input=false \
-           ${tf_args}
       - name: Terraform Format
         id: fmt
         run: terraform fmt -recursive -check
@@ -136,14 +144,14 @@ jobs:
 
           echo "Current working directory: $(pwd)"
 
-          tf_args=''
+          tf_args=""
 
-          IFS=',' read -ra ADDR <<< "${{ inputs.tf_vars }}"
+          IFS="," read -ra ADDR <<< "${{ inputs.tf_vars }}"
           for var in "${ADDR[@]}"; do
             tf_args+=" -var $var"
           done
 
-          IFS=',' read -ra ADDR <<< "${{ inputs.tf_var_files }}"
+          IFS="," read -ra ADDR <<< "${{ inputs.tf_var_files }}"
           for var_file in "${ADDR[@]}"; do
             tf_args+=" -var-file=$var_file"
           done
