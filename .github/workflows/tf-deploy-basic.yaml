@@ -39,11 +39,11 @@ on:
         type: boolean
         default: false
       tf_state_bucket:
-        description: "Deprecated: The name of the S3 bucket to store the Terraform state"
+        description: "The name of the S3 bucket to store the Terraform state"
         required: false
         type: string
       tf_state_key:
-        description: "Deprecated: The name of the S3 key to store the Terraform state"
+        description: "The name of the S3 key to store the Terraform state"
         required: false
         type: string
       tf_backend_configs:
@@ -109,7 +109,7 @@ jobs:
             fi
           done <<< "${{ inputs.tf_backend_configs }}"
 
-          # Still keep the old deprecated inputs
+          # Overwrite with the tf_state_bucket and tf_state_key variables
           if [ "${{ inputs.tf_state_bucket }}" != "" ]; then
             tf_args+=" -backend-config=bucket=${{ inputs.tf_state_bucket }}"
           fi
