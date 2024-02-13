@@ -39,7 +39,7 @@ jobs:
           fpath=${{ inputs.build_dir }}/$fname-v${{ inputs.node_version }}.zip
           mkdir -p nodejs ${{ inputs.build_dir }}
           npm install --omit=dev
-          mv node_modules nodejs/
+          cp -RL node_modules nodejs/
           zip -r $fpath nodejs
           echo "file_name=$fname" >> $GITHUB_OUTPUT
           echo "file_path=$fpath" >> $GITHUB_OUTPUT
