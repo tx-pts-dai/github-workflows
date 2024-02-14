@@ -54,7 +54,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - run:
+      - run: |
           echo ${{ inputs.tf_backend_configs }}
 
       - name: Configure AWS Credentials
@@ -67,15 +67,13 @@ jobs:
         uses: dflook/terraform-fmt-check@v1
         with:
           path: ${{ inputs.tf_dir }}
-          backend_config:
-            ${{ inputs.tf_backend_configs }}
+          backend_config: ${{ inputs.tf_backend_configs }}
 
       - name: Terraform Validate
         uses: dflook/terraform-validate@v1
         with:
           path: ${{ inputs.tf_dir }}
-          backend_config:
-            ${{ inputs.tf_backend_configs }}
+          backend_config: ${{ inputs.tf_backend_configs }}
 
       - name: Terraform Plan
         id: plan
@@ -83,11 +81,9 @@ jobs:
         with:
           path: ${{ inputs.tf_dir }}
           backend_config: ${{ inputs.tf_backend_configs }}
-          backend_config_file:
-            ${{ inputs.tf_backend_files }}
+          backend_config_file: ${{ inputs.tf_backend_files }}
           label: ${{ inputs.environment}}
-          var_file:
-            ${{ inputs.tf_var_files }}
+          var_file: ${{ inputs.tf_var_files }}
           add_github_comment: changes-only
 
       - name: Create String Output

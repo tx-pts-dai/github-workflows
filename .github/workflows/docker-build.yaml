@@ -12,7 +12,7 @@ on:
         description: 'Path to the build context'
         type: string
         required: false
-        default: .
+        default: '.'
       artifact_retention_days:
         description: 'Number of days to retain the artifact'
         type: number
@@ -46,7 +46,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.image_name }}-${{ github.sha }}
           path: /tmp/${{ inputs.image_name }}.tar

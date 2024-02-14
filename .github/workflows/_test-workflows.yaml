@@ -67,12 +67,11 @@ jobs:
       aws_region: ${{ vars.aws_region }}
       aws_role_name: ${{ vars.aws_role_name }}
       environment: sandbox
-      tf_backend_configs:
+      tf_backend_configs: |
         bucket=tf-state-911453050078
         key=github-workflows/tf-dflook
       tf_dir: tests/terraform/s3
-      tf_var_files:
-        tests/terraform/environment/sandbox.tfvars
+      tf_var_files: tests/terraform/s3/environment/sandbox.tfvars
 
   test_terraform_dflook_apply:
     needs: test_terraform_dflook_plan
@@ -82,9 +81,8 @@ jobs:
       aws_region: ${{ vars.aws_region }}
       aws_role_name: ${{ vars.aws_role_name }}
       environment: sandbox
-      tf_backend_configs:
+      tf_backend_configs: |
         bucket=tf-state-911453050078
         key=github-workflows/tf-dflook
       tf_dir: tests/terraform/s3
-      tf_var_files:
-        tests/terraform/environment/sandbox.tfvars
+      tf_var_files: tests/terraform/s3/environment/sandbox.tfvars

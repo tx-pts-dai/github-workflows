@@ -24,7 +24,7 @@ on:
         description: "The directory where the Terraform files are located"
         type: string
         required: false
-        default: '.'
+        default: "."
       tf_backend_configs:
         description: "Terraform backend configuration"
         required: false
@@ -37,7 +37,6 @@ on:
         description: "New line separated list of Terraform variable files to pass to the plan command"
         required: false
         type: string
-        default: ''
 jobs:
   terraform:
     permissions:
