@@ -30,11 +30,15 @@ on:
         required: false
         type: string
       tf_backend_files:
-        description: "New line separated list of Terraform backend files to pass to the plan command"
+        description: "New line separated list of Terraform backend files to pass to the apply command"
         required: false
         type: string
       tf_var_files:
-        description: "New line separated list of Terraform variable files to pass to the plan command"
+        description: "New line separated list of Terraform variable files to pass to the apply command"
+        required: false
+        type: string
+      tf_vars:
+        description: "New line separated list of Terraform variables to pass to the apply command"
         required: false
         type: string
 jobs:
@@ -63,9 +67,8 @@ jobs:
         with:
           path: ${{ inputs.tf_dir }}
           backend_config: ${{ inputs.tf_backend_configs }}
-          backend_config_file:
-            ${{ inputs.tf_backend_files }}
+          backend_config_file: ${{ inputs.tf_backend_files }}
           label: ${{ inputs.environment }}
-          var_file:
-            ${{ inputs.tf_var_files }}
+          var_file: ${{ inputs.tf_var_files }}
+          variables: ${{ inputs.tf_vars }}
           auto_approve: true

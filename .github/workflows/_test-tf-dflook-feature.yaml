@@ -11,11 +11,6 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-  id-token: write
-  pull-requests: write
-
 jobs:
   test_tf_dflook_feature:
     uses: ./.github/workflows/tf-dflook-feature.yaml

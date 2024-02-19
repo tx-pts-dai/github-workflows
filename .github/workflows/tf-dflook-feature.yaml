@@ -15,23 +15,30 @@ on:
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
-        default: "${{ vars.AWS_OIDC_ROLE_ARN }}"
       build_type:
         description: "Type of build: Docker | Lambda"
         type: string
-        default: "${{ vars.BUILD_TYPE }}"
       tf_dir:
         description: "Terraform directory"
         type: string
-        default: "${{ vars.TF_DIR }}"
       tf_backend_configs:
         description: "Terraform backend config cli arguments"
         type: string
-        default: "${{ vars.TF_BACKEND_CONFIGS }}"
       tf_var_files:
         description: "New line separated list of terraform variable files"
         type: string
-        default: "${{ vars.TF_VAR_FILES }}"
+      tf_vars:
+        description: "New line separated list of terraform variables"
+        type: string
+
+env:
+  ENVIRONMENT: ${{ inputs.environment }}
+  AWS_DEFAULT_REGION: ${{ inputs.aws_region }}
+  AWS_ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn }}
+  TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
+  TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
+  TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
+  TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
 
 jobs:
   terraform:
@@ -50,20 +57,22 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ inputs.aws_oidc_role_arn }}
-          aws-region: ${{ inputs.aws_region }}
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
       - name: Use branch workspace
         uses: dflook/terraform-new-workspace@v1
         with:
-          path: ${{ inputs.tf_dir }}
+          path: ${{ env.TF_DIR }}
           workspace: ${{ github.head_ref }}
-          backend_config: ${{ inputs.tf_backend_configs }}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
 
       - name: Deploy test infrastrucutre
         uses: dflook/terraform-apply@v1
         with:
-          path: ${{ inputs.tf_dir }}
+          path: ${{ env.TF_DIR}}
           workspace: ${{ github.head_ref }}
-          backend_config: ${{ inputs.tf_backend_configs }}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
+          var_file: ${{ env.TF_VAR_FILES }}
+          variables: ${{ env.TF_VARS }}
           auto_approve: true
