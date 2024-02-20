@@ -1,48 +1,44 @@
-# Test dflook plan workflow
+# Terraform Plan Workflow using dflook/terraform-github-actions
 on:
   workflow_call:
     inputs:
-      aws_account_id:
-        description: "The AWS account ID"
-        type: string
-        required: true
-      aws_region:
-        description: "The AWS region"
-        required: false
-        type: string
-        default: eu-central-1
-      aws_role_name:
-        description: "The name of the role to assume with OIDC"
-        type: string
-        required: false
-        default: cicd-iac
       environment:
-        description: "The environment name"
+        description: "Environment to deploy."
         type: string
         required: true
+      aws_account_id:
+        description: "The AWS account ID."
+        type: string
+      aws_region:
+        description: "The AWS region."
+        type: string
+      aws_role_name:
+        description: "The name of the role to assume with OIDC."
+        type: string
+      aws_oidc_role_arn:
+        description: "AWS OIDC IAM role to assume"
+        type: string
+      github_comment:
+        description: "Whether to post a comment on the PR with the Terraform plan"
+        type: string
+        default: changes-only
       tf_dir:
-        description: "The directory where the Terraform files are located"
+        description: "Path to the Terraform root module to apply."
         type: string
-        required: false
-        default: '.'
       tf_backend_configs:
-        description: "Terraform backend configuration"
-        required: false
+        description: "ist of Terraform backend config values, one per line."
         type: string
-      tf_backend_files:
-        description: "New line separated list of Terraform backend files to pass to the plan command"
-        required: false
+      tf_backend_config_files:
+        description: "List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace."
         type: string
       tf_var_files:
-        description: "New line separated list of Terraform variable files to pass to the plan command"
-        required: false
+        description: "List of tfvars files to use, one per line. Paths should be relative to the GitHub Actions workspace."
         type: string
       tf_vars:
-        description: "New line separated list of Terraform variables to pass to the plan command"
-        required: false
+        description: "Variables to set for the Terraform plan. This should be valid Terraform syntax."
         type: string
 jobs:
-  terraform:
+  plan:
     permissions:
       contents: read
       id-token: write
@@ -52,43 +48,51 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
+      TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
+      TF_BACKEND_FILES: ${{ inputs.tf_backend_files || vars.tf_backend_files }}
+      TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
+      TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - run: |
-          echo ${{ inputs.tf_backend_configs }}
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
+        env:
+          ROLE_TO_ASSUME: ${{ vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
         with:
-          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
-          aws-region: ${{ inputs.aws_region }}
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Format
         uses: dflook/terraform-fmt-check@v1
         with:
-          path: ${{ inputs.tf_dir }}
-          backend_config: ${{ inputs.tf_backend_configs }}
+          path: ${{ env.TF_DIR}}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
+          backend_config_file: ${{ env.TF_BACKEND_FILES }}
 
       - name: Terraform Validate
         uses: dflook/terraform-validate@v1
         with:
-          path: ${{ inputs.tf_dir }}
-          backend_config: ${{ inputs.tf_backend_configs }}
+          path: ${{ env.TF_DIR}}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
+          backend_config_file: ${{ env.TF_BACKEND_FILES }}
 
       - name: Terraform Plan
         id: plan
         uses: dflook/terraform-plan@v1
         with:
-          path: ${{ inputs.tf_dir }}
-          backend_config: ${{ inputs.tf_backend_configs }}
-          backend_config_file: ${{ inputs.tf_backend_files }}
           label: ${{ inputs.environment}}
-          var_file: ${{ inputs.tf_var_files }}
-          variables: ${{ inputs.tf_vars }}
-          add_github_comment: changes-only
+          add_github_comment: ${{ inputs.github_comment }}
+          path: ${{ env.TF_DIR}}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
+          backend_config_file: ${{ env.TF_BACKEND_FILES }}
+          var_file: ${{ env.TF_VAR_FILES }}
+          variables: ${{ env.TF_VARS }}
 
+      # TODO Convert to composite run steps
       - name: Create String Output
         if: github.event_name == 'pull_request'
         id: tf-plan-string

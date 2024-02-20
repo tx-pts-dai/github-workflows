@@ -1,17 +1,8 @@
 on:
-  pull_request:
+  workflow_run:
+    workflows: [_test-tf-dflook-feature]
     types:
-      - closed
-    branches:
-      - main
-    paths:
-      - '.github/workflows/_test-tf-dflook-cleanup.yaml'
-      - '.github/workflows/tf-dflook-cleanup.yaml'
-      - 'tests/terraform/**'
-
-  push:
-    branches:
-      - main
+      - completed
 
 jobs:
   test_tf_dflook_cleanup:

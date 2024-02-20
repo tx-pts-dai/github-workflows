@@ -4,32 +4,32 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: "Environment to deploy to"
+        description: "Environment to deploy"
         type: string
         required: true
-      aws_region:
-        description: "AWS region"
+      aws_account_id:
+        description: "The AWS account ID."
         type: string
-        default: "eu-central-1"
+      aws_region:
+        description: "The AWS region."
+        type: string
+      aws_role_name:
+        description: "The name of the role to assume with OIDC."
+        type: string
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
-        default: "${{ vars.aws_oidc_role_arn }}"
-      build_type:
-        description: "Type of build: Docker | Lambda"
-        type: string
-        default: "${{ vars.build_type }}"
       tf_dir:
         description: "Terraform directory"
         type: string
-        default: "${{ vars.tf_dir }}"
       tf_backend_configs:
         description: "Terraform backend config cli arguments"
         type: string
-        default: "${{ vars.tf_backend_configs }}"
-
+      tf_backend_config_file:
+        description: "Terraform backend config file"
+        type: string
 jobs:
-  terraform:
+  cleanup:
     permissions:
       contents: read
       id-token: write
@@ -38,19 +38,31 @@ jobs:
       group: ${{ github.workflow }}-${{ inputs.environment }}
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
+      AWS_DEFAULT_REGION: ${{ inputs.aws_region || vars.aws_region}}
+      TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
+      TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
+      TF_BACKEND_CONFIG_FILE: ${{ inputs.tf_backend_config_file || vars.tf_backend_config_file }}
+      TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
+      TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
+        env:
+          ROLE_TO_ASSUME: ${{ vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
         with:
-          role-to-assume: ${{ inputs.aws_oidc_role_arn }}
-          aws-region: ${{ inputs.aws_region }}
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: terraform destroy
         uses: dflook/terraform-destroy-workspace@v1
         with:
-          path: ${{ inputs.tf_dir }}
           workspace: ${{ github.head_ref }}
-          backend_config: ${{ inputs.tf_backend_configs }}
+          path: ${{ env.TF_DIR}}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
+          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILE }}

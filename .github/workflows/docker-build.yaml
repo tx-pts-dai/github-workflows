@@ -1,4 +1,4 @@
-name: Docker
+name: Docker Build
 
 on:
   workflow_call:
@@ -6,28 +6,21 @@ on:
       image_name:
         description: 'Name of the Docker image to build'
         type: string
-        required: false
         default: ${{ github.event.repository.name }}
       docker_context:
         description: 'Path to the build context'
         type: string
-        required: false
         default: '.'
       artifact_retention_days:
         description: 'Number of days to retain the artifact'
         type: number
-        required: false
         default: 5
-
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   build:
-    name: Build Image
     runs-on: ubuntu-latest
-
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Check out code
         uses: actions/checkout@v4
