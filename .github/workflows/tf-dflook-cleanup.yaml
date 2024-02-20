@@ -66,3 +66,5 @@ jobs:
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILE }}
+          var_file: ${{ env.TF_VAR_FILES }}
+          variables: ${{ env.TF_VARS }}
