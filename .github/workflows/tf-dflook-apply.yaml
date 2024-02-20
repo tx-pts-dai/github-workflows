@@ -42,6 +42,7 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ inputs.environment }}
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
