@@ -1,0 +1,26 @@
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/_test-tf-deploy-basic.yaml'
+      - '.github/workflows/tf-deploy-basic.yaml'
+      - 'tests/terraform/**'
+  push:
+    branches:
+      - main
+
+jobs:
+  test_terraform_deploy_basic:
+    uses: ./.github/workflows/tf-deploy-basic.yaml
+    with:
+      github_artifact_path: path/to/artifacts
+      aws_account_id: ${{ vars.aws_account_id }}
+      aws_region: ${{ vars.aws_region }}
+      aws_role_name: ${{ vars.aws_role_name }}
+      environment: foo
+      github_feedback: true
+      tf_deploy_override: true
+      tf_dir: tests/terraform/local
+      tf_vars: var1=value1,var2=value2
+      tf_version: 1.6.6

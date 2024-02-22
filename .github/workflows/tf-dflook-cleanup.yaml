@@ -1,5 +1,6 @@
-# Workflow to cleanup feature branch resources
-#
+# Workflow to cleanup Terraform workspaces
+# Can be used when a PR is closed or merged
+# This workflow will destroy the Terraform workspace and remove the state file from the backend
 on:
   workflow_call:
     inputs:

@@ -1,4 +1,8 @@
-# Terraform Plan Workflow using dflook/terraform-github-actions
+# Terraform Plan Workflow using the action dflook/terraform-github-actions
+# This workflow is used to plan Terraform changes and post the plan to a pull request as a comment. These plans
+# are then used to compare the changes when the apply workflow is run.
+# It also includes terraform validation and formatting steps.
+# This workflow utilizes either github environments variables or workflow inputs to pass to the terraform actions
 on:
   workflow_call:
     inputs:

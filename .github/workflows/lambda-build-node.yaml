@@ -5,7 +5,7 @@ on:
         description: "The Node.js version to use"
         type: string
         required: false
-        default: '20'
+        default: "20"
       source_dir:
         description: "The directory where the Lambda source code is located"
         type: string
