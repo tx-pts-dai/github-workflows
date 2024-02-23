@@ -3,9 +3,9 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/_test-docker-build-push-ecr.yaml'
-      - '.github/workflows/docker-build-push-ecr.yaml'
-      - 'tests/terraform/**'
+      - '.github/workflows/_test-docker.yaml'
+      - '.github/workflows/docker-*.yaml'
+      - 'tests/docker/**'
   push:
     branches:
       - main
@@ -31,3 +31,10 @@ jobs:
       image_name: test-docker-build-push
       docker_context: tests/docker
       docker_push: false
+
+  test_docker_build:
+    uses: ./.github/workflows/docker-build.yaml
+    with:
+      image_name: test-docker-build
+      docker_context: tests/docker
+      artifact_retention_days: 1
