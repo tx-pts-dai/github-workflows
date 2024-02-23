@@ -1,0 +1,33 @@
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/_test-tf-dflook.yaml'
+      - '.github/workflows/tf-dflook-*.yaml'
+      - 'tests/terraform/**'
+  push:
+    branches:
+      - main
+
+jobs:
+  test_tf_dflook_plan:
+    uses: ./.github/workflows/tf-dflook-plan.yaml
+    with:
+      environment: sandbox
+
+  test_tf_dflook_apply:
+    uses: ./.github/workflows/tf-dflook-apply.yaml
+    with:
+      environment: sandbox
+
+  test_tf_dflook_feature:
+    uses: ./.github/workflows/tf-dflook-feature.yaml
+    with:
+      environment: sandbox
+
+  test_tf_dflook_cleanup:
+    needs: test_tf_dflook_feature
+    uses: ./.github/workflows/tf-dflook-cleanup.yaml
+    with:
+      environment: sandbox

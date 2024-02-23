@@ -1,48 +1,45 @@
-name: Docker
+name: Docker Build and Push
 
 on:
   workflow_call:
     inputs:
+      environment:
+        description: "Environment to run the build in"
+        type: string
       aws_account_id:
         description: "AWS Account ID"
         type: string
-        required: true
       aws_region:
         description: "AWS Region"
         type: string
-        required: true
       aws_role_name:
         description: "AWS Role Name"
         type: string
-        required: true
+      aws_oidc_role_arn:
+        description: "AWS OIDC IAM role to assume"
+        type: string
       image_name:
         description: "Name of the Docker image to build"
         type: string
-        required: false
         default: ${{ github.event.repository.name }}
       image_tag:
         description: "Tag of the Docker image to build"
         type: string
-        required: false
       docker_context:
         description: "Path to the build context"
         type: string
-        required: false
-        default: .
+        default: '.'
       docker_push:
         description: "Push Image to ECR"
         type: boolean
-        required: false
         default: true
-
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -52,9 +49,12 @@ jobs:
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
+        env:
+          ROLE_TO_ASSUME: ${{ vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
         with:
-          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_name }}
-          aws-region: ${{ inputs.aws_region }}
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
