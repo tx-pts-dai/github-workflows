@@ -28,7 +28,11 @@ on:
       docker_context:
         description: "Path to the build context"
         type: string
-        default: '.'
+        default: "."
+      dockerfile_path:
+        description: "Path to the Dockerfile"
+        type: string
+        default: "Dockerfile"
       docker_push:
         description: "Push Image to ECR"
         type: boolean
@@ -68,6 +72,7 @@ jobs:
           IMAGE_TAG: ${{ inputs.image_tag }}
         with:
           context: ${{ inputs.docker_context }}
+          file: ${{ inputs.dockerfile_path }}
           # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
           cache-from: type=gha
           cache-to: type=gha,mode=max
