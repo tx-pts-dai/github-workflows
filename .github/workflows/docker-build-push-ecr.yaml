@@ -35,7 +35,7 @@ on:
         type: string
         default: "."
       dockerfile_path:
-        description: "Path to the Dockerfile. If not defined, will default to ${{ docker_context }}/Dockerfile"
+        description: "Path to the Dockerfile. If not defined, will default to {docker_context}/Dockerfile"
         type: string
         required: false
       docker_push:
