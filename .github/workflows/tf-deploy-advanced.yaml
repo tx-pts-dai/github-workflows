@@ -1,0 +1,70 @@
+on:
+  workflow_call:
+    inputs:
+      environments:
+        description: Newline-delimited list of environments to deploy to
+        type: string
+        required: true
+      aws_account_id:
+        description: "The AWS account ID."
+        type: string
+      aws_region:
+        description: "The AWS region."
+        type: string
+      aws_role_name:
+        description: "The name of the role to assume with OIDC."
+        type: string
+      aws_oidc_role_arn:
+        description: "AWS OIDC IAM role to assume"
+        type: string
+      github_comment:
+        description: "Whether to post a comment on the PR with the Terraform plan"
+        type: string
+        default: changes-only
+      tf_dir:
+        description: "Path to the Terraform root module to apply."
+        type: string
+      tf_backend_configs:
+        description: "ist of Terraform backend config values, one per line."
+        type: string
+      tf_backend_config_files:
+        description: "List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace."
+        type: string
+      tf_var_files:
+        description: "List of tfvars files to use, one per line. Paths should be relative to the GitHub Actions workspace."
+        type: string
+      tf_vars:
+        description: "Variables to set for the Terraform plan. This should be valid Terraform syntax."
+        type: string
+
+jobs:
+  matrix:
+    name: Set Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          echo "matrix=$(echo "${{ inputs.environments }}" | jq -Rsc '{include: split("\n") | map(select(. != "")) | map({environment: .})}')" >> $GITHUB_OUTPUT
+
+  plan:
+    needs: matrix
+    name: TF Apply ${{ matrix.environment }}
+    if: github.event_name == 'pull_request'
+    strategy:
+      matrix: ${{fromJson(needs.matrix.outputs.environments)}}
+
+    uses: ./.github/workflows/tf-dflook-plan.yaml
+    with:
+      environment: ${{ matrix.environment }}
+
+  apply:
+    needs: matrix
+    name: TF Apply ${{ matrix.environment }}
+    if: github.ref_name == github.event.repository.default_branch
+    strategy:
+      matrix: ${{fromJson(needs.matrix.outputs.environments)}}
+    uses: ./.github/workflows/tf-dflook-apply.yaml
+    with:
+      environment: ${{ matrix.environment }}

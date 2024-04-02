@@ -24,3 +24,11 @@ jobs:
       tf_dir: tests/terraform/local
       tf_vars: var1=value1,var2=value2
       tf_version: 1.6.6
+
+  test_terraform_deploy_advanced:
+    name: Test TF Deploy Advanced
+    uses: ./.github/workflows/tf-deploy-advanced.yaml
+    with:
+      environments: |
+        sandbox
+        sandbox2
