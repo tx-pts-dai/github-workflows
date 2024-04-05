@@ -3,9 +3,9 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/_test-docker.yaml'
-      - '.github/workflows/docker-*.yaml'
-      - 'tests/docker/**'
+      - ".github/workflows/_test-docker.yaml"
+      - ".github/workflows/docker-*.yaml"
+      - "tests/docker/**"
   push:
     branches:
       - main
@@ -24,12 +24,16 @@ jobs:
 
   test_docker_build_push_ecr_no_image_tag:
     uses: ./.github/workflows/docker-build-push-ecr.yaml
+    secrets:
+      docker_secrets: |
+        SECRET_TOKEN="S€cReT1!"
     with:
       aws_account_id: ${{ vars.aws_account_id }}
       aws_region: ${{ vars.aws_region }}
       aws_role_name: ${{ vars.aws_role_name }}
       image_name: test-docker-build-push
       docker_context: tests/docker
+      dockerfile_path: tests/docker/secrets.Dockerfile
       docker_push: false
 
   test_docker_build:
