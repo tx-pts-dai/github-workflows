@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       docker_secrets:
-        description: "Comma-delimited list of secrets to pass to docker build"
+        description: "Comma-delimited list of Github secrets to pass to docker build workflow"
         required: false
     inputs:
       environment:
