@@ -70,7 +70,8 @@ jobs:
       id-token: write
       pull-requests: write
     concurrency:
-      group: ${{ github.workflow }}-${{ inputs.environment }}
+      group: "apply-sequentially"
+      # group: ${{ github.event_name == "pull_request" && format("{1}-{2}", github.workflow, inputs.environment) || "apply-sequentially" }}
       #group: ${{ github.head_ref || github.run_id }} # The order is random, so need to find another way to apply in a specific order
     runs-on: ubuntu-latest
     defaults:
