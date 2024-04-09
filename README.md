@@ -27,6 +27,8 @@ jobs:
       my-input: my-value
 ```
 
+For more usage examples please look for the `_test-*` workflow definition in the [`.github/workflows/`](.github/workflows/) folder.
+
 ### dflook workflows
 
 [dflook](https://github.com/dflook/terraform-github-actions) actions are an externally maintained set of actions that are used in the workflows.
