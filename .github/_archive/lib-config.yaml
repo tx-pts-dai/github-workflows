@@ -1,0 +1,84 @@
+name: Config
+
+on:
+  workflow_call:
+    inputs:
+      config_path:
+        required: false
+        type: string
+        default: '.github/config.yaml'
+      environment:
+        description: Pass environment name to output environment details as outputs
+        required: false
+        type: string
+
+    outputs:
+      config:
+        value: ${{ jobs.config.outputs.config }}
+      matrix:
+        value: ${{ jobs.config.outputs.matrix }}
+      environment:
+        value: ${{ jobs.config.outputs.environment }}
+      aws_account_id:
+        value: ${{ jobs.config.outputs.aws_account_id }}
+      aws_region:
+        value: ${{ jobs.config.outputs.aws_region }}
+      aws_role_name:
+        value: ${{ jobs.config.outputs.aws_role_name }}
+      tf_state_bucket:
+        value: ${{ jobs.config.outputs.tf_state_bucket }}
+      tf_state_key:
+        value: ${{ jobs.config.outputs.tf_state_key }}
+      tf_dir:
+        value: ${{ jobs.config.outputs.tf_dir }}
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      config: ${{ steps.config.outputs.config }}
+      matrix: ${{ steps.config.outputs.matrix }}
+      environment: ${{ steps.config.outputs.environment }}
+      aws_account_id: ${{ steps.config.outputs.aws_account_id }}
+      aws_region: ${{ steps.config.outputs.aws_region }}
+      aws_role_name: ${{ steps.config.outputs.aws_role_name }}
+      tf_state_bucket: ${{ steps.config.outputs.tf_state_bucket }}
+      tf_state_key: ${{ steps.config.outputs.tf_state_key }}
+      tf_dir: ${{ steps.config.outputs.tf_dir }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Workflow config
+        id: config
+        run: |
+          config_path=${{ inputs.config_path }}
+          if [ ! -f $config_path ]; then
+            echo "Config file not found at $config_path"
+            exit 1
+          fi
+          environment=${{ inputs.environment }}
+
+          config=$(yq -r -o=json '.environment' $config_path | jq -rc)
+          matrix=$(yq -r -o=json '.environment | to_entries | map({"environment": .key} + .value)' $config_path | jq -rc)
+          echo "config=$config" >> $GITHUB_OUTPUT
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+
+          # Set defaults
+          tf_dir=$(yq -r -o=json '.defaults.tf_dir' $config_path)
+          echo "tf_dir=$tf_dir" >> $GITHUB_OUTPUT
+
+          if [ $environment ]; then
+            aws_account_id=$(yq -r -o=json '.environment.${{ inputs.environment }}.aws_account_id' $config_path)
+            aws_region=$(yq -r -o=json '.environment.${{ inputs.environment }}.aws_region' $config_path)
+            aws_role_name=$(yq -r -o=json '.environment.${{ inputs.environment }}.aws_role_name' $config_path)
+            tf_state_bucket=$(yq -r -o=json '.environment.${{ inputs.environment }}.tf_state_bucket' $config_path)
+            tf_state_key=$(yq -r -o=json '.environment.${{ inputs.environment }}.tf_state_key' $config_path)
+            tf_dir=$(yq -r -o=json '.environment.${{ inputs.environment }}.tf_dir' $config_path)
+            echo "aws_account_id=$aws_account_id" >> $GITHUB_OUTPUT
+            echo "aws_region=$aws_region" >> $GITHUB_OUTPUT
+            echo "aws_role_name=$aws_role_name" >> $GITHUB_OUTPUT
+            echo "tf_state_bucket=$tf_state_bucket" >> $GITHUB_OUTPUT
+            echo "tf_state_key=$tf_state_key" >> $GITHUB_OUTPUT
+            echo "tf_dir=$tf_dir" >> $GITHUB_OUTPUT
+          fi
+
+          cat $GITHUB_OUTPUT

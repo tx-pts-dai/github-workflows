@@ -1,0 +1,13 @@
+name: Test matrix config workflow
+run-name: TF Matrix Workflow by @${{ github.actor }}
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Matrix Workflow
+    uses: ./.github/workflows/tf-matrix.yaml
+    with:
+      config_path: ./.github/config_matrix.yaml

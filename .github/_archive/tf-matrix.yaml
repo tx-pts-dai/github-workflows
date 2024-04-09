@@ -1,0 +1,51 @@
+name: Matrix workflow
+
+on:
+  workflow_call:
+    inputs:
+      config_path:
+        description: 'Path to the config file'
+        type: string
+        required: false
+        default: '.github/config.yaml'
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test matrix config
+        uses: tx-pts-dai/config-export-action@v0.0.2
+        with:
+          config_path: ${{ inputs.config_path }}
+
+  test_terraform_plan_matrix:
+    needs: [config]
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.config.outputs.matrix) }}
+    uses: ./.github/workflows/lib-tf-plan.yaml
+    with:
+      environment: ${{ matrix.environment }}
+      aws_account_id: ${{ matrix.aws_account_id }}
+      aws_region: ${{ matrix.aws_region }}
+      aws_role_name: ${{ matrix.aws_role_name }}
+      tf_state_bucket: ${{ matrix.tf_state_bucket }}
+      tf_state_key: ${{ matrix.tf_state_key }}
+      tf_dir: ${{ matrix.tf_dir }}
+
+  test_terraform_apply_matrix:
+    needs: [config, test_terraform_plan_matrix]
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.config.outputs.matrix) }}
+    uses: ./.github/workflows/lib-tf-apply.yaml
+    with:
+      environment: ${{ matrix.environment }}
+      aws_account_id: ${{ matrix.aws_account_id }}
+      aws_region: ${{ matrix.aws_region }}
+      aws_role_name: ${{ matrix.aws_role_name }}
+      tf_state_bucket: ${{ matrix.tf_state_bucket }}
+      tf_state_key: ${{ matrix.tf_state_key }}
+      tf_dir: ${{ matrix.tf_dir }}

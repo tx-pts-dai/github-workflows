@@ -1,0 +1,48 @@
+on:
+  workflow_call:
+    inputs:
+      config_path:
+        description: 'Path to config file'
+        type: string
+        required: false
+        default: '.github/config.yaml'
+      environment:
+        description: 'Environment to run'
+        type: string
+        required: true
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    name: Destroy
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Get config
+      id: config
+      uses: tx-pts-dai/config-export-action@v0.0.2
+      with:
+        config_path: ${{ inputs.config_path }}
+        environment: ${{ inputs.environment }}
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ steps.config.outputs.aws_account_id }}:role/${{ steps.config.outputs.aws_role_name }}
+        aws-region: ${{ steps.config.outputs.aws_region }}
+
+    - name: terraform plan
+      uses: dflook/terraform-destroy@v1
+      with:
+        path: ${{ steps.config.outputs.tf_dir }}
+        backend_config: |
+          backend=s3
+          bucket=${{ steps.config.outputs.tf_state_bucket }}
+          key=${{ steps.config.outputs.tf_state_key }}
+        variables: |
+          environment="${{ inputs.environment }}"
+          github_repo="${{ github.event.repository.name }}"
+          region="${{ steps.config.outputs.aws_region }}"
+        var_file: |
+          ${{ steps.config.outputs.tf_dir }}/environment/${{ inputs.environment }}.tfvars

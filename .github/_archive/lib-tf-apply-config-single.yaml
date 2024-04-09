@@ -1,0 +1,31 @@
+on:
+  workflow_call:
+    inputs:
+      config_path:
+        description: 'Path to config file'
+        type: string
+        required: false
+        default: '.github/config.yaml'
+      environment:
+        description: 'Environment to run'
+        type: string
+        required: true
+
+jobs:
+  config:
+    uses: ./.github/workflows/lib-config.yaml
+    with:
+      config_path: ${{ inputs.config_path }}
+      environment: ${{ inputs.environment }}
+
+  apply:
+    needs: [config]
+    uses: ./.github/workflows/lib-tf-apply.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      aws_account_id: ${{ needs.config.outputs.aws_account_id }}
+      aws_region: ${{ needs.config.outputs.aws_region }}
+      aws_role_name: ${{ needs.config.outputs.aws_role_name }}
+      tf_state_bucket: ${{ needs.config.outputs.tf_state_bucket }}
+      tf_state_key: ${{ needs.config.outputs.tf_state_key }}
+      tf_dir: ${{ needs.config.outputs.tf_dir }}

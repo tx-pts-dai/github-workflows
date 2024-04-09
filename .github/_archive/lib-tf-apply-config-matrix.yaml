@@ -1,0 +1,32 @@
+on:
+  workflow_call:
+    inputs:
+      config_path:
+        description: 'Path to config file'
+        type: string
+        required: false
+
+jobs:
+  config:
+    uses: ./.github/workflows/lib-config.yaml
+
+  check:
+    needs: [config]
+    uses: ./.github/workflows/lib-tf-check.yaml
+    with:
+      tf_dir: ${{ needs.config.outputs.tf_dir }}
+
+  apply:
+    needs: [config]
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.config.outputs.matrix) }}
+    uses: ./.github/workflows/lib-tf-apply.yaml
+    with:
+      environment: ${{ matrix.environment }}
+      aws_account_id: ${{ matrix.aws_account_id }}
+      aws_region: ${{ matrix.aws_region }}
+      aws_role_name: ${{ matrix.aws_role_name }}
+      tf_state_bucket: ${{ matrix.tf_state_bucket }}
+      tf_state_key: ${{ matrix.tf_state_key }}
+      tf_dir: ${{ matrix.tf_dir }}

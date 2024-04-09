@@ -37,7 +37,7 @@ jobs:
       id-token: write
       pull-requests: write
     concurrency:
-      group: ${{ github.workflow }}-${{ inputs.environment }}
+      group: ${{ github.head_ref }}-${{ inputs.environment }}
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:

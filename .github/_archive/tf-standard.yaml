@@ -1,0 +1,64 @@
+name: Standard workflow
+
+on:
+  workflow_call:
+    inputs:
+      config_enabled:
+        description: 'Enable workflow config file'
+        type: boolean
+        required: false
+        default: false
+      config_path:
+        description: 'Path to the config file'
+        type: string
+        required: false
+        default: '.github/config.yaml'
+
+run-name: Terraform Workflow triggered by @${{ github.actor }}
+
+jobs:
+  check:
+    name: Check Terraform
+    uses: ./.github/workflows/lib-tf-lint-config.yaml
+    with:
+      config_path: ${{ inputs.config_path }}
+
+  deploy_sandbox:
+    if: github.event_name == 'pull_request'
+    needs: [check]
+    uses: ./.github/workflows/lib-tf-deploy-config.yaml
+    with:
+      environment: sandbox
+      config_path: ${{ inputs.config_path }}
+
+  plan_dev:
+    needs: [check]
+    uses: ./.github/workflows/lib-tf-plan-config.yaml
+    with:
+      environment: dev
+      config_path: ${{ inputs.config_path }}
+
+  apply_dev:
+    if: github.ref_name == github.event.repository.default_branch && github.event_name == 'push'
+    needs: [plan_dev]
+    name: Dev Apply
+    uses: ./.github/workflows/lib-tf-apply-config.yaml
+    with:
+      environment: dev
+      config_path: ${{ inputs.config_path }}
+
+  plan_prod:
+    needs: [check]
+    uses: ./.github/workflows/lib-tf-plan-config.yaml
+    with:
+      environment: prod
+      config_path: ${{ inputs.config_path }}
+
+  apply_prod:
+    if: github.ref_name == github.event.repository.default_branch && github.event_name == 'push'
+    needs: [plan_prod, apply_dev]
+    name: Prod Apply
+    uses: ./.github/workflows/lib-tf-apply-config.yaml
+    with:
+      environment: prod
+      config_path: ${{ inputs.config_path }}

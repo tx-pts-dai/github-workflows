@@ -1,0 +1,75 @@
+name: Build and Deploy
+
+on:
+  pull_request:
+    branches: [main]
+
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  # Always push to dev environment on PRs for feature branches. Need to implement a cleanup job to remove old images.
+  # Label the image with the pr number or the pr name, this makes it easier to identify the image in the ECR for cleanup
+  build:
+    if: github.event_name == 'pull_request'
+    concurrency:
+      group: ${{ github.head_ref }}
+      cancel-in-progress: true
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.8.0
+    with:
+      docker_push: true
+      environment: dev
+      # TODO: tag the image with the pr number or the pr name, this makes it easier to identify the image in the ECR for cleanup
+      # image_tags: ${{ github.sha }}, ${{ github.head_ref }}
+
+  integration:
+    if: github.event_name == 'pull_request'
+    needs: [build]
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-dflook-feature.yaml@v0.8.0
+    with:
+      environment: dev
+      tf_vars: |
+        git_branch="${{ github.event.pull_request.head.ref }}"
+        image_tag="${{ github.sha }}"
+
+  plan:
+    needs: [integration]
+    if: github.event_name == 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [dev, prod]
+
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-dflook-plan.yaml@v0.8.0
+    with:
+      environment: ${{ matrix.environment }}
+      tf_vars: image_tag="${{ github.sha }}"
+
+  # Push to other environments. In this case its only prod.
+  push:
+    if: github.ref_name == github.event.repository.default_branch && github.event_name == 'push'
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml@v0.8.0
+    with:
+      environment: prod
+
+  apply:
+    if: github.ref_name == github.event.repository.default_branch && github.event_name == 'push'
+    name: Terraform Apply (main branch)
+    needs: [push]
+    concurrency:
+      group: terraform-apply # Prevent multiple terraform apply jobs in the same repo
+      cancel-in-progress: false
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [dev, prod]
+
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-dflook-apply.yaml@v0.8.0
+    with:
+      environment: ${{ matrix.environment }}
+      tf_vars: image_tag="${{ github.sha }}"

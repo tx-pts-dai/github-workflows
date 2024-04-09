@@ -1,0 +1,47 @@
+name: Lint
+
+on:
+  workflow_call:
+    inputs:
+      config_path:
+        description: 'Path to the config file to export'
+        type: string
+        required: false
+        default: '.github/config.yaml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate terraform configuration
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get config
+        id: config
+        uses: tx-pts-dai/config-export-action@v0.0.2
+        with:
+          config_path: ${{ inputs.config_path }}
+
+      - name: terraform validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: ${{ steps.config.outputs.tf_dir }}
+
+  fmt-check:
+    runs-on: ubuntu-latest
+    name: Check formatting of terraform files
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get config
+        id: config
+        uses: tx-pts-dai/config-export-action@v0.0.2
+        with:
+          config_path: ${{ inputs.config_path }}
+
+      - name: terraform fmt
+        uses: dflook/terraform-fmt-check@v1
+        with:
+          path: ${{ steps.config.outputs.tf_dir }}

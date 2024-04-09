@@ -1,0 +1,24 @@
+version: "3"
+
+dotenv:
+  - .github/.env.dev
+
+tasks:
+  gh:env:update:
+    cmds:
+      - gh variable set -f .github/.env.dev --env dev
+      - gh variable set -f .github/.env.prod --env prod
+  build:
+    cmds:
+      - echo "Building..."
+  test:
+    cmds:
+      - echo "Testing..."
+  deploy:
+    cmds:
+      - echo "Deploying..."
+  all:
+    cmds:
+      - echo "Building..."
+      - echo "Testing..."
+      - echo "Deploying..."

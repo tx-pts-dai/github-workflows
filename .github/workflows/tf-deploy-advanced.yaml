@@ -50,7 +50,7 @@ jobs:
 
   plan:
     needs: matrix
-    name: TF Apply ${{ matrix.environment }}
+    name: TF Plan ${{ matrix.environment }}
     if: github.event_name == 'pull_request'
     strategy:
       matrix: ${{fromJson(needs.matrix.outputs.environments)}}
