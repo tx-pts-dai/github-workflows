@@ -17,6 +17,7 @@ jobs:
       environment: sandbox
 
   test_tf_dflook_apply:
+    needs: test_tf_dflook_plan
     uses: ./.github/workflows/tf-dflook-apply.yaml
     with:
       environment: sandbox
