@@ -46,6 +46,7 @@ jobs:
       pull-requests: write
     concurrency:
       group: ${{ github.workflow }}-${{ inputs.environment }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
