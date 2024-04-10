@@ -17,9 +17,12 @@ jobs:
       environment: sandbox
 
   test_tf_dflook_apply:
+    needs: test_tf_dflook_plan
     uses: ./.github/workflows/tf-dflook-apply.yaml
     with:
       environment: sandbox
+      tf_pre_run:
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
 
   test_tf_dflook_feature:
     uses: ./.github/workflows/tf-dflook-feature.yaml
