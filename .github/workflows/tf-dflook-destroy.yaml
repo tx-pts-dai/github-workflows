@@ -20,7 +20,7 @@ on:
         description: "Path to the Terraform root module to apply."
         type: string
       tf_backend_configs:
-        description: "ist of Terraform backend config values, one per line."
+        description: "List of Terraform backend config values, one per line."
         type: string
       tf_backend_config_files:
         description: "List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace."
@@ -35,14 +35,11 @@ on:
         description: "Command to run before Terraform is executed."
         type: string
 jobs:
-  apply:
+  destroy:
     permissions:
       contents: read
       id-token: write
       pull-requests: write
-    concurrency:
-      group: ${{ github.workflow }}-${{ inputs.environment }}
-      cancel-in-progress: false
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment || null}}
     env:
@@ -59,7 +56,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         env:
-          ROLE_TO_ASSUME: ${{ vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
           AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
         with:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
