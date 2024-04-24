@@ -1,13 +1,9 @@
-# Workflow to cleanup Terraform workspaces
-# Can be used when a PR is closed or merged
-# This workflow will destroy the Terraform workspace and remove the state file from the backend
 on:
   workflow_call:
     inputs:
       environment:
-        description: "Environment to deploy"
+        description: "Environment to deploy."
         type: string
-        required: true
       aws_account_id:
         description: "The AWS account ID."
         type: string
@@ -21,34 +17,36 @@ on:
         description: "AWS OIDC IAM role to assume"
         type: string
       tf_dir:
-        description: "Terraform directory"
+        description: "Path to the Terraform root module to apply."
         type: string
       tf_backend_configs:
-        description: "Terraform backend config cli arguments"
+        description: "List of Terraform backend config values, one per line."
         type: string
-      tf_backend_config_file:
-        description: "Terraform backend config file"
+      tf_backend_config_files:
+        description: "List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace."
+        type: string
+      tf_var_files:
+        description: "List of tfvars files to use, one per line. Paths should be relative to the GitHub Actions workspace."
+        type: string
+      tf_vars:
+        description: "Variables to set for the Terraform plan. This should be valid Terraform syntax."
         type: string
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string
 jobs:
-  cleanup:
+  destroy:
     permissions:
       contents: read
       id-token: write
       pull-requests: write
-    concurrency:
-      group: ${{ github.workflow }}-${{ inputs.environment }}
-      cancel-in-progress: false
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || null}}
     env:
-      ENVIRONMENT: ${{ inputs.environment }}
-      AWS_DEFAULT_REGION: ${{ inputs.aws_region || vars.aws_region}}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
       TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
-      TF_BACKEND_CONFIG_FILE: ${{ inputs.tf_backend_config_file || vars.tf_backend_config_file }}
+      TF_BACKEND_FILES: ${{ inputs.tf_backend_files || vars.tf_backend_files }}
       TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
@@ -64,8 +62,8 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: terraform destroy
-        uses: dflook/terraform-destroy-workspace@v1
+      - name: Terraform Destroy
+        uses: dflook/terraform-destroy@v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
@@ -75,9 +73,8 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
-          workspace: ${{ github.head_ref }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
-          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILE }}
+          backend_config_file: ${{ env.TF_BACKEND_FILES }}
           var_file: ${{ env.TF_VAR_FILES }}
           variables: ${{ env.TF_VARS }}
