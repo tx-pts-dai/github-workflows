@@ -1,5 +1,6 @@
 {
   "baseBranches": ["main"],
+  "branchPrefix": "renovate_",
   "rebaseWhen": "conflicted",
   "extends": [
     "config:recommended",
