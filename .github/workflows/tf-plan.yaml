@@ -1,0 +1,137 @@
+# Terraform Plan Workflow using the action dflook/terraform-github-actions
+# This workflow is used to plan Terraform changes and post the plan to a pull request as a comment. These plans
+# are then used to compare the changes when the apply workflow is run.
+# It also includes terraform validation and formatting steps.
+# This workflow utilizes either github environments variables or workflow inputs to pass to the terraform actions
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "Environment to deploy."
+        type: string
+      aws_account_id:
+        description: "The AWS account ID."
+        type: string
+      aws_region:
+        description: "The AWS region."
+        type: string
+      aws_role_name:
+        description: "The name of the role to assume with OIDC."
+        type: string
+      aws_oidc_role_arn:
+        description: "AWS OIDC IAM role to assume"
+        type: string
+      github_comment:
+        description: "Whether to post a comment on the PR with the Terraform plan"
+        type: string
+        default: changes-only
+      tf_dir:
+        description: "Path to the Terraform root module to apply."
+        type: string
+      tf_backend_configs:
+        description: "List of Terraform backend config values, one per line."
+        type: string
+      tf_backend_config_files:
+        description: "List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace."
+        type: string
+      tf_var_files:
+        description: "List of tfvars files to use, one per line. Paths should be relative to the GitHub Actions workspace."
+        type: string
+      tf_vars:
+        description: "Variables to set for the Terraform plan. This should be valid Terraform syntax."
+        type: string
+      tf_pre_run:
+        description: "Command to run before Terraform is executed."
+        type: string
+jobs:
+  plan:
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ inputs.environment }}
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
+      TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
+      TF_BACKEND_CONFIG_FILES: ${{ inputs.tf_backend_config_files || vars.tf_backend_config_files }}
+      TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
+      TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        env:
+          ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
+        with:
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Format
+        uses: dflook/terraform-fmt-check@v1
+        with:
+          path: ${{ env.TF_DIR}}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
+          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
+
+      - name: Terraform Validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: ${{ env.TF_DIR}}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
+          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
+
+      - name: Terraform Plan
+        id: plan
+        uses: dflook/terraform-plan@v1
+        env:
+          TERRAFORM_PRE_RUN: |
+            AWS_CLI_VERSION=2.15.36
+            if [ -z "${{ inputs.tf_pre_run }}" ]; then
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
+            else
+              eval "${{ inputs.tf_pre_run }}"
+            fi
+        with:
+          label: ${{ inputs.environment}}
+          add_github_comment: ${{ inputs.github_comment }}
+          path: ${{ env.TF_DIR}}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
+          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
+          var_file: ${{ env.TF_VAR_FILES }}
+          variables: ${{ env.TF_VARS }}
+
+      # TODO Convert to composite run steps
+      - name: Create String Output
+        if: github.event_name == 'pull_request'
+        id: tf-plan-string
+        env:
+          TERRAFORM_PLAN_PATH: ${{ steps.plan.outputs.text_plan_path }}
+        run: |
+          TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
+          TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
+
+          delimiter="$(openssl rand -hex 8)"
+          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_SUMMARY_HEADER" >> $GITHUB_OUTPUT
+          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo '```terraform' >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo "</details>" >> $GITHUB_OUTPUT
+          echo "${delimiter}" >> $GITHUB_OUTPUT
+
+      - name: Publish Terraform Plan to Task Summary
+        if: github.event_name == 'pull_request'
+        env:
+          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+        run: |
+          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
