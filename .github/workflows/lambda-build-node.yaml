@@ -30,7 +30,7 @@ jobs:
         working-directory: ${{ inputs.source_dir }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: Build
         id: build
@@ -45,7 +45,7 @@ jobs:
           echo "file_path=$fpath" >> $GITHUB_OUTPUT
 
       - name: Archive
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         with:
           name: ${{ steps.build.outputs.file_name }}-${{ inputs.node_version }}
           path: ${{ inputs.source_dir }}/${{ steps.build.outputs.file_path }}

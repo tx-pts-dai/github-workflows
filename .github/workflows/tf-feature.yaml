@@ -52,10 +52,10 @@ jobs:
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
         env:
           ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
           AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
@@ -64,7 +64,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Use branch workspace
-        uses: dflook/terraform-new-workspace@v1
+        uses: dflook/terraform-new-workspace@a7e66c5defccc8bdcfe4dd6b32b4064812049ed1 # v1
         with:
           workspace: ${{ github.head_ref }}
           path: ${{ env.TF_DIR }}
@@ -72,7 +72,7 @@ jobs:
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
 
       - name: Deploy test infrastrucutre
-        uses: dflook/terraform-apply@v1
+        uses: dflook/terraform-apply@8a1bf89017460503cf302632cb15e8583afa7ac4 # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
