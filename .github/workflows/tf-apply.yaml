@@ -1,7 +1,5 @@
-# Terraform Plan Workflow using the action dflook/terraform-github-actions
-# This workflow is used to plan Terraform changes and post the plan to a pull request as a comment. These plans
-# are then used to compare the changes when the apply workflow is run.
-# It also includes terraform validation and formatting steps.
+# Terraform Apply Workflow using the action dflook/terraform-github-actions
+# This workflow is used to apply Terraform changes to an environment.
 # This workflow utilizes either github environments variables or workflow inputs to pass to the terraform actions
 on:
   workflow_call:
@@ -9,7 +7,6 @@ on:
       environment:
         description: "Environment to deploy."
         type: string
-        required: true
       aws_account_id:
         description: "The AWS account ID."
         type: string
@@ -22,10 +19,6 @@ on:
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
-      github_comment:
-        description: "Whether to post a comment on the PR with the Terraform plan"
-        type: string
-        default: changes-only
       tf_dir:
         description: "Path to the Terraform root module to apply."
         type: string
@@ -45,7 +38,7 @@ on:
         description: "Command to run before Terraform is executed."
         type: string
 jobs:
-  plan:
+  apply:
     permissions:
       contents: read
       id-token: write
@@ -59,7 +52,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
       TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
-      TF_BACKEND_FILES: ${{ inputs.tf_backend_files || vars.tf_backend_files }}
+      TF_BACKEND_CONFIG_FILES: ${{ inputs.tf_backend_config_files || vars.tf_backend_config_files }}
       TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
@@ -75,23 +68,8 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Terraform Format
-        uses: dflook/terraform-fmt-check@v1
-        with:
-          path: ${{ env.TF_DIR}}
-          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
-          backend_config_file: ${{ env.TF_BACKEND_FILES }}
-
-      - name: Terraform Validate
-        uses: dflook/terraform-validate@v1
-        with:
-          path: ${{ env.TF_DIR}}
-          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
-          backend_config_file: ${{ env.TF_BACKEND_FILES }}
-
-      - name: Terraform Plan
-        id: plan
-        uses: dflook/terraform-plan@v1
+      - name: Terraform Apply
+        uses: dflook/terraform-apply@v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
@@ -101,38 +79,10 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
-          label: ${{ inputs.environment}}
-          add_github_comment: ${{ inputs.github_comment }}
+          label: ${{ inputs.environment }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
-          backend_config_file: ${{ env.TF_BACKEND_FILES }}
+          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
           var_file: ${{ env.TF_VAR_FILES }}
           variables: ${{ env.TF_VARS }}
-
-      # TODO Convert to composite run steps
-      - name: Create String Output
-        if: github.event_name == 'pull_request'
-        id: tf-plan-string
-        env:
-          TERRAFORM_PLAN_PATH: ${{ steps.plan.outputs.text_plan_path }}
-        run: |
-          TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
-          TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
-
-          delimiter="$(openssl rand -hex 8)"
-          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
-          echo "$TERRAFORM_SUMMARY_HEADER" >> $GITHUB_OUTPUT
-          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
-          echo '```terraform' >> $GITHUB_OUTPUT
-          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
-          echo '```' >> $GITHUB_OUTPUT
-          echo "</details>" >> $GITHUB_OUTPUT
-          echo "${delimiter}" >> $GITHUB_OUTPUT
-
-      - name: Publish Terraform Plan to Task Summary
-        if: github.event_name == 'pull_request'
-        env:
-          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
-        run: |
-          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+          auto_approve: true

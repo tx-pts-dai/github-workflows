@@ -1,5 +1,18 @@
 {
-  "extends": ["config:recommended"],
+  "baseBranches": ["main"],
+  "rebaseWhen": "conflicted",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
   "reviewers": ["team:DAI-Team"],
-  "enabledManagers": ["github-actions"]
+  "enabledManagers": ["github-actions"],
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": false,
+      "pinDigests": true
+    }
+  ]
 }
