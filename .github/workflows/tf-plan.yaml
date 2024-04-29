@@ -63,10 +63,10 @@ jobs:
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
         env:
           ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
           AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
@@ -75,14 +75,14 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Format
-        uses: dflook/terraform-fmt-check@v1
+        uses: dflook/terraform-fmt-check@5e2043f1289bfaf0e568855ca2513aa13e9ac04f # v1
         with:
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
 
       - name: Terraform Validate
-        uses: dflook/terraform-validate@v1
+        uses: dflook/terraform-validate@01559dd634f13c7cc3b7dfff49c31cbeec8813c1 # v1
         with:
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
@@ -90,7 +90,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        uses: dflook/terraform-plan@v1
+        uses: dflook/terraform-plan@0f4a5046f18698eee737a52d4cb11f56f2377a32 # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
