@@ -39,7 +39,7 @@ This workflow is responsible for deploying infrastructure using Terraform throug
 
 ## Docker Build and Push to ECR
 
-The `docker-build-push-ecr.yaml` builds a Docker image and pushes it to the Elastic Container Registry (ECR). It's triggered on a workflow_call event and accepts several inputs. For more information see [documentation](/docs/README-docker-build-push.md).
+The `docker-build-push-ecr.yaml` builds a Docker image and pushes it to the Elastic Container Registry (ECR). It's triggered on a workflow_call event and accepts several inputs. For more information see [Docker build and push documentation](/docs/README-docker-build-push.md).
 
 ## Release
 
