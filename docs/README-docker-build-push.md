@@ -19,7 +19,7 @@ The `docker-build-push-ecr.yaml` is a GitHub Action workflow designed to automat
 
 ## Examples
 
-```
+```yaml
 on: [push, pull_request]
 jobs:
   docker_build_push_ecr:
