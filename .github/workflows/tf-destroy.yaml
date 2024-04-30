@@ -1,62 +1,60 @@
-# Terraform feature branch workflow
-# Creates a new terraform workspace based on the branch name
-# This workflow utilizes either github environments variables or workflow inputs to pass to the terraform actions
 on:
   workflow_call:
     inputs:
       environment:
-        description: "Environment to deploy"
+        description: "Environment to deploy."
         type: string
-        required: true
+      aws_account_id:
+        description: "The AWS account ID."
+        type: string
       aws_region:
-        description: "AWS region"
+        description: "The AWS region."
+        type: string
+      aws_role_name:
+        description: "The name of the role to assume with OIDC."
         type: string
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
       tf_dir:
-        description: "Terraform directory"
+        description: "Path to the Terraform root module to apply."
         type: string
       tf_backend_configs:
-        description: "Terraform backend config cli arguments"
+        description: "List of Terraform backend config values, one per line."
         type: string
-      tf_backend_config_file:
-        description: "Terraform backend config file"
+      tf_backend_config_files:
+        description: "List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace."
         type: string
       tf_var_files:
-        description: "New line separated list of terraform variable files"
+        description: "List of tfvars files to use, one per line. Paths should be relative to the GitHub Actions workspace."
         type: string
       tf_vars:
-        description: "New line separated list of terraform variables"
+        description: "Variables to set for the Terraform plan. This should be valid Terraform syntax."
         type: string
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string
 jobs:
-  feature:
+  destroy:
     permissions:
       contents: read
       id-token: write
       pull-requests: write
-    concurrency:
-      group: ${{ github.workflow }}-${{ inputs.environment }}
-      cancel-in-progress: false
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment || null}}
     env:
-      ENVIRONMENT: ${{ inputs.environment }}
-      AWS_DEFAULT_REGION: ${{ inputs.aws_region || vars.aws_region}}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
       TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
-      TF_BACKEND_CONFIG_FILE: ${{ inputs.tf_backend_config_file || vars.tf_backend_config_file }}
+      TF_BACKEND_CONFIG_FILES: ${{ inputs.tf_backend_config_files || vars.tf_backend_config_files }}
       TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
         env:
           ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
           AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
@@ -64,16 +62,8 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Use branch workspace
-        uses: dflook/terraform-new-workspace@v1
-        with:
-          workspace: ${{ github.head_ref }}
-          path: ${{ env.TF_DIR }}
-          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
-          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILE }}
-
-      - name: Deploy test infrastrucutre
-        uses: dflook/terraform-apply@v1
+      - name: Terraform Destroy
+        uses: dflook/terraform-destroy@7f500c95250b8744af0b6c632d54b38d91056062 # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
@@ -83,10 +73,8 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
-          workspace: ${{ github.head_ref }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
-          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILE }}
+          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
           var_file: ${{ env.TF_VAR_FILES }}
           variables: ${{ env.TF_VARS }}
-          auto_approve: true

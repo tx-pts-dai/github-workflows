@@ -1,3 +1,6 @@
+# Terraform Apply Workflow using the action dflook/terraform-github-actions
+# This workflow is used to apply Terraform changes to an environment.
+# This workflow utilizes either github environments variables or workflow inputs to pass to the terraform actions
 on:
   workflow_call:
     inputs:
@@ -20,7 +23,7 @@ on:
         description: "Path to the Terraform root module to apply."
         type: string
       tf_backend_configs:
-        description: "List of Terraform backend config values, one per line."
+        description: "ist of Terraform backend config values, one per line."
         type: string
       tf_backend_config_files:
         description: "List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace."
@@ -35,26 +38,29 @@ on:
         description: "Command to run before Terraform is executed."
         type: string
 jobs:
-  destroy:
+  apply:
     permissions:
       contents: read
       id-token: write
       pull-requests: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ inputs.environment }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || null}}
+    environment: ${{ inputs.environment }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
       TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
-      TF_BACKEND_FILES: ${{ inputs.tf_backend_files || vars.tf_backend_files }}
+      TF_BACKEND_CONFIG_FILES: ${{ inputs.tf_backend_config_files || vars.tf_backend_config_files }}
       TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
         env:
           ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
           AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
@@ -62,8 +68,8 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Terraform Destroy
-        uses: dflook/terraform-destroy@v1
+      - name: Terraform Apply
+        uses: dflook/terraform-apply@8a1bf89017460503cf302632cb15e8583afa7ac4 # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
@@ -73,8 +79,10 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
+          label: ${{ inputs.environment }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
-          backend_config_file: ${{ env.TF_BACKEND_FILES }}
+          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
           var_file: ${{ env.TF_VAR_FILES }}
           variables: ${{ env.TF_VARS }}
+          auto_approve: true
