@@ -1,4 +1,4 @@
-## Quick start guide
+# Quick start guide
 
 The `docker-build-push-ecr.yaml` is a GitHub Action workflow designed to automate the process of building a Docker image and pushing it to Amazon ECR. It's triggered on a `workflow_call` event and accepts several inputs.
 
