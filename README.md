@@ -35,7 +35,7 @@ Each workflow has its own dedicated documentation. For a detailed understanding,
 
 ## Terraform Deployment
 
-# This workflow is responsible for deploying infrastructure using Terraform. For more information see [Terraform Deployment Documentation](/docs/README-tf-deploy.md).
+This workflow is responsible for deploying infrastructure using Terraform through dflook . For more information see [Terraform Deployment Documentation](/docs/README-tf-deploy.md).
 
 ## Docker Build and Push to ECR
 
@@ -43,11 +43,11 @@ The `docker-build-push-ecr.yaml` builds a Docker image and pushes it to the Elas
 
 ## Release
 
-# This workflow handles the release process, including versioning and tagging. For more information see [Release Documentation](/docs/README-gh-release.md).
+This workflow handles the release process, including versioning and tagging. For more information see [Release Documentation](/docs/README-gh-release.md).
 
 ## Lambda Build Node
 
-# This workflow is responsible for building the Lambda function using Node.js. For more information see [Lambda Build Node Documentation](/docs/README-lambda-build-node.md).
+This workflow is responsible for building the Lambda function using Node.js. For more information see [Lambda Build Node Documentation](/docs/README-lambda-build-node.md).
 
 # Development Guidelines
 
