@@ -1,9 +1,8 @@
 # Quick start guide
-
-## dflook workflows
-
 [dflook](https://github.com/dflook/terraform-github-actions) actions are an externally maintained set of actions that are used in the workflows.
 The decision to use [dflook](https://github.com/dflook/terraform-github-actions) actions was made to reduce the maintenance burden of the workflows and reuse actions that are well tested and reliable.
+
+## Inputs dflook workflows
 
 Each reusable workflow should contain related tasks to reduce any duplication of tasks across workflows. eg. `plan` runs validate and format before the plan to catch any issues early and not have to rely on creating extra workflows to run these tasks.
 
@@ -11,3 +10,44 @@ Assumptions when using dflook actions:
 
 - the environment input is set for all actions.
 - inputs are either passed directly to the action or are set as environment variables.
+
+## Examples 
+```yaml
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/_test-tf-dflook.yaml'
+      - '.github/workflows/tf-dflook-*.yaml'
+      - 'tests/terraform/**'
+  push:
+    branches:
+      - main
+
+jobs:
+  test_tf_dflook_plan:
+    uses: ./.github/workflows/tf-dflook-plan.yaml
+    with:
+      environment: sandbox
+
+  test_tf_dflook_apply:
+    needs: test_tf_dflook_plan
+    uses: ./.github/workflows/tf-dflook-apply.yaml
+    with:
+      environment: sandbox
+      tf_pre_run:
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
+
+  test_tf_dflook_feature:
+    uses: ./.github/workflows/tf-dflook-feature.yaml
+    with:
+      environment: sandbox
+
+  test_tf_dflook_cleanup:
+    needs: test_tf_dflook_feature
+    uses: ./.github/workflows/tf-dflook-cleanup.yaml
+    with:
+      environment: sandbox
+```
+
