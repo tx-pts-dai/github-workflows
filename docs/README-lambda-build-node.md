@@ -13,7 +13,7 @@ The `lambda-build-node.yaml` is a GitHub Action workflow designed to automate th
 
 ## Examples
 
-```
+```yaml
 on: [push, pull_request]
 jobs:
   build:
