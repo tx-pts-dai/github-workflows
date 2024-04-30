@@ -26,9 +26,7 @@ jobs:
     uses: ./.github/workflows/docker-build-push-ecr.yaml
     with:
       environment: 'production'
-      aws_account_id: '123456789012'
       aws_region: 'us-west-2'
-      aws_role_name: 'my-aws-role'
       aws_oidc_role_arn: 'arn:aws:iam::123456789012:role/my-aws-role'
       image_name: 'my-docker-image'
       image_tag: 'latest'
