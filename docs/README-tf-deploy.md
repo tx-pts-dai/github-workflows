@@ -33,7 +33,7 @@ jobs:
       environment: sandbox
 
   test_tf_apply:
-    needs: test_tf_dflook_plan
+    needs: test_tf_plan
     uses: ./.github/workflows/tf-apply.yaml
     with:
       environment: sandbox
