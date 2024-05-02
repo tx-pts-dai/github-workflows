@@ -28,7 +28,7 @@ on:
 
 jobs:
   test_tf_plan:
-    uses: ./.github/workflows/tf-dflook-plan.yaml
+    uses: ./.github/workflows/tf-plan.yaml
     with:
       environment: sandbox
 
