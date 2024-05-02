@@ -41,7 +41,7 @@ jobs:
         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
 
   test_tf_feature:
-    uses: ./.github/workflows/tf-dflook-feature.yaml
+    uses: ./.github/workflows/tf-feature.yaml
     with:
       environment: sandbox
 
