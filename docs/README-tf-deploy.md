@@ -19,7 +19,7 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/_test-tf-dflook.yaml'
+      - '.github/workflows/_test-tf.yaml'
       - '.github/workflows/tf-dflook-*.yaml'
       - 'tests/terraform/**'
   push:
