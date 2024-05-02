@@ -34,7 +34,7 @@ jobs:
 
   test_tf_apply:
     needs: test_tf_dflook_plan
-    uses: ./.github/workflows/tf-dflook-apply.yaml
+    uses: ./.github/workflows/tf-apply.yaml
     with:
       environment: sandbox
       tf_pre_run:
