@@ -46,7 +46,7 @@ jobs:
       environment: sandbox
 
   test_tf_cleanup:
-    needs: test_tf_dflook_feature
+    needs: test_tf_feature
     uses: ./.github/workflows/tf-dflook-cleanup.yaml
     with:
       environment: sandbox
