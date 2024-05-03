@@ -31,6 +31,9 @@ on:
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string
+      tf_workspace:
+        description: "Terraform workspace"
+        type: string
 jobs:
   cleanup:
     permissions:
@@ -74,7 +77,7 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
-          workspace: ${{ github.head_ref }}
+          workspace: ${{ tf_workspace || github.head_ref }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
