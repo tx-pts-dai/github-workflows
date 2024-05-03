@@ -53,6 +53,7 @@ jobs:
       TF_BACKEND_CONFIG_FILES: ${{ inputs.tf_backend_config_files || vars.tf_backend_config_files }}
       TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
+      TF_WORKSPACE: ${{ inputs.tf_workspace || vars.tf_workspace || github.head_ref}}
     steps:
       - name: Checkout
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
@@ -69,7 +70,7 @@ jobs:
       - name: Use branch workspace
         uses: dflook/terraform-new-workspace@a7e66c5defccc8bdcfe4dd6b32b4064812049ed1 # v1
         with:
-          workspace: ${{ inputs.tf_workspace || github.head_ref }}
+          workspace: ${{ env.TF_WORKSPACE }}
           path: ${{ env.TF_DIR }}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
@@ -85,7 +86,7 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
-          workspace: ${{ inputs.tf_workspace || github.head_ref }}
+          workspace: ${{ env.TF_WORKSPACE }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
