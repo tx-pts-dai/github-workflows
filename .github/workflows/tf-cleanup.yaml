@@ -77,7 +77,7 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
-          workspace: ${{ tf_workspace || github.head_ref }}
+          workspace: ${{ inputs.tf_workspace || github.head_ref }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}

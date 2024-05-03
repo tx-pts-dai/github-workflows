@@ -31,6 +31,9 @@ on:
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string
+      tf_workspace:
+          description: "Terraform workspace"
+          type: string
 jobs:
   feature:
     permissions:
@@ -66,7 +69,7 @@ jobs:
       - name: Use branch workspace
         uses: dflook/terraform-new-workspace@a7e66c5defccc8bdcfe4dd6b32b4064812049ed1 # v1
         with:
-          workspace: ${{ github.head_ref }}
+          workspace: ${{ inputs.tf_workspace || github.head_ref }}
           path: ${{ env.TF_DIR }}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
@@ -82,7 +85,7 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
-          workspace: ${{ github.head_ref }}
+          workspace: ${{ inputs.tf_workspace || github.head_ref }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
