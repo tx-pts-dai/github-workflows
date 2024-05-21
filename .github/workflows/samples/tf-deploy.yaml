@@ -1,0 +1,41 @@
+name: TF Deployment
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+      - "renovate.json"
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+      - "renovate.json"
+  workflow_dispatch:
+  
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    if: github.event_name == 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [infra-dev, infra-int, infra-prod]
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
+    with:
+      environment: ${{ matrix.environment }}
+
+  apply:
+    if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [infra-dev, infra-int, infra-prod]
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.16.0
+    with:
+      environment: ${{ matrix.environment }}
