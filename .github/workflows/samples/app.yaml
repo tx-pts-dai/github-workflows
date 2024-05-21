@@ -25,6 +25,7 @@ jobs:
     uses: ./.github/workflows/docker-build.yaml
       
   docker_push_ecr:
+    if: github.event_name == 'push'
     strategy:
       fail-fast: false
       matrix:
