@@ -118,6 +118,8 @@ jobs:
           TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
 
+          echo "plan length is ${#TERRAFORM_PLAN}"
+
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
           echo "$TERRAFORM_SUMMARY_HEADER" >> $GITHUB_OUTPUT
