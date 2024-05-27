@@ -118,8 +118,17 @@ jobs:
           TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
 
-          echo "plan length is ${#TERRAFORM_PLAN}"
-          tail -1000 "$TERRAFORM_PLAN"
+          length=${#TERRAFORM_PLAN}         
+          # Calculate the start position for the last 1000 characters
+          start=$((length - 1000))
+          
+          # Extract and print the last 1000 characters
+          if (( start > 0 )); then
+              echo "${file_content:start:1000}"
+          else
+              echo "$file_content"
+          fi
+          
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
           echo "$TERRAFORM_SUMMARY_HEADER" >> $GITHUB_OUTPUT
