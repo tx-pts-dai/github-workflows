@@ -124,7 +124,7 @@ jobs:
             echo "Plan will not be cut !"
             SHORT_PLAN=${TERRAFORM_PLAN}
           else
-            echo "Plan will be cut to max ${MAX_PLAN_LENGTH} chars ! (LENGTH: ${PLAN_LENGTH})"
+            echo ":warning: Plan output is too long to be displayed (${PLAN_LENGTH} chars). Only the last ${MAX_PLAN_LENGTH} characters will be printed. "
             SHORT_PLAN=${TERRAFORM_PLAN:START:MAX_PLAN_LENGTH}
           fi
           delimiter="$(openssl rand -hex 8)"
