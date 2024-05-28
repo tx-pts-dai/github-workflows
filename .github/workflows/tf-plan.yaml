@@ -119,7 +119,7 @@ jobs:
           TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
           PLAN_LENGTH=${#TERRAFORM_PLAN}         
-          START=$((PLAN_LENGTH - MAX_PLAN_LENGTH))
+          START=$(PLAN_LENGTH - MAX_PLAN_LENGTH)
           if [ "$START" -lt 0 ]; then
             echo "Plan will not be cut !"
             SHORT_PLAN=${TERRAFORM_PLAN}
