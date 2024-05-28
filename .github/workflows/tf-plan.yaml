@@ -121,21 +121,17 @@ jobs:
           length=${#TERRAFORM_PLAN}         
           # Calculate the start position for the last 1000 characters
           start=$((length - 1000))
-          
-          # Extract and print the last 1000 characters
-          if (( start > 0 )); then
-              echo "${TERRAFORM_PLAN:start:1000}"
-          else
-              echo "$TERRAFORM_PLAN"
-          fi
-          
+
+          echo $start
+          echo $length
+          SHORT_PLAN=${TERRAFORM_PLAN:start:100}
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
           echo "$TERRAFORM_SUMMARY_HEADER" >> $GITHUB_OUTPUT
           echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo '```terraform' >> $GITHUB_OUTPUT
-          echo "${TERRAFORM_PLAN:start:100}" >> $GITHUB_OUTPUT
+          echo "${SHORT_PLAN}" >> $GITHUB_OUTPUT
           echo '```' >> $GITHUB_OUTPUT
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
