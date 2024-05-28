@@ -120,11 +120,11 @@ jobs:
 
           length=${#TERRAFORM_PLAN}         
           # Calculate the start position for the last 1000 characters
-          start=$((length - 1000))
+          start=$((length - 100000))
 
           echo "$start"
           echo "$length"
-          SHORT_PLAN=${TERRAFORM_PLAN:start:10000}
+          SHORT_PLAN=${TERRAFORM_PLAN:start:100000}
           echo "$SHORT_PLAN"
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
@@ -136,13 +136,6 @@ jobs:
           echo '```' >> $GITHUB_OUTPUT
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
-
-      - name: test step
-        if: github.event_name == 'pull_request'
-        env:
-          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
-        run: |
-          echo "$SUMMARY" 
           
       - name: Publish Terraform Plan to Task Summary
         if: github.event_name == 'pull_request'
