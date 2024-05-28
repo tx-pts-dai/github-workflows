@@ -132,11 +132,18 @@ jobs:
           echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo '```terraform' >> $GITHUB_OUTPUT
-          echo "${SHORT_PLAN}" >> $GITHUB_OUTPUT
+          # echo "${SHORT_PLAN}" >> $GITHUB_OUTPUT
           echo '```' >> $GITHUB_OUTPUT
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
 
+      - name: test step
+        if: github.event_name == 'pull_request'
+        env:
+          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+        run: |
+          echo "$SUMMARY" 
+          
       - name: Publish Terraform Plan to Task Summary
         if: github.event_name == 'pull_request'
         env:
