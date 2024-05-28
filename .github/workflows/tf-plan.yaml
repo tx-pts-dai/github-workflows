@@ -122,9 +122,10 @@ jobs:
           # Calculate the start position for the last 1000 characters
           start=$((length - 1000))
 
-          echo $start
-          echo $length
+          echo "$start"
+          echo "$length"
           SHORT_PLAN=${TERRAFORM_PLAN:start:100}
+          echo "$SHORT_PLAN"
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
           echo "$TERRAFORM_SUMMARY_HEADER" >> $GITHUB_OUTPUT
