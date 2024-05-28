@@ -124,9 +124,9 @@ jobs:
           
           # Extract and print the last 1000 characters
           if (( start > 0 )); then
-              echo "${file_content:start:1000}"
+              echo "${TERRAFORM_PLAN:start:1000}"
           else
-              echo "$file_content"
+              echo "$TERRAFORM_PLAN"
           fi
           
           delimiter="$(openssl rand -hex 8)"
@@ -135,7 +135,7 @@ jobs:
           echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo '```terraform' >> $GITHUB_OUTPUT
-          # echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
           echo '```' >> $GITHUB_OUTPUT
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
