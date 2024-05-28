@@ -124,7 +124,7 @@ jobs:
 
           echo "$start"
           echo "$length"
-          SHORT_PLAN=${TERRAFORM_PLAN:start:100}
+          SHORT_PLAN=${TERRAFORM_PLAN:start:10000}
           echo "$SHORT_PLAN"
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
