@@ -115,7 +115,7 @@ jobs:
         env:
           TERRAFORM_PLAN_PATH: ${{ steps.plan.outputs.text_plan_path }}
         run: |
-          MAX_PLAN_LENGTH=150000
+          MAX_PLAN_LENGTH=120000
           TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
           length=${#TERRAFORM_PLAN}         
