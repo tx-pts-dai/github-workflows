@@ -118,13 +118,13 @@ jobs:
           MAX_PLAN_LENGTH=120000
           TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
-          length=${#TERRAFORM_PLAN}         
-          start=$((length - MAX_PLAN_LENGTH))
+          PLAN_LENGTH=${#TERRAFORM_PLAN}         
+          START=$((PLAN_LENGTH - MAX_PLAN_LENGTH))
           if [ "$start" -lt 0 ]; then
             echo "Plan will not be cut !"
             SHORT_PLAN=${TERRAFORM_PLAN}
           else
-            echo "Plan will be cut to max ${MAX_PLAN_LENGTH} chars ! (LENGTH: ${#TERRAFORM_PLAN})"
+            echo "Plan will be cut to max ${MAX_PLAN_LENGTH} chars ! (LENGTH: ${PLAN_LENGTH})"
             SHORT_PLAN=${TERRAFORM_PLAN:start:MAX_PLAN_LENGTH}
           fi
           delimiter="$(openssl rand -hex 8)"
