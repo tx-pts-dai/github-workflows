@@ -125,7 +125,7 @@ jobs:
             SHORT_PLAN=${TERRAFORM_PLAN}
           else
             echo "Plan will be cut to max ${MAX_PLAN_LENGTH} chars ! (LENGTH: ${PLAN_LENGTH})"
-            SHORT_PLAN=${TERRAFORM_PLAN:start:MAX_PLAN_LENGTH}
+            SHORT_PLAN=${TERRAFORM_PLAN:START:MAX_PLAN_LENGTH}
           fi
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
