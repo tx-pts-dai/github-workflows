@@ -1,0 +1,58 @@
+name: Application
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+      - "renovate.json"
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+      - "renovate.json"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  docker_build_artifact:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/docker-build.yaml
+      
+  docker_push_ecr:
+    if: github.event_name == 'push'
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: [app]
+        environment: [dev, int, prod]
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@v0.16.0
+    with:
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
+
+  plan:
+    if: github.event_name == 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: [app]
+        environment: [dev, int, prod]
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.16.0
+    with:
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
+        
+  apply:
+    if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: [app]
+        environment: [dev, int, prod]
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.16.0
+    with:
+      environment: ${{ matrix.stack }}-${{ matrix.environment }}
