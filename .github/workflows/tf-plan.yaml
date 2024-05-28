@@ -117,15 +117,15 @@ jobs:
         run: |
           TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
-
           length=${#TERRAFORM_PLAN}         
-          # Calculate the start position for the last 1000 characters
           start=$((length - 100000))
-
-          echo "$start"
-          echo "$length"
-          SHORT_PLAN=${TERRAFORM_PLAN:start:100000}
-          echo "$SHORT_PLAN"
+          if [ "$start" -lt 0 ]; then
+            echo "Plan will not be cut !"
+            SHORT_PLAN=${TERRAFORM_PLAN}
+          else
+            echo "Plan will be cut to max 100000 chars ! (LENGTH: ${#TERRAFORM_PLAN})"
+            SHORT_PLAN=${TERRAFORM_PLAN:start:100000}
+          fi
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
           echo "$TERRAFORM_SUMMARY_HEADER" >> $GITHUB_OUTPUT
