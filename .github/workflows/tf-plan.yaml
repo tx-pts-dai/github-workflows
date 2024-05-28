@@ -136,7 +136,6 @@ jobs:
           echo '```' >> $GITHUB_OUTPUT
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
-          
       - name: Publish Terraform Plan to Task Summary
         if: github.event_name == 'pull_request'
         env:
