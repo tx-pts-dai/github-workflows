@@ -115,20 +115,27 @@ jobs:
         env:
           TERRAFORM_PLAN_PATH: ${{ steps.plan.outputs.text_plan_path }}
         run: |
+          MAX_PLAN_LENGTH=120000
           TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
-
+          PLAN_LENGTH=${#TERRAFORM_PLAN}         
+          START=$((PLAN_LENGTH - MAX_PLAN_LENGTH))
+          if [ "$START" -lt 0 ]; then
+            SHORT_PLAN=${TERRAFORM_PLAN}
+          else
+            echo ":warning: Plan output is too long to be displayed (${PLAN_LENGTH} chars). Only the last ${MAX_PLAN_LENGTH} characters will be printed. "
+            SHORT_PLAN=${TERRAFORM_PLAN:START:MAX_PLAN_LENGTH}
+          fi
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
           echo "$TERRAFORM_SUMMARY_HEADER" >> $GITHUB_OUTPUT
           echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo '```terraform' >> $GITHUB_OUTPUT
-          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+          echo "${SHORT_PLAN}" >> $GITHUB_OUTPUT
           echo '```' >> $GITHUB_OUTPUT
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
-
       - name: Publish Terraform Plan to Task Summary
         if: github.event_name == 'pull_request'
         env:
