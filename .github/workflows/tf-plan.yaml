@@ -75,7 +75,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Format
-        uses: dflook/terraform-fmt-check@5e2043f1289bfaf0e568855ca2513aa13e9ac04f # v1
+        uses: dflook/terraform-fmt-check@86914e9afad7218471018af867cc8d157d485d4b # v1
         with:
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
