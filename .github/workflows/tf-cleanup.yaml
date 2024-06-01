@@ -68,7 +68,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: terraform destroy
-        uses: dflook/terraform-destroy-workspace@1c6579397c402f758ee04f67e2d528e38f9bf5f7 # v1
+        uses: dflook/terraform-destroy-workspace@371a74d6159f2dd763b43e9c421707d3d6d5d151 # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
