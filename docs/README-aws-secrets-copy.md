@@ -1,6 +1,6 @@
 # Quick start guide
 
-[aws-copy-secret.yaml](./.github/workflows/aws-copy-secret.yaml) is a GitHub Action Job designed to copy an AWS secret between two AWS accounts.
+[aws-secrets-copy.yaml](../.github/workflows/aws-secrets-copy.yaml) is a GitHub Action Job designed to copy an AWS secret between two AWS accounts.
 
 ## Inputs
 
