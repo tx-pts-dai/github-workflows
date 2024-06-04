@@ -38,7 +38,7 @@ A: The destination AWS secret value will be updated to the value of the source s
 
 ## Workflow
 
-There is a [validation workflow](./.github/workflows/_test-aws-secrets-copy.yaml) triggered when a pull request from a feature branch to `main` is created.
+There is a [validation workflow](../.github/workflows/_test-aws-secrets-copy.yaml) triggered when a pull request from a feature branch to `main` is created.
 The workflow will create some temporary AWS secrets to validate that different use cases of the workflow will work:
 
 - Copy of a secret to non existing secret
