@@ -22,7 +22,7 @@ permissions:
 jobs:
   docker_build_artifact:
     if: github.event_name == 'pull_request'
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml@v0.22.0
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml@fca483ef4c544cb7a334d3143c608a449f5f8ced # v0.22.0
       
   docker_push_ecr:
     if: github.event_name == 'push'
@@ -31,7 +31,7 @@ jobs:
       matrix:
         stack: [app]
         environment: [dev, int, prod]
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@v0.22.0
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@fca483ef4c544cb7a334d3143c608a449f5f8ced # v0.22.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
 
@@ -42,7 +42,7 @@ jobs:
       matrix:
         stack: [app]
         environment: [dev, int, prod]
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v0.22.0
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@fca483ef4c544cb7a334d3143c608a449f5f8ced # v0.22.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
         
@@ -53,6 +53,6 @@ jobs:
       matrix:
         stack: [app]
         environment: [dev, int, prod]
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v0.22.0
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@fca483ef4c544cb7a334d3143c608a449f5f8ced # v0.22.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
