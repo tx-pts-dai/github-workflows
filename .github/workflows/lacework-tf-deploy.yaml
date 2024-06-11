@@ -100,12 +100,11 @@ jobs:
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
 
       - name: Terraform Plan
-        env:
-          TF_VAR_lacework_key: ${{ env.KEYID }}
-          TF_VAR_lacework_secret: ${{ secrets.SECRET }}
         id: plan
         uses: dflook/terraform-plan@0f4a5046f18698eee737a52d4cb11f56f2377a32 # v1
         env:
+          TF_VAR_lacework_key: ${{ env.KEYID }}
+          TF_VAR_lacework_secret: ${{ secrets.SECRET }}
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
             if [ -z "${{ inputs.tf_pre_run }}" ]; then
@@ -158,12 +157,11 @@ jobs:
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
-        env:
-          TF_VAR_lacework_key: ${{ env.KEYID }}
-          TF_VAR_lacework_secret: ${{ secrets.SECRET }}
         if: github.event_name == 'push'
         uses: dflook/terraform-apply@8a1bf89017460503cf302632cb15e8583afa7ac4 # v1
         env:
+          TF_VAR_lacework_key: ${{ env.KEYID }}
+          TF_VAR_lacework_secret: ${{ secrets.SECRET }}
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
             if [ -z "${{ inputs.tf_pre_run }}" ]; then
