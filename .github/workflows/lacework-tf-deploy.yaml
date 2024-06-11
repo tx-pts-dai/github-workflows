@@ -43,6 +43,9 @@ on:
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string
+      lacework_secret:
+        description: "Secret name for lacework"
+        type: string
 jobs:
   plan:
     permissions:
