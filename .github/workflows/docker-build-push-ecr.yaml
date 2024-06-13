@@ -29,6 +29,7 @@ on:
       image_tag:
         description: "Tag of the Docker image to build"
         type: string
+        default: ${{ github.sha }}
       docker_context:
         description: "Path to the build context"
         type: string
