@@ -36,15 +36,18 @@ jobs:
       contents: read
     steps:
       - name: Download artifact
+        env:
+          IMAGE_NAME: ${{ inputs.image_name || vars.image_name }}
+          GITHUB_SHA: ${{ github.sha }}
         uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4
         with:
-          name: ${{ inputs.image_name }}-${{ github.sha }}
+          name: ${{ env.IMAGE_NAME }}-${{ github.sha }}
           path: /tmp
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
         env:
-          ROLE_TO_ASSUME: ${{ vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
           AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
         with:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
@@ -57,7 +60,7 @@ jobs:
       - name: Tag and push docker image to Amazon ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ inputs.image_name }}
+          REPOSITORY: ${{ inputs.image_name || vars.image_name }}
           SOURCE_TAG: ${{ github.sha }}
           IMAGE_TAG: ${{ inputs.image_tag }}
           BRANCH: ${{ github.ref_name }}

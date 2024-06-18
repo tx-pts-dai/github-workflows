@@ -1,6 +1,10 @@
 on:
   workflow_call:
     inputs:
+      environment:
+        description: "Environment to deploy."
+        type: string
+        required: false
       node_version:
         description: "The Node.js version to use"
         type: string
@@ -25,19 +29,24 @@ jobs:
   build:
     name: Build Lamda Layer
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     defaults:
       run:
-        working-directory: ${{ inputs.source_dir }}
+        working-directory: ${{ inputs.source_dir || vars.source_dir }}
     steps:
       - name: Checkout
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
 
       - name: Build
+        env:
+          NODE_VERSION: ${{ inputs.node_version || vars.node_version }}
+          BUILD_DIR: ${{ inputs.build_dir || vars.build_dir }}
+          SOURCE_DIR: ${{ inputs.source_dir || vars.source_dir }}
         id: build
         run: |
-          fname=$(basename ${{ inputs.source_dir }})
-          fpath=${{ inputs.build_dir }}/$fname-v${{ inputs.node_version }}.zip
-          mkdir -p nodejs ${{ inputs.build_dir }}
+          fname=$(basename ${{ env.SOURCE_DIR }})
+          fpath=${{ env.BUILD_DIR }}/$fname-v${{ env.NODE_VERSION }}.zip
+          mkdir -p nodejs ${{ env.BUILD_DIR }}
           npm install --omit=dev
           cp -RL node_modules nodejs/
           zip -r $fpath nodejs
@@ -45,9 +54,13 @@ jobs:
           echo "file_path=$fpath" >> $GITHUB_OUTPUT
 
       - name: Archive
+        env:
+          NODE_VERSION: ${{ inputs.node_version || vars.node_version }}
+          SOURCE_DIR: ${{ inputs.source_dir || vars.source_dir }}
+          ARTIFACT_RETENTION_DAYS: ${{ inputs.artifact_retention_days || vars.artifact_retention_days }}
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         with:
-          name: ${{ steps.build.outputs.file_name }}-${{ inputs.node_version }}
-          path: ${{ inputs.source_dir }}/${{ steps.build.outputs.file_path }}
+          name: ${{ steps.build.outputs.file_name }}-${{ env.NODE_VERSION }}
+          path: ${{ env.SOURCE_DIR }}/${{ steps.build.outputs.file_path }}
           if-no-files-found: error
-          retention-days: ${{ inputs.artifact_retention_days }}
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
