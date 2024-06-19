@@ -27,7 +27,7 @@ jobs:
       matrix:
         stack: [infra]
         environment: [dev, int, prod]
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@fca483ef4c544cb7a334d3143c608a449f5f8ced # v0.22.0
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@658059f677d11be07ae904d6f82bcd383f62792b # v0.25.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
 
@@ -38,6 +38,6 @@ jobs:
       matrix:
         stack: [infra]
         environment: [dev, int, prod]
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@fca483ef4c544cb7a334d3143c608a449f5f8ced # v0.22.0
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@658059f677d11be07ae904d6f82bcd383f62792b # v0.25.0
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
