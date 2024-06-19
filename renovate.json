@@ -1,19 +1,20 @@
 {
-  "baseBranches": ["main"],
-  "branchPrefix": "renovate_",
-  "rebaseWhen": "conflicted",
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    "helpers:pinGitHubActionDigests"
+    ":dependencyDashboard",
+    "github>tx-pts-dai/renovate-config:automerge-github-actions",
+    "github>tx-pts-dai/renovate-config:group-github-actions-minor-patch",
+    "github>tx-pts-dai/renovate-config:group-terraform-minor-patch"
   ],
-  "reviewers": ["team:DAI-Team"],
-  "enabledManagers": ["github-actions"],
-  "packageRules": [
-    {
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": false,
-      "pinDigests": true
-    }
-  ]
+  "branchPrefix": "renovate_",
+  "timezone": "Europe/Zurich",
+  "dependencyDashboardTitle": "Renovate Dashboard",
+  "suppressNotifications": ["prIgnoreNotification"],
+  "commitBodyTable": true,
+  "rebaseWhen": "conflicted",
+  "platformCommit": true,
+  "reviewersFromCodeOwners": true,
+  "prCreation": "immediate",
+  "enabledManagers": ["dockerfile", "terraform", "github-actions", "circleci"]
 }
