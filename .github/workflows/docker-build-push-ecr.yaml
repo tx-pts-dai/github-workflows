@@ -74,10 +74,10 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ inputs.image_name|| vars.image_name}}
           IMAGE_TAG: ${{ inputs.image_tag }}
-          DOCKER_CONTEXT: ${{ inputs.docker_context || vars.docker_context }}
+          DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context }}
           DOCKERFILE_PATH: ${{ inputs.dockerfile_path || format('{0}/Dockerfile', inputs.docker_context) }}
         with:
-          context: ${{ env.DOCKER_CONTEXT }}
+          context: ${{ env.DOCKER_CTX }}
           file: ${{ env.DOCKERFILE_PATH }}
           secrets: ${{ secrets.docker_secrets }}
           # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
