@@ -10,7 +10,8 @@ Features include, but are not limited to:
 - aws authentication
 - docker image management
 - lambda builds
-- Copy of AWS secrets across AWS accounts
+- copy of AWS secrets across AWS accounts
+- release pipeline
 
 The state of these workflows are considered to be in alpha, and are subject to change to suit the needs of projects managed by DAI.
 
