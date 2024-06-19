@@ -51,7 +51,7 @@ jobs:
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
       - name: Checkout
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
@@ -63,7 +63,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Destroy
-        uses: dflook/terraform-destroy@7f500c95250b8744af0b6c632d54b38d91056062 # v1
+        uses: dflook/terraform-destroy@65f689138f6e3549c0aa2fd92153fce0bead4ed7 # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
