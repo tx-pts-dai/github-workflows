@@ -69,7 +69,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Apply
-        uses: dflook/terraform-apply@8a1bf89017460503cf302632cb15e8583afa7ac4 # v1
+        uses: dflook/terraform-apply@dcda97d729f1843ede471d2fac989cb946f5622a # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
