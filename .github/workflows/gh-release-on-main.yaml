@@ -38,12 +38,12 @@ jobs:
         tag_name: ${{ steps.version.outputs.TAG_NAME }}
         generate_release_notes: true
 
-    - name: Create or update major version tag
+    - name: Update major version tag
       run: |
         git tag -fa ${{ steps.version.outputs.MAJOR_VERSION }} -m "Update major version tag"
         git push origin ${{ steps.version.outputs.MAJOR_VERSION }} --force
 
-    - name: Create or update minor version tag
+    - name: Update minor version tag
       run: |
         git tag -fa ${{ steps.version.outputs.MINOR_VERSION }} -m "Update minor version tag"
         git push origin ${{ steps.version.outputs.MINOR_VERSION }} --force
