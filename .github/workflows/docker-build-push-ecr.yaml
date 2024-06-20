@@ -69,7 +69,7 @@ jobs:
         uses: docker/build-push-action@94f8f8c2eec4bc3f1d78c1755580779804cb87b2 # v6
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ inputs.image_name|| vars.image_name || github.event.repository.name}}
+          REPOSITORY: ${{ inputs.image_name || vars.image_name || github.event.repository.name }}
           IMAGE_TAG: ${{ inputs.image_tag }}
           DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context || '.'}}
           DOCKERFILE_PATH: ${{ inputs.dockerfile_path || format('{0}/Dockerfile', inputs.docker_context) }}
