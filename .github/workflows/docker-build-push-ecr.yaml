@@ -25,18 +25,15 @@ on:
       image_name:
         description: "Name of the Docker image to build"
         type: string
-        default: ${{ github.event.repository.name }}
       image_tag:
         description: "Tag of the Docker image to build"
         type: string
       docker_context:
         description: "Path to the build context"
         type: string
-        default: "."
       dockerfile_path:
         description: "Path to the Dockerfile. If not defined, will default to {docker_context}/Dockerfile"
         type: string
-        required: false
       docker_push:
         description: "Push Image to ECR"
         type: boolean
@@ -58,7 +55,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
         env:
-          ROLE_TO_ASSUME: ${{ vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
           AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
         with:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
@@ -72,11 +69,13 @@ jobs:
         uses: docker/build-push-action@94f8f8c2eec4bc3f1d78c1755580779804cb87b2 # v6
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ inputs.image_name }}
+          REPOSITORY: ${{ inputs.image_name || vars.image_name || github.event.repository.name }}
           IMAGE_TAG: ${{ inputs.image_tag }}
+          DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context || '.'}}
+          DOCKERFILE_PATH: ${{ inputs.dockerfile_path || format('{0}/Dockerfile', inputs.docker_context) }}
         with:
-          context: ${{ inputs.docker_context }}
-          file: ${{ inputs.dockerfile_path }}
+          context: ${{ env.DOCKER_CTX }}
+          file: ${{ env.DOCKERFILE_PATH }}
           secrets: ${{ secrets.docker_secrets }}
           # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
           cache-from: type=gha
