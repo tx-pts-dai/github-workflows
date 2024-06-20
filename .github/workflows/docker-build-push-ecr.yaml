@@ -50,7 +50,7 @@ jobs:
       contents: read
     steps:
       - name: Check out code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3
@@ -58,7 +58,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
         env:
-          ROLE_TO_ASSUME: ${{ vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
           AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
         with:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
@@ -69,14 +69,104 @@ jobs:
         uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2
 
       - name: Build and export
-        uses: docker/build-push-action@94f8f8c2eec4bc3f1d78c1755580779804cb87b2 # v6
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ inputs.image_name }}
+          REPOSITORY: ${{ inputs.image_name|| vars.image_name}}
           IMAGE_TAG: ${{ inputs.image_tag }}
+          DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context }}
+          DOCKERFILE_PATH: ${{ inputs.dockerfile_path || format('{0}/Dockerfile', inputs.docker_context) }}
         with:
-          context: ${{ inputs.docker_context }}
-          file: ${{ inputs.dockerfile_path }}
+          context: ${{ env.DOCKER_CTX }}
+          file: ${{ env.DOCKERFILE_PATH }}
+          secrets: ${{ secrets.docker_secrets }}
+          # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: ${{ inputs.docker_push }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}
+            ${{ (env.IMAGE_TAG != '' && format('{0}/{1}:{2}', env.REGISTRY, env.REPOSITORY, env.IMAGE_TAG)) || '' }}name: Docker Build and Push
+
+on:
+  workflow_call:
+    secrets:
+      docker_secrets:
+        description: "Comma-delimited list of Github secrets to pass to docker build workflow"
+        required: false
+    inputs:
+      environment:
+        description: "Environment to run the build in"
+        type: string
+      aws_account_id:
+        description: "AWS Account ID"
+        type: string
+      aws_region:
+        description: "AWS Region"
+        type: string
+      aws_role_name:
+        description: "AWS Role Name"
+        type: string
+      aws_oidc_role_arn:
+        description: "AWS OIDC IAM role to assume"
+        type: string
+      image_name:
+        description: "Name of the Docker image to build"
+        type: string
+        default: ${{ github.event.repository.name }}
+      image_tag:
+        description: "Tag of the Docker image to build"
+        type: string
+      docker_context:
+        description: "Path to the build context"
+        type: string
+        default: "."
+      dockerfile_path:
+        description: "Path to the Dockerfile. If not defined, will default to {docker_context}/Dockerfile"
+        type: string
+        required: false
+      docker_push:
+        description: "Push Image to ECR"
+        type: boolean
+        default: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Check out code
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
+        env:
+          ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
+        with:
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2
+
+      - name: Build and export
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ inputs.image_name|| vars.image_name}}
+          IMAGE_TAG: ${{ inputs.image_tag }}
+          DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context }}
+          DOCKERFILE_PATH: ${{ inputs.dockerfile_path || format('{0}/Dockerfile', inputs.docker_context) }}
+        with:
+          context: ${{ env.DOCKER_CTX }}
+          file: ${{ env.DOCKERFILE_PATH }}
           secrets: ${{ secrets.docker_secrets }}
           # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
           cache-from: type=gha
