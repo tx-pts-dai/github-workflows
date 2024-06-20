@@ -1,6 +1,10 @@
 on:
   workflow_call:
     inputs:
+      environment:
+        description: "Environment to deploy."
+        type: string
+        required: false
       node_version:
         description: "The Node.js version to use"
         type: string
@@ -9,35 +13,34 @@ on:
       source_dir:
         description: "The directory where the Lambda source code is located"
         type: string
-        required: false
-        default: src
       build_dir:
         description: "The directory where the Lambda build artifacts are located"
         type: string
-        required: false
-        default: dist
       artifact_retention_days:
         description: "Number of days to retain the artifact"
         type: number
-        required: false
-        default: 5
 jobs:
   build:
     name: Build Lamda Layer
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     defaults:
       run:
-        working-directory: ${{ inputs.source_dir }}
+        working-directory: ${{ inputs.source_dir || vars.source_dir || 'src'}}
     steps:
       - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
 
       - name: Build
+        env:
+          NODE_VERSION: ${{ inputs.node_version }}
+          BUILD_DIR: ${{ inputs.build_dir || vars.build_dir || 'dist'}}
+          SOURCE_DIR: ${{ inputs.source_dir || vars.source_dir || 'src'}}
         id: build
         run: |
-          fname=$(basename ${{ inputs.source_dir }})
-          fpath=${{ inputs.build_dir }}/$fname-v${{ inputs.node_version }}.zip
-          mkdir -p nodejs ${{ inputs.build_dir }}
+          fname=$(basename ${{ env.SOURCE_DIR }})
+          fpath=${{ env.BUILD_DIR }}/$fname-v${{ env.NODE_VERSION }}.zip
+          mkdir -p nodejs ${{ env.BUILD_DIR }}
           npm install --omit=dev
           cp -RL node_modules nodejs/
           zip -r $fpath nodejs
@@ -45,9 +48,13 @@ jobs:
           echo "file_path=$fpath" >> $GITHUB_OUTPUT
 
       - name: Archive
+        env:
+          NODE_VERSION: ${{ inputs.node_version }}
+          SOURCE_DIR: ${{ inputs.source_dir || vars.source_dir || 'src' }}
+          ARTIFACT_RETENTION_DAYS: ${{ inputs.artifact_retention_days || vars.artifact_retention_days || 5}}
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         with:
-          name: ${{ steps.build.outputs.file_name }}-${{ inputs.node_version }}
-          path: ${{ inputs.source_dir }}/${{ steps.build.outputs.file_path }}
+          name: ${{ steps.build.outputs.file_name }}-${{ env.NODE_VERSION }}
+          path: ${{ env.SOURCE_DIR }}/${{ steps.build.outputs.file_path }}
           if-no-files-found: error
-          retention-days: ${{ inputs.artifact_retention_days }}
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}

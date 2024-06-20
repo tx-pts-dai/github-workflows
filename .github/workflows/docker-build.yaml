@@ -9,15 +9,12 @@ on:
       image_name:
         description: "Name of the Docker image to build"
         type: string
-        default: ${{ github.event.repository.name }}
       docker_context:
         description: "Path to the build context"
         type: string
-        default: "."
       artifact_retention_days:
         description: "Number of days to retain the artifact"
         type: number
-        default: 5
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,8 +32,8 @@ jobs:
       - name: Build and export
         uses: docker/build-push-action@94f8f8c2eec4bc3f1d78c1755580779804cb87b2 # v6
         env:
-          DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context }}
-          IMAGE_NAME: ${{ inputs.image_name || vars.image_name }}
+          DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context || '.'}}
+          IMAGE_NAME: ${{ inputs.image_name || vars.image_name || github.event.repository.name }}
         with:
           context: ${{ env.DOCKER_CTX }}
           # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
@@ -47,8 +44,8 @@ jobs:
 
       - name: Upload artifact
         env:
-          IMAGE_NAME: ${{ inputs.image_name || vars.image_name }}
-          ARTIFACT_RETENTION_DAYS: ${{ inputs.artifact_retention_days || vars.artifact_retention_days }}
+          IMAGE_NAME: ${{ inputs.image_name || vars.image_name || github.event.repository.name }}
+          ARTIFACT_RETENTION_DAYS: ${{ inputs.artifact_retention_days || vars.artifact_retention_days || 5 }}
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         with:
           name: ${{ env.IMAGE_NAME }}-${{ github.sha }}
