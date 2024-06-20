@@ -63,7 +63,7 @@ jobs:
 
       - name: Release
         if: steps.version_increment.outputs.RELEASE == 'true'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@69320dbe05506a9a39fc8ae11030b214ec2d1f87 # v2
         with:
           tag_name: ${{ steps.version_increment.outputs.NEW_TAG }}
           generate_release_notes: true
