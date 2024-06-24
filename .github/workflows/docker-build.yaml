@@ -15,6 +15,10 @@ on:
       artifact_retention_days:
         description: "Number of days to retain the artifact"
         type: number
+      docker_target:
+        description: "Build target"
+        type: string
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,6 +38,7 @@ jobs:
         env:
           DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context || '.'}}
           IMAGE_NAME: ${{ inputs.image_name || vars.image_name || github.event.repository.name }}
+          DOCKER_TARGET: ${{ inputs.docker_target || vars.docker_target }}
         with:
           context: ${{ env.DOCKER_CTX }}
           # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
@@ -41,6 +46,7 @@ jobs:
           outputs: type=docker,dest=/tmp/${{ env.IMAGE_NAME }}.tar
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          target: ${{ env.DOCKER_TARGET }}
 
       - name: Upload artifact
         env:

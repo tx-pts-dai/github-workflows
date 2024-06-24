@@ -38,6 +38,9 @@ on:
         description: "Push Image to ECR"
         type: boolean
         default: true
+      docker_target:
+        description: "Build target"
+        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -73,6 +76,7 @@ jobs:
           IMAGE_TAG: ${{ inputs.image_tag }}
           DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context || '.'}}
           DOCKERFILE_PATH: ${{ inputs.dockerfile_path || format('{0}/Dockerfile', inputs.docker_context) }}
+          DOCKER_TARGET: ${{ inputs.docker_target || vars.docker_target }}
         with:
           context: ${{ env.DOCKER_CTX }}
           file: ${{ env.DOCKERFILE_PATH }}
@@ -81,6 +85,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ inputs.docker_push }}
+          target: ${{ env.DOCKER_TARGET }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}
             ${{ (env.IMAGE_TAG != '' && format('{0}/{1}:{2}', env.REGISTRY, env.REPOSITORY, env.IMAGE_TAG)) || '' }}
