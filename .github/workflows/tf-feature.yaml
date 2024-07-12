@@ -13,6 +13,9 @@ on:
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
+      gh_artifact_path:
+        description: "Path to download artifacts to"
+        type: string
       tf_dir:
         description: "Terraform directory"
         type: string
@@ -32,8 +35,8 @@ on:
         description: "Command to run before Terraform is executed."
         type: string
       tf_workspace:
-          description: "Terraform workspace"
-          type: string
+        description: "Terraform workspace"
+        type: string
 jobs:
   feature:
     permissions:
@@ -66,6 +69,14 @@ jobs:
         with:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Download Artifacts
+        env:
+          GH_ARTIFACT_PATH: ${{ inputs.gh_artifact_path || vars.gh_artifact_path || '' }}
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
+        if: ${{ env.GH_ARTIFACT_PATH }} != ''
+        with:
+          path: ${{ env.GH_ARTIFACT_PATH }}
 
       - name: Use branch workspace
         uses: dflook/terraform-new-workspace@74ceae9c6f940846d7f498bb45c319421abf1041 # v1
