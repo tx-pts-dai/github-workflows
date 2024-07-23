@@ -28,6 +28,12 @@ on:
       tf_backend_config_files:
         description: "List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace."
         type: string
+      tf_var_files:
+        description: "New line separated list of terraform variable files"
+        type: string
+      tf_vars:
+        description: "New line separated list of terraform variables"
+        type: string
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string

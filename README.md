@@ -30,63 +30,7 @@ jobs:
 
 For more usage examples please look for the `_test-*` workflow definition in the [`.github/workflows/`](.github/workflows/) folder.
 
-## Maintained workflows
-
-Each workflow has its own dedicated documentation. For a detailed understanding, you should go through the code and understand each step and how they interact with each other.
-
-## Terraform Deployment
-
-This workflow is responsible for deploying infrastructure using Terraform through dflook . For more information see [Terraform Deployment Documentation](/docs/README-tf-deploy.md).
-
-## Docker Build and Push to ECR
-
-The `docker-build-push-ecr.yaml` builds a Docker image and pushes it to the Elastic Container Registry (ECR). It's triggered on a workflow_call event and accepts several inputs. For more information see [Docker build and push documentation](/docs/README-docker-build-push.md).
-
-## Release
-
-This workflow handles the release process, including versioning and tagging. For more information see [Release Documentation](/docs/README-gh-release.md).
-
-## Lambda Build Node
-
-This workflow is responsible for building the Lambda function using Node.js. For more information see [Lambda Build Node Documentation](/docs/README-lambda-build-node.md).
-
-# Development Guidelines
-
-When modifying any of these workflows, ensure that you adhere to the following guidelines:
-
-- **Inputs** : All inputs should be clearly defined at the top of the workflow. Each input should have a description, type, and whether it is required or not.
-
-- **Jobs** : Each job should have a clear purpose and should be named accordingly.
-
-- **Steps** : Each step within a job should be atomic, meaning it should do one thing and do it well.
-
-- **Errors** : Ensure that any potential errors are handled gracefully and provide clear error messages.
-
-# Documentation related to GitHub Actions
-
-Documentation: [GitHub Actions - Documentation GitHub](https://docs.github.com/en/actions)
-
-# Releases
-
-Release pipeline is triggered on each PR merged to main, which creates a new release incrementing automatically minor version.
-
-# Testing
-
-Each workflow should have a `test` job that runs the workflow with different inputs. This job should be triggered on when changes are detected and push to main.
-
-Test workflows are prefixed with `_test-` and contain the workflow file name. One test workflow per workflow file which can contain multiple jobs.
-
-# Contributing
-
-Before creating a new shared workflow, check if something similar already exists. If it does, consider updating the existing workflow instead of creating a new one.
-
-If you want to create a new workflow, please follow these steps:
-
-- Name the workflow files similar to the following `<tool/service>-<simple description>.yaml`.
-- The less inputs, the better.
-- Files uses dash-case and variables use snake_case.
-
-# Quick Start Guide for Reusable Workflows
+## Quick Start Guide for Reusable Workflows
 
 To get started with using reusable workflows in your repository, follow these steps:
 
@@ -105,3 +49,67 @@ To get started with using reusable workflows in your repository, follow these st
 7. The workflow will now be triggered based on the specified events. For example, if you have configured the workflow to run on every push event, it will automatically start whenever you push changes to your repository.
 
 That's it! You have successfully set up and customized a reusable workflow in your repository. Now you can benefit from the predefined tasks and automation provided by the workflow to streamline your development process.
+
+For the list and documentation of the maintained workflows, please have a look below!
+
+## Maintained workflows
+
+Each workflow has its own dedicated documentation. For a detailed understanding, you should go through the code and understand each step and how they interact with each other.
+
+Most of the workflows do some "black magic", by getting values by default from your Github Environments, if set as `environment` input.
+
+### Terraform Deployment
+
+This workflow is responsible for deploying infrastructure using Terraform through dflook. For more information see [Terraform Deployment Documentation](/docs/README-tf-deploy.md).
+
+#### Feature branches deployment
+
+A common use case is to have feature branches deployment to test changes before they reach the `main` branch. To achieve that you can use the `tf-feature` workflow. Remember to use the `tf-cleanup` workflow too once you're done with it so that Terraform can cleanup the dangling resources.
+
+### Docker Build and Push to ECR
+
+The `docker-build-push-ecr.yaml` builds a Docker image and pushes it to the Elastic Container Registry (ECR). It's triggered on a workflow_call event and accepts several inputs. For more information see [Docker build and push documentation](/docs/README-docker-build-push.md).
+
+### Release
+
+This workflow handles the release process, including versioning and tagging. For more information see [Release Documentation](/docs/README-gh-release.md).
+
+### Lambda Build Node
+
+This workflow is responsible for building the Lambda function using Node.js. For more information see [Lambda Build Node Documentation](/docs/README-lambda-build-node.md).
+
+## Development Guidelines
+
+When modifying any of these workflows, ensure that you adhere to the following guidelines:
+
+- **Inputs** : All inputs should be clearly defined at the top of the workflow. Each input should have a description, type, and whether it is required or not.
+
+- **Jobs** : Each job should have a clear purpose and should be named accordingly.
+
+- **Steps** : Each step within a job should be atomic, meaning it should do one thing and do it well.
+
+- **Errors** : Ensure that any potential errors are handled gracefully and provide clear error messages.
+
+## Documentation related to GitHub Actions
+
+Documentation: [GitHub Actions - Documentation GitHub](https://docs.github.com/en/actions)
+
+## Releases
+
+Release pipeline is triggered on each PR merged to main, which creates a new release incrementing automatically minor version.
+
+## Contributing
+
+Before creating a new shared workflow, check if something similar already exists. If it does, consider updating the existing workflow instead of creating a new one.
+
+If you want to create a new workflow, please follow these steps:
+
+- Name the workflow files similar to the following `<tool/service>-<simple description>.yaml`.
+- The less inputs, the better.
+- Files uses dash-case and variables use snake_case.
+
+### Testing
+
+Each workflow should have a `test` job that runs the workflow with different inputs. This job should be triggered on when changes are detected and push to main.
+
+Test workflows are prefixed with `_test-` and contain the workflow file name. One test workflow per workflow file which can contain multiple jobs.
