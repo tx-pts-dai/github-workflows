@@ -14,7 +14,7 @@ on:
         description: "AWS OIDC IAM role to assume"
         type: string
       gh_artifact_path:
-        description: "Path to download artifacts to"
+        description: "Path to download artifacts to. If not set, no artifacts will be downloaded."
         type: string
       tf_dir:
         description: "Terraform directory"
@@ -74,7 +74,7 @@ jobs:
         env:
           GH_ARTIFACT_PATH: ${{ inputs.gh_artifact_path || vars.gh_artifact_path || '' }}
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
-        if: ${{ env.GH_ARTIFACT_PATH }} != ''
+        if: env.GH_ARTIFACT_PATH != ''
         with:
           path: ${{ env.GH_ARTIFACT_PATH }}
 
