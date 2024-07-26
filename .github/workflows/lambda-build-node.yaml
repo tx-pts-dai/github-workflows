@@ -4,11 +4,9 @@ on:
       environment:
         description: "Environment to deploy."
         type: string
-        required: false
       node_version:
         description: "The Node.js version to use"
         type: string
-        required: false
         default: "20"
       source_dir:
         description: "The directory where the Lambda source code is located"
@@ -24,6 +22,10 @@ jobs:
     name: Build Lamda Layer
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    env:
+      NODE_VERSION: ${{ inputs.node_version }}
+      BUILD_DIR: ${{ inputs.build_dir || vars.build_dir || 'dist'}}
+      SOURCE_DIR: ${{ inputs.source_dir || vars.source_dir || 'src'}}
     defaults:
       run:
         working-directory: ${{ inputs.source_dir || vars.source_dir || 'src'}}
@@ -32,10 +34,6 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Build
-        env:
-          NODE_VERSION: ${{ inputs.node_version }}
-          BUILD_DIR: ${{ inputs.build_dir || vars.build_dir || 'dist'}}
-          SOURCE_DIR: ${{ inputs.source_dir || vars.source_dir || 'src'}}
         id: build
         run: |
           fname=$(basename ${{ env.SOURCE_DIR }})

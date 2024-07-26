@@ -19,6 +19,9 @@ on:
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
+      gh_artifact_path:
+        description: "Path to download artifacts to. If not set, no artifacts will be downloaded."
+        type: string
       tf_dir:
         description: "Path to the Terraform root module to apply."
         type: string
@@ -67,6 +70,14 @@ jobs:
         with:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Download Artifacts
+        env:
+          GH_ARTIFACT_PATH: ${{ inputs.gh_artifact_path || vars.gh_artifact_path || '' }}
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
+        if: env.GH_ARTIFACT_PATH != ''
+        with:
+          path: ${{ env.GH_ARTIFACT_PATH }}
 
       - name: Terraform Apply
         uses: dflook/terraform-apply@dcda97d729f1843ede471d2fac989cb946f5622a # v1

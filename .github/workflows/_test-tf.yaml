@@ -11,26 +11,27 @@ on:
       - main
 
 jobs:
-  test_tf_dflook_plan:
+  test_tf_feature:
+    uses: ./.github/workflows/tf-feature.yaml
+    with:
+      environment: sandbox
+
+  test_tf_plan:
+    needs: test_tf_feature
     uses: ./.github/workflows/tf-plan.yaml
     with:
       environment: sandbox
 
-  test_tf_dflook_apply:
-    needs: test_tf_dflook_plan
+  test_tf_apply:
+    needs: test_tf_plan
     uses: ./.github/workflows/tf-apply.yaml
     with:
       environment: sandbox
       tf_pre_run:
         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
 
-  test_tf_dflook_feature:
-    uses: ./.github/workflows/tf-feature.yaml
-    with:
-      environment: sandbox
-
-  test_tf_dflook_cleanup:
-    needs: test_tf_dflook_feature
+  test_tf_cleanup:
+    needs: test_tf_apply
     uses: ./.github/workflows/tf-cleanup.yaml
     with:
       environment: sandbox
