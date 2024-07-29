@@ -21,7 +21,10 @@ on:
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
-      github_comment:
+      gh_artifact_path:
+        description: "Path to download artifacts to. If not set, no artifacts will be downloaded."
+        type: string
+      gh_comment:
         description: "Whether to post a comment on the PR with the Terraform plan"
         type: string
         default: changes-only
@@ -74,6 +77,14 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Download Artifacts
+        env:
+          GH_ARTIFACT_PATH: ${{ inputs.gh_artifact_path || vars.gh_artifact_path || '' }}
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
+        if: env.GH_ARTIFACT_PATH != ''
+        with:
+          path: ${{ env.GH_ARTIFACT_PATH }}
+
       - name: Terraform Format
         uses: dflook/terraform-fmt-check@86914e9afad7218471018af867cc8d157d485d4b # v1
         with:
@@ -118,7 +129,7 @@ jobs:
           MAX_PLAN_LENGTH=120000
           TERRAFORM_PLAN=$(cat $TERRAFORM_PLAN_PATH)
           TERRAFORM_SUMMARY_HEADER=$(grep -E -i -m 1 'No changes|Plan:|Outputs:' <<< "$TERRAFORM_PLAN")
-          PLAN_LENGTH=${#TERRAFORM_PLAN}         
+          PLAN_LENGTH=${#TERRAFORM_PLAN}
           START=$((PLAN_LENGTH - MAX_PLAN_LENGTH))
           if [ "$START" -lt 0 ]; then
             SHORT_PLAN=${TERRAFORM_PLAN}
@@ -136,6 +147,7 @@ jobs:
           echo '```' >> $GITHUB_OUTPUT
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
+
       - name: Publish Terraform Plan to Task Summary
         if: github.event_name == 'pull_request'
         env:
