@@ -6,9 +6,6 @@ on:
       - ".github/workflows/_test-docker.yaml"
       - ".github/workflows/docker-*.yaml"
       - "tests/docker/**"
-  push:
-    branches:
-      - main
 
 jobs:
   test_docker_build_push_ecr:
