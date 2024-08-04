@@ -87,7 +87,7 @@ jobs:
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
 
       - name: Deploy test infrastrucutre
-        uses: dflook/terraform-apply@7d435d4d115a11e5db1e710ac969f5382f0f6f9f # v1
+        uses: dflook/terraform-apply@dcda97d729f1843ede471d2fac989cb946f5622a # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
