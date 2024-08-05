@@ -55,10 +55,14 @@ jobs:
   upload_artifact:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          path: tests/docker-artifacts/
+          name: docker-artifacts
+          path: ~/tests/docker-artifacts/
 
   # Artifacts
   test_docker_build_push_ecr_artifacts:
@@ -70,3 +74,4 @@ jobs:
       aws_role_name: ${{ vars.aws_role_name }}
       docker_context: tests/docker
       docker_push: false
+      artifact_name: docker-artifacts
