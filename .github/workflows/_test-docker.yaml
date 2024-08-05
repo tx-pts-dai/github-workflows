@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: docker-artifacts
-          path: ~/tests/docker-artifacts/
+          path: tests/docker-artifacts/
 
   # Artifacts
   test_docker_build_push_ecr_artifacts:
