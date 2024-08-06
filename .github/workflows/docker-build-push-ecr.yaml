@@ -86,7 +86,7 @@ jobs:
           REPOSITORY: ${{ inputs.image_name || vars.image_name || github.event.repository.name }}
           IMAGE_TAG: ${{ inputs.image_tag }}
           DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context || '.' }}
-          DOCKERFILE_PATH: ${{ inputs.dockerfile_path || vars.dockerfile_path || format('{0}/Dockerfile', env.DOCKER_CTX) }}
+          DOCKERFILE_PATH: ${{ inputs.dockerfile_path || vars.dockerfile_path }} # upstream defaults to {DOCKER_CTX}/Dockerfile
           DOCKER_TARGET: ${{ inputs.docker_target || vars.docker_target }}
         with:
           context: ${{ env.DOCKER_CTX }}
