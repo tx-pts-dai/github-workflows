@@ -16,6 +16,8 @@ The `docker-build-push-ecr.yaml` is a GitHub Action workflow designed to automat
 | docker_context    | The path to the build context         | No       | .                           |
 | dockerfile_path   | The path to the Dockerfile            | No       | {docker_context}/Dockerfile |
 | docker_push       | Whether to push the image to ECR      | No       | true                        |
+| artifact_name     | Artifact name to be downloaded        | No       |                             |
+| artifact_path     | Artifact target path                  | No       |                             |
 
 ## Examples
 
@@ -56,3 +58,7 @@ A: Whether the image is pushed to ECR is controlled using the docker_push input.
 **Q: Can I only build or only push ?**
 
 A: Yes you can call separately the workflows docker-build.yaml and docker-push-ecr.yaml. Please refer to each individual workflow for informations about inputs.
+
+**Q: Can I pass files and folders from other jobs?**
+
+A: Yes, you can upload them as artifacts and have the docker-build-push-ecr.yaml to download them via `artifact_path` and `artifact_name`. Example [`DND-IT/disco` PR](https://github.com/DND-IT/disco/pull/2836)
