@@ -41,7 +41,7 @@ jobs:
       id-token: write
       pull-requests: write
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment || null}}
+    environment: ${{ inputs.environment || null }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_DIR: ${{ inputs.tf_dir || vars.tf_dir }}
