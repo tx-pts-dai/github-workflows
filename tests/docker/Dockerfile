@@ -3,5 +3,7 @@ FROM alpine
 WORKDIR /app
 
 RUN echo "Hello, world!" > hello.txt
+COPY *.txt .
 
-CMD ["cat", "hello.txt"]
+# Wildcard allows us to test artifacts
+CMD ["cat", "*.txt"]
