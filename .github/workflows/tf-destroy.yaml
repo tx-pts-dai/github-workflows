@@ -34,6 +34,9 @@ on:
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string
+      tf_workspace:
+        description: "Terraform workspace to use."
+        type: string
 jobs:
   destroy:
     permissions:
@@ -49,6 +52,7 @@ jobs:
       TF_BACKEND_CONFIG_FILES: ${{ inputs.tf_backend_config_files || vars.tf_backend_config_files }}
       TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
+      TF_WORKSPACE: ${{ inputs.tf_workspace || vars.tf_workspace }}
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -78,3 +82,4 @@ jobs:
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
           var_file: ${{ env.TF_VAR_FILES }}
           variables: ${{ env.TF_VARS }}
+          workspace: ${{ env.TF_WORKSPACE }}
