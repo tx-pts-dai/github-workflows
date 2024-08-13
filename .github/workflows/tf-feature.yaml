@@ -79,7 +79,7 @@ jobs:
           path: ${{ env.GH_ARTIFACT_PATH }}
 
       - name: Use branch workspace
-        uses: dflook/terraform-new-workspace@74ceae9c6f940846d7f498bb45c319421abf1041 # v1
+        uses: dflook/terraform-new-workspace@328d939679a5ddd00425d9cd75ceb6689f54c2bc # v1
         with:
           workspace: ${{ env.TF_WORKSPACE }}
           path: ${{ env.TF_DIR }}
