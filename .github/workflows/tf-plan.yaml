@@ -77,6 +77,12 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Execute Terraform Pre Run
+        run: eval "${{ inputs.tf_pre_run }}"
+        env:
+          TERRAFORM_PRE_RUN: ${{ inputs.tf_pre_run || '' }}
+        if: env.TERRAFORM_PRE_RUN != ''
+
       - name: Download Artifacts
         env:
           GH_ARTIFACT_PATH: ${{ inputs.gh_artifact_path || vars.gh_artifact_path || '' }}
@@ -105,11 +111,7 @@ jobs:
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
-            if [ -z "${{ inputs.tf_pre_run }}" ]; then
-              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
-            else
-              eval "${{ inputs.tf_pre_run }}"
-            fi
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
         with:
           label: ${{ inputs.environment}}
           add_github_comment: ${{ inputs.github_comment }}
