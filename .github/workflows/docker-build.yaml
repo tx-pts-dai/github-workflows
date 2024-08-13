@@ -52,7 +52,7 @@ jobs:
         env:
           IMAGE_NAME: ${{ inputs.image_name || vars.image_name || github.event.repository.name }}
           ARTIFACT_RETENTION_DAYS: ${{ inputs.artifact_retention_days || vars.artifact_retention_days || 5 }}
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
+        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4
         with:
           name: ${{ env.IMAGE_NAME }}-${{ github.sha }}
           path: /tmp/${{ env.IMAGE_NAME }}.tar
