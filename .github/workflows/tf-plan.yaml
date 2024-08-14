@@ -78,10 +78,10 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Execute Terraform Pre Run
+        if: env.TERRAFORM_PRE_RUN != ''
         run: eval "${{ inputs.tf_pre_run }}"
         env:
           TERRAFORM_PRE_RUN: ${{ inputs.tf_pre_run || '' }}
-        if: env.TERRAFORM_PRE_RUN != ''
 
       - name: Download Artifacts
         env:
@@ -91,12 +91,12 @@ jobs:
         with:
           path: ${{ env.GH_ARTIFACT_PATH }}
 
-      # - name: Terraform Format
-      #   uses: dflook/terraform-fmt-check@86914e9afad7218471018af867cc8d157d485d4b # v1
-      #   with:
-      #     path: ${{ env.TF_DIR}}
-      #     backend_config: ${{ env.TF_BACKEND_CONFIGS }}
-      #     backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
+      - name: Terraform Format
+        uses: dflook/terraform-fmt-check@86914e9afad7218471018af867cc8d157d485d4b # v1
+        with:
+          path: ${{ env.TF_DIR}}
+          backend_config: ${{ env.TF_BACKEND_CONFIGS }}
+          backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
 
       - name: Terraform Validate
         uses: dflook/terraform-validate@9cfdf207ffbd0ec5d171403a24feb222591ffdc7 # v1
