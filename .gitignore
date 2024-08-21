@@ -43,6 +43,16 @@ node_modules/
 
 # Next.js build / generate output
 dist
+package-lock.json
+package.json
 
 # OSX files
 .DS_Store
+
+# mkdocs
+site/
+
+# Python
+# Virtual environment
+venv/
+.venv/

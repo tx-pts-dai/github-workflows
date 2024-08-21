@@ -60,7 +60,7 @@ Most of the workflows do some "black magic", by getting values by default from y
 
 ### Terraform Deployment
 
-This workflow is responsible for deploying infrastructure using Terraform through dflook. For more information see [Terraform Deployment Documentation](/docs/README-tf-deploy.md).
+This workflow is responsible for deploying infrastructure using Terraform through dflook. For more information see [Terraform Deployment Documentation](docs/workflows/tf.md).
 
 #### Feature branches deployment
 
@@ -68,15 +68,15 @@ A common use case is to have feature branches deployment to test changes before 
 
 ### Docker Build and Push to ECR
 
-The `docker-build-push-ecr.yaml` builds a Docker image and pushes it to the Elastic Container Registry (ECR). It's triggered on a workflow_call event and accepts several inputs. For more information see [Docker build and push documentation](/docs/README-docker-build-push.md).
+The `docker-build-push-ecr.yaml` builds a Docker image and pushes it to the Elastic Container Registry (ECR). It's triggered on a workflow_call event and accepts several inputs. For more information see [Docker build and push documentation](docs/workflows/docker-build-push.md).
 
 ### Release
 
-This workflow handles the release process, including versioning and tagging. For more information see [Release Documentation](/docs/README-gh-release.md).
+This workflow handles the release process, including versioning and tagging. For more information see [Release Documentation](docs/workflows/gh-release.md).
 
 ### Lambda Build Node
 
-This workflow is responsible for building the Lambda function using Node.js. For more information see [Lambda Build Node Documentation](/docs/README-lambda-build-node.md).
+This workflow is responsible for building the Lambda function using Node.js. For more information see [Lambda Build Node Documentation](docs/workflows/lambda-build-node.md).
 
 ## Development Guidelines
 
