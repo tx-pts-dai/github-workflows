@@ -12,6 +12,7 @@ jobs:
     uses: ./.github/workflows/tf-feature.yaml
     with:
       environment: sandbox
+      tf_workspace: test/slash/replacement
 
   test_tf_plan:
     needs: test_tf_feature
@@ -32,3 +33,4 @@ jobs:
     uses: ./.github/workflows/tf-cleanup.yaml
     with:
       environment: sandbox
+      tf_workspace: test/slash/replacement
