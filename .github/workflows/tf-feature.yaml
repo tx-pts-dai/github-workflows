@@ -56,8 +56,13 @@ jobs:
       TF_BACKEND_CONFIG_FILES: ${{ inputs.tf_backend_config_files || vars.tf_backend_config_files }}
       TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
-      TF_WORKSPACE: ${{ inputs.tf_workspace || vars.tf_workspace || github.head_ref}}
     steps:
+      - name: Sanitise Environment Variables
+        run: |
+          WORKSPACE="${{ inputs.tf_workspace || vars.tf_workspace || github.head_ref || github.ref_name }}"
+          SANITISED_WORKSPACE="${WORKSPACE//\//-}"
+          echo "TF_WORKSPACE=$SANITISED_WORKSPACE" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
