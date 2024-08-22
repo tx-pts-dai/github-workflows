@@ -101,15 +101,6 @@ jobs:
       - name: Retry Terraform Destroy
         uses: dflook/terraform-destroy-workspace@371a74d6159f2dd763b43e9c421707d3d6d5d151 # v1
         if: ${{ steps.first_try.outputs.failure-reason == 'destroy-failed' }}
-        continue-on-error: true
-        env:
-          TERRAFORM_PRE_RUN: |
-            AWS_CLI_VERSION=2.15.36
-            if [ -z "${{ inputs.tf_pre_run }}" ]; then
-              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
-            else
-              eval "${{ inputs.tf_pre_run }}"
-            fi
         with:
           workspace: ${{ env.TF_WORKSPACE }}
           path: ${{ env.TF_DIR}}
