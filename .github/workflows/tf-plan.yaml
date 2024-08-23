@@ -112,7 +112,7 @@ jobs:
             fi
         with:
           label: ${{ inputs.environment}}
-          add_github_comment: ${{ inputs.github_comment }}
+          add_github_comment: ${{ inputs.gh_comment }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
