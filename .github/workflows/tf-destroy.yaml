@@ -70,7 +70,7 @@ jobs:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
             if [ -z "${{ inputs.tf_pre_run }}" ]; then
-              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && unzip -qq -o awscliv2.zip && ./aws/install
             else
               eval "${{ inputs.tf_pre_run }}"
             fi
@@ -83,6 +83,14 @@ jobs:
 
       - name: Terraform Destroy
         uses: dflook/terraform-destroy@65f689138f6e3549c0aa2fd92153fce0bead4ed7 # v1
+        env:
+          TERRAFORM_PRE_RUN: |
+            AWS_CLI_VERSION=2.15.36
+            if [ -z "${{ inputs.tf_pre_run }}" ]; then
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && unzip -qq -o awscliv2.zip && ./aws/install
+            else
+              eval "${{ inputs.tf_pre_run }}"
+            fi
         with:
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
