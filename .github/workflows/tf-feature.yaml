@@ -83,7 +83,7 @@ jobs:
         with:
           path: ${{ env.GH_ARTIFACT_PATH }}
 
-      - name: Use branch workspace
+      - name: Use Branch Workspace
         uses: dflook/terraform-new-workspace@74ceae9c6f940846d7f498bb45c319421abf1041 # v1
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -91,13 +91,13 @@ jobs:
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
 
-      - name: Deploy Test Infrastrucutre
+      - name: Deploy Test Infrastructure
         uses: dflook/terraform-apply@dcda97d729f1843ede471d2fac989cb946f5622a # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
             if [ -z "${{ inputs.tf_pre_run }}" ]; then
-              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && unzip -qq -o awscliv2.zip && ./aws/install
             else
               eval "${{ inputs.tf_pre_run }}"
             fi
