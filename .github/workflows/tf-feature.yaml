@@ -13,6 +13,9 @@ on:
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
+      aws_account_id:
+        description: "The AWS account ID."
+        type: string
       gh_artifact_path:
         description: "Path to download artifacts to. If not set, no artifacts will be downloaded."
         type: string
