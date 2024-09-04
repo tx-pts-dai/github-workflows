@@ -13,6 +13,7 @@ jobs:
     with:
       environment: sandbox
       tf_workspace: test/slash/replacement
+      tf_output: true
 
   test_tf_plan:
     needs: test_tf_feature

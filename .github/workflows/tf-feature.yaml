@@ -34,12 +34,16 @@ on:
       tf_vars:
         description: "New line separated list of terraform variables"
         type: string
+      tf_output:
+        description: "Output terraform outputs"
+        type: boolean
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string
       tf_workspace:
         description: "Terraform workspace"
         type: string
+
 jobs:
   feature:
     permissions:
@@ -96,6 +100,7 @@ jobs:
 
       - name: Deploy Test Infrastructure
         uses: dflook/terraform-apply@dcda97d729f1843ede471d2fac989cb946f5622a # v1
+        id: tf-apply
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
@@ -112,3 +117,27 @@ jobs:
           var_file: ${{ env.TF_VAR_FILES }}
           variables: ${{ env.TF_VARS }}
           auto_approve: true
+
+      - name: Create String Output
+        id: tf-output-string
+        run: |
+          TERRAFORM_SUMMARY_HEADER='Terraform Outputs:'
+          TERRAFORM_OUTPUTS='${{ toJson(steps.tf-apply.outputs) }}'
+
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "outputs<<${delimiter}"
+            echo "$TERRAFORM_SUMMARY_HEADER"
+            echo "<details><summary>Click to expand</summary>"
+            echo ""
+            echo '```terraform'
+            echo "${TERRAFORM_OUTPUTS}"
+            echo '```'
+            echo "</details>"
+            echo "${delimiter}"
+          } >> $GITHUB_OUTPUT
+
+      - name: Publish Terraform Outputs to Task Summary
+        env:
+          SUMMARY: ${{ toJson(steps.tf-output-string.outputs) }}
+        run: echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
