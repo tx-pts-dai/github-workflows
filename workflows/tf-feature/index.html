@@ -12,28 +12,28 @@
         <meta name="author" content="DAI">
       
       
-        <link rel="canonical" href="https://tx-pts-dai.github.io/github-workflows/getting-started/">
+        <link rel="canonical" href="https://tx-pts-dai.github.io/github-workflows/workflows/tf-feature/">
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../tf-destroy/">
       
       
-        <link rel="next" href="../workflows/">
+        <link rel="next" href="../tf-plan/">
       
       
-      <link rel="icon" href="../images/favicon.png">
+      <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
     
     
       
-        <title>Getting started - Github Reusable Workflows</title>
+        <title>Terraform Preview Deployment - Github Reusable Workflows</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.35f28582.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.35f28582.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
   
@@ -93,7 +93,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -129,7 +129,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#getting-started-with-reusable-workflows" class="md-skip">
+        <a href="#terraform-preview-deployment" class="md-skip">
           Skip to content
         </a>
       
@@ -145,9 +145,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Github Reusable Workflows" class="md-header__button md-logo" aria-label="Github Reusable Workflows" data-md-component="logo">
+    <a href="../.." title="Github Reusable Workflows" class="md-header__button md-logo" aria-label="Github Reusable Workflows" data-md-component="logo">
       
-  <img src="../images/logo.png" alt="logo">
+  <img src="../../images/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -164,7 +164,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Getting started
+              Terraform Preview Deployment
             
           </span>
         </div>
@@ -265,7 +265,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
     
@@ -280,11 +280,9 @@
         
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../../getting-started/" class="md-tabs__link">
         
   
     
@@ -299,11 +297,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../workflows/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
     
@@ -323,7 +323,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../examples/" class="md-tabs__link">
+        <a href="../../examples/" class="md-tabs__link">
           
   
     
@@ -341,7 +341,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../faq/" class="md-tabs__link">
+      <a href="../../faq/" class="md-tabs__link">
         
   
     
@@ -381,9 +381,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Github Reusable Workflows" class="md-nav__button md-logo" aria-label="Github Reusable Workflows" data-md-component="logo">
+    <a href="../.." title="Github Reusable Workflows" class="md-nav__button md-logo" aria-label="Github Reusable Workflows" data-md-component="logo">
       
-  <img src="../images/logo.png" alt="logo">
+  <img src="../../images/logo.png" alt="logo">
 
     </a>
     Github Reusable Workflows
@@ -410,7 +410,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -427,28 +427,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Getting started
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -457,33 +439,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#getting-started-with-reusable-workflows" class="md-nav__link">
-    <span class="md-ellipsis">
-      Getting started with Reusable Workflows
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -492,6 +447,8 @@
       
   
   
+    
+  
   
   
     
@@ -528,19 +485,22 @@
     
     
       
+        
+        
+      
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../workflows/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -551,13 +511,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Workflows
@@ -573,7 +533,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/aws-secrets-copy/" class="md-nav__link">
+      <a href="../aws-secrets-copy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -594,7 +554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/docker-build-push-ecr/" class="md-nav__link">
+      <a href="../docker-build-push-ecr/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -615,7 +575,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/docker-build/" class="md-nav__link">
+      <a href="../docker-build/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -636,7 +596,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/docker-push-ecr/" class="md-nav__link">
+      <a href="../docker-push-ecr/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -657,7 +617,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/gh-release-on-main/" class="md-nav__link">
+      <a href="../gh-release-on-main/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -678,7 +638,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/gh-release/" class="md-nav__link">
+      <a href="../gh-release/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -699,7 +659,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/lambda-build-node/" class="md-nav__link">
+      <a href="../lambda-build-node/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -720,7 +680,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/tf-apply/" class="md-nav__link">
+      <a href="../tf-apply/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -741,7 +701,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/tf-cleanup/" class="md-nav__link">
+      <a href="../tf-cleanup/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -762,7 +722,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/tf-destroy/" class="md-nav__link">
+      <a href="../tf-destroy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -780,10 +740,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../workflows/tf-feature/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -792,6 +761,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -804,7 +774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/tf-plan/" class="md-nav__link">
+      <a href="../tf-plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -861,7 +831,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../examples/" class="md-nav__link ">
+            <a href="../../examples/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -894,7 +864,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/docker-terraform/" class="md-nav__link">
+      <a href="../../examples/docker-terraform/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -915,7 +885,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/multiple-releases/" class="md-nav__link">
+      <a href="../../examples/multiple-releases/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -936,7 +906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/terraform-multiple/" class="md-nav__link">
+      <a href="../../examples/terraform-multiple/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -957,7 +927,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/terraform-single/" class="md-nav__link">
+      <a href="../../examples/terraform-single/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -985,7 +955,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../faq/" class="md-nav__link">
+      <a href="../../faq/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1015,23 +985,8 @@
   
   
   
+    
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#getting-started-with-reusable-workflows" class="md-nav__link">
-    <span class="md-ellipsis">
-      Getting started with Reusable Workflows
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -1049,43 +1004,219 @@
   
 
 
-  <h1>Getting started</h1>
+<!-- action-docs-header source=".github/workflows/tf-feature.yaml" -->
+<h1 id="terraform-preview-deployment">Terraform Preview Deployment<a class="headerlink" href="#terraform-preview-deployment" title="Permanent link">&para;</a></h1>
+<!-- action-docs-header source=".github/workflows/tf-feature.yaml" -->
 
-<!-- BEGIN INCLUDE ../README.md '&lt;!--usage-start--&gt;' '&lt;!--usage-end--&gt;' -->
+<h1 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h1>
+<!-- action-docs-inputs source=".github/workflows/tf-feature.yaml" -->
+<h2 id="inputs">Inputs<a class="headerlink" href="#inputs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>description</th>
+<th>type</th>
+<th>required</th>
+<th>default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>environment</code></td>
+<td><p>Environment to deploy</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>aws_region</code></td>
+<td><p>AWS region</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>aws_oidc_role_arn</code></td>
+<td><p>AWS OIDC IAM role to assume</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>aws_account_id</code></td>
+<td><p>The AWS account ID.</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>gh_artifact_path</code></td>
+<td><p>Path to download artifacts to. If not set, no artifacts will be downloaded.</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>tf_dir</code></td>
+<td><p>Terraform directory</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>tf_backend_configs</code></td>
+<td><p>Terraform backend config cli arguments</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>tf_backend_config_files</code></td>
+<td><p>List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace.</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>tf_var_files</code></td>
+<td><p>New line separated list of terraform variable files</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>tf_vars</code></td>
+<td><p>New line separated list of terraform variables</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>tf_pre_run</code></td>
+<td><p>Command to run before Terraform is executed.</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>tf_workspace</code></td>
+<td><p>Terraform workspace</p></td>
+<td><code>string</code></td>
+<td><code>false</code></td>
+<td><code>""</code></td>
+</tr>
+</tbody>
+</table>
+<!-- action-docs-inputs source=".github/workflows/tf-feature.yaml" -->
 
-<h2 id="getting-started-with-reusable-workflows">Getting started with Reusable Workflows<a class="headerlink" href="#getting-started-with-reusable-workflows" title="Permanent link">&para;</a></h2>
-<p>To get started with using reusable workflows in your repository, follow these steps:</p>
-<ol>
-<li>
-<p>Create a <code>.github/workflows</code> directory in your repository if it doesn't already exist.</p>
-</li>
-<li>
-<p>Copy an example workflow file from the reusable workflows repository into your <code>.github/workflows</code> directory. You can find the workflow example files in the <a href="https://github.com/tx-pts-dai/github-workflows/tree/main/docs/examples" target="_blank"><code>docs/examples/</code></a> folder of this repository.</p>
-</li>
-<li>
-<p>Open the workflow file you just copied and customize it according to your needs. Each workflow file contains a set of jobs that define the tasks to be executed.</p>
-</li>
-<li>
-<p>Make sure to set the required inputs for the workflow. These inputs are defined in the workflow file and can be customized to match your specific requirements. For example, you might need to provide values for environment variables, AWS credentials, or Docker image details.</p>
-</li>
-<li>
-<p>Save the modified workflow file.</p>
-</li>
-<li>
-<p>Commit and push the changes to your repository.</p>
-</li>
-<li>
-<p>The workflow will now be triggered based on the specified events. For example, if you have configured the workflow to run on every push event, it will automatically start whenever you push changes to your repository.</p>
-</li>
-</ol>
-<p>That's it! You have successfully set up and customized a reusable workflow in your repository. Now you can benefit from the predefined tasks and automation provided by the workflow to streamline your development process.</p>
-<!-- END INCLUDE -->
+<!-- action-docs-outputs source=".github/workflows/tf-feature.yaml" -->
+
+<!-- action-docs-outputs source=".github/workflows/tf-feature.yaml" -->
+
+<!-- action-docs-usage source=".github/workflows/tf-feature.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-feature.yaml" version="v1" -->
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">jobs</span><span class="p">:</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">job1</span><span class="p">:</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/tf-feature.yaml@v1</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="c1"># Environment to deploy</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nt">aws_region</span><span class="p">:</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="c1"># AWS region</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">      </span><span class="nt">aws_oidc_role_arn</span><span class="p">:</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="c1"># AWS OIDC IAM role to assume</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">      </span><span class="nt">aws_account_id</span><span class="p">:</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">      </span><span class="c1"># The AWS account ID.</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">      </span><span class="nt">gh_artifact_path</span><span class="p">:</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">      </span><span class="c1"># Path to download artifacts to. If not set, no artifacts will be downloaded.</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="w">      </span><span class="nt">tf_dir</span><span class="p">:</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="w">      </span><span class="c1"># Terraform directory</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a><span class="w">      </span><span class="nt">tf_backend_configs</span><span class="p">:</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a><span class="w">      </span><span class="c1"># Terraform backend config cli arguments</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="w">      </span><span class="nt">tf_backend_config_files</span><span class="p">:</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a><span class="w">      </span><span class="c1"># List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace.</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a><span class="w">      </span><span class="nt">tf_var_files</span><span class="p">:</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a><span class="w">      </span><span class="c1"># New line separated list of terraform variable files</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a><span class="w">      </span><span class="nt">tf_vars</span><span class="p">:</span>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a><span class="w">      </span><span class="c1"># New line separated list of terraform variables</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>
+</span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a><span class="w">      </span><span class="nt">tf_pre_run</span><span class="p">:</span>
+</span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a><span class="w">      </span><span class="c1"># Command to run before Terraform is executed.</span>
+</span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>
+</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a><span class="w">      </span><span class="nt">tf_workspace</span><span class="p">:</span>
+</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a><span class="w">      </span><span class="c1"># Terraform workspace</span>
+</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a><span class="w">      </span><span class="c1">#</span>
+</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a><span class="w">      </span><span class="c1"># Type: string</span>
+</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a><span class="w">      </span><span class="c1"># Required: false</span>
+</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
+</span></code></pre></div>
+<!-- action-docs-usage source=".github/workflows/tf-feature.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-feature.yaml" version="v1" -->
+
+<h1 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h1>
+<h1 id="faq">FAQ<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h1>
 
 
 
 
 
 
+
+  
+  
 
 
 
@@ -1143,10 +1274,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs.sticky", "navigation.tabs", "content.code.copy", "navigation.indexes"], "search": "../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs.sticky", "navigation.tabs", "content.code.copy", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.56dfad97.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56dfad97.min.js"></script>
       
     
   </body>

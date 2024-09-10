@@ -1,17 +1,10 @@
-name: Application
+name: Build and Deploy
+
 on:
   push:
-    branches:
-      - main
-    paths-ignore:
-      - "README.md"
-      - "renovate.json"
+    branches: [main]
   pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - "README.md"
-      - "renovate.json"
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -22,16 +15,16 @@ permissions:
 jobs:
   docker_build_artifact:
     if: github.event_name == 'pull_request'
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml@ece8993c7f7e419bc658a7036cd281f0ad0968b6 # v1.0.1
-      
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml@v1
+
   docker_push_ecr:
     if: github.event_name == 'push'
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         stack: [app]
         environment: [dev, int, prod]
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@ece8993c7f7e419bc658a7036cd281f0ad0968b6 # v1.0.1
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@v1
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
 
@@ -42,17 +35,18 @@ jobs:
       matrix:
         stack: [app]
         environment: [dev, int, prod]
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@ece8993c7f7e419bc658a7036cd281f0ad0968b6 # v1.0.1
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v1
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}
-        
+
   apply:
     if: github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     strategy:
-      fail-fast: false
+      fail-fast: true
+      max-parallel: 1
       matrix:
         stack: [app]
         environment: [dev, int, prod]
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@ece8993c7f7e419bc658a7036cd281f0ad0968b6 # v1.0.1
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v1
     with:
       environment: ${{ matrix.stack }}-${{ matrix.environment }}

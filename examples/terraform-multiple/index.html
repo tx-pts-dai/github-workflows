@@ -12,28 +12,28 @@
         <meta name="author" content="DAI">
       
       
-        <link rel="canonical" href="https://tx-pts-dai.github.io/github-workflows/getting-started/">
+        <link rel="canonical" href="https://tx-pts-dai.github.io/github-workflows/examples/terraform-multiple/">
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../multiple-releases/">
       
       
-        <link rel="next" href="../workflows/">
+        <link rel="next" href="../terraform-single/">
       
       
-      <link rel="icon" href="../images/favicon.png">
+      <link rel="icon" href="../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
     
     
       
-        <title>Getting started - Github Reusable Workflows</title>
+        <title>Multiple Terraform Stacks - Github Reusable Workflows</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.35f28582.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.35f28582.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
   
@@ -93,7 +93,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -129,7 +129,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#getting-started-with-reusable-workflows" class="md-skip">
+        <a href="#multiple-terraform-stacks" class="md-skip">
           Skip to content
         </a>
       
@@ -145,9 +145,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Github Reusable Workflows" class="md-header__button md-logo" aria-label="Github Reusable Workflows" data-md-component="logo">
+    <a href="../.." title="Github Reusable Workflows" class="md-header__button md-logo" aria-label="Github Reusable Workflows" data-md-component="logo">
       
-  <img src="../images/logo.png" alt="logo">
+  <img src="../../images/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -164,7 +164,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Getting started
+              Multiple Terraform Stacks
             
           </span>
         </div>
@@ -265,7 +265,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
     
@@ -280,11 +280,9 @@
         
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../../getting-started/" class="md-tabs__link">
         
   
     
@@ -303,7 +301,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../workflows/" class="md-tabs__link">
+        <a href="../../workflows/" class="md-tabs__link">
           
   
     
@@ -319,11 +317,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../examples/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
     
@@ -341,7 +341,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../faq/" class="md-tabs__link">
+      <a href="../../faq/" class="md-tabs__link">
         
   
     
@@ -381,9 +381,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Github Reusable Workflows" class="md-nav__button md-logo" aria-label="Github Reusable Workflows" data-md-component="logo">
+    <a href="../.." title="Github Reusable Workflows" class="md-nav__button md-logo" aria-label="Github Reusable Workflows" data-md-component="logo">
       
-  <img src="../images/logo.png" alt="logo">
+  <img src="../../images/logo.png" alt="logo">
 
     </a>
     Github Reusable Workflows
@@ -410,7 +410,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -427,28 +427,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Getting started
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -457,33 +439,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#getting-started-with-reusable-workflows" class="md-nav__link">
-    <span class="md-ellipsis">
-      Getting started with Reusable Workflows
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -540,7 +495,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../workflows/" class="md-nav__link ">
+            <a href="../../workflows/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -573,7 +528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/aws-secrets-copy/" class="md-nav__link">
+      <a href="../../workflows/aws-secrets-copy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -594,7 +549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/docker-build-push-ecr/" class="md-nav__link">
+      <a href="../../workflows/docker-build-push-ecr/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -615,7 +570,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/docker-build/" class="md-nav__link">
+      <a href="../../workflows/docker-build/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -636,7 +591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/docker-push-ecr/" class="md-nav__link">
+      <a href="../../workflows/docker-push-ecr/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -657,7 +612,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/gh-release-on-main/" class="md-nav__link">
+      <a href="../../workflows/gh-release-on-main/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -678,7 +633,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/gh-release/" class="md-nav__link">
+      <a href="../../workflows/gh-release/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -699,7 +654,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/lambda-build-node/" class="md-nav__link">
+      <a href="../../workflows/lambda-build-node/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -720,7 +675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/tf-apply/" class="md-nav__link">
+      <a href="../../workflows/tf-apply/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -741,7 +696,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/tf-cleanup/" class="md-nav__link">
+      <a href="../../workflows/tf-cleanup/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -762,7 +717,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/tf-destroy/" class="md-nav__link">
+      <a href="../../workflows/tf-destroy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -783,7 +738,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/tf-feature/" class="md-nav__link">
+      <a href="../../workflows/tf-feature/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -804,7 +759,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflows/tf-plan/" class="md-nav__link">
+      <a href="../../workflows/tf-plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -829,6 +784,8 @@
       
   
   
+    
+  
   
   
     
@@ -849,19 +806,22 @@
     
     
       
+        
+        
+      
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../examples/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -872,13 +832,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Examples
@@ -894,7 +854,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/docker-terraform/" class="md-nav__link">
+      <a href="../docker-terraform/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -915,7 +875,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/multiple-releases/" class="md-nav__link">
+      <a href="../multiple-releases/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -933,10 +893,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../examples/terraform-multiple/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -945,6 +914,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -957,7 +927,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/terraform-single/" class="md-nav__link">
+      <a href="../terraform-single/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -985,7 +955,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../faq/" class="md-nav__link">
+      <a href="../../faq/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1015,23 +985,8 @@
   
   
   
+    
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#getting-started-with-reusable-workflows" class="md-nav__link">
-    <span class="md-ellipsis">
-      Getting started with Reusable Workflows
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -1049,37 +1004,45 @@
   
 
 
-  <h1>Getting started</h1>
-
-<!-- BEGIN INCLUDE ../README.md '&lt;!--usage-start--&gt;' '&lt;!--usage-end--&gt;' -->
-
-<h2 id="getting-started-with-reusable-workflows">Getting started with Reusable Workflows<a class="headerlink" href="#getting-started-with-reusable-workflows" title="Permanent link">&para;</a></h2>
-<p>To get started with using reusable workflows in your repository, follow these steps:</p>
-<ol>
-<li>
-<p>Create a <code>.github/workflows</code> directory in your repository if it doesn't already exist.</p>
-</li>
-<li>
-<p>Copy an example workflow file from the reusable workflows repository into your <code>.github/workflows</code> directory. You can find the workflow example files in the <a href="https://github.com/tx-pts-dai/github-workflows/tree/main/docs/examples" target="_blank"><code>docs/examples/</code></a> folder of this repository.</p>
-</li>
-<li>
-<p>Open the workflow file you just copied and customize it according to your needs. Each workflow file contains a set of jobs that define the tasks to be executed.</p>
-</li>
-<li>
-<p>Make sure to set the required inputs for the workflow. These inputs are defined in the workflow file and can be customized to match your specific requirements. For example, you might need to provide values for environment variables, AWS credentials, or Docker image details.</p>
-</li>
-<li>
-<p>Save the modified workflow file.</p>
-</li>
-<li>
-<p>Commit and push the changes to your repository.</p>
-</li>
-<li>
-<p>The workflow will now be triggered based on the specified events. For example, if you have configured the workflow to run on every push event, it will automatically start whenever you push changes to your repository.</p>
-</li>
-</ol>
-<p>That's it! You have successfully set up and customized a reusable workflow in your repository. Now you can benefit from the predefined tasks and automation provided by the workflow to streamline your development process.</p>
-<!-- END INCLUDE -->
+<h1 id="multiple-terraform-stacks">Multiple Terraform Stacks<a class="headerlink" href="#multiple-terraform-stacks" title="Permanent link">&para;</a></h1>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deployment</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">on</span><span class="p">:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nt">permissions</span><span class="p">:</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nt">id-token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="nt">pull-requests</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="nt">jobs</span><span class="p">:</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="nt">plan</span><span class="p">:</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.event_name == &#39;pull_request&#39;</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">        </span><span class="nt">stack</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">infra</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">app</span><span class="p p-Indicator">]</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">        </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">int</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">prod</span><span class="p p-Indicator">]</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v1</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">      </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.stack }}-${{ matrix.environment }}</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">  </span><span class="nt">apply</span><span class="p">:</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.ref_name == github.event.repository.default_branch &amp;&amp; (github.event_name == &#39;push&#39; || github.event_name == &#39;workflow_dispatch&#39;)</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">      </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">      </span><span class="nt">max-parallel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">        </span><span class="nt">stack</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">infra</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">app</span><span class="p p-Indicator">]</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">        </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">dev</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">int</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">prod</span><span class="p p-Indicator">]</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/tf-apply.yaml@v1</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">      </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.stack }}-${{ matrix.environment }}</span>
+</span></code></pre></div>
 
 
 
@@ -1143,10 +1106,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs.sticky", "navigation.tabs", "content.code.copy", "navigation.indexes"], "search": "../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs.sticky", "navigation.tabs", "content.code.copy", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.56dfad97.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56dfad97.min.js"></script>
       
     
   </body>
