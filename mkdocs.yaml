@@ -7,26 +7,10 @@ site_url: https://tx-pts-dai.github.io/github-workflows/
 repo_name: github-workflows
 repo_url: https://github.com/tx-pts-dai/github-workflows
 
-nav:
-  - Overview: index.md
-  - Getting Started: getting-started.md
-  - Workflows:
-    - AWS Secrets Copy: workflows/aws-secrets-copy.md
-    - Docker Build and Push: workflows/docker-build-push.md
-    - Terraform Plan and Apply: workflows/terraform.md
-    - GitHub Release: workflows/github-release.md
-    - Lambda Node Layer: workflows/lambda-build-node.md
-  - Examples:
-      - Terraform: examples/terraform.md
-  - FAQ: faq.md
-  - Test: test.md
-
 theme:
   name: material
   logo: images/logo.png
   favicon: images/favicon.png
-  font:
-    text:
   palette:
     - scheme: default
       primary: indigo
@@ -59,9 +43,19 @@ theme:
     - navigation.tabs.sticky
     - navigation.tabs
     - content.code.copy
+    - navigation.indexes
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/tx-pts-dai/github-workflows
+  analytics:
+    provider: google
+    property: G-J2L3YBBVQJ
 
 plugins:
   - include-markdown
+  - awesome-pages
   - search:
       lang:
         - en

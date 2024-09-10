@@ -1,9 +1,6 @@
-name: Release
+name: Github Conventional Commit Release
 
 on:
-  push:
-    branches:
-      - main
   workflow_call:
 
 jobs:

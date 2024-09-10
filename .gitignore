@@ -42,9 +42,8 @@ terraform.rc
 node_modules/
 
 # Next.js build / generate output
-dist
+dist/
 package-lock.json
-package.json
 
 # OSX files
 .DS_Store

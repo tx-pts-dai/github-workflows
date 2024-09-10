@@ -1,18 +1,43 @@
 # GitHub Workflows
 
-This repository contains a collection of GitHub workflows that are reusable across projects.
+<!--intro-start-->
 
-The main goal is to have a single source of truth for all workflows, so that they can be easily updated and reused.
+<!-- TODO: change to release badge -->
+![GitHub Workflow Status](https://github.com/tx-pts-dai/github-workflows/actions/workflows/gh-release-on-main.yaml/badge.svg)
 
-Features include, but are not limited to:
+Github Actions is a powerful tool for automating workflows in your repository. This repository contains a collection of GitHub workflows that are reusable across projects.
 
-- terraform management
-- aws authentication
-- docker image management
-- lambda builds
-- Copy of AWS secrets across AWS accounts
+Reusable workflows will not suit all projects, but they can be a good starting point for projects that have similar requirements.
 
 The state of these workflows are considered to be in alpha, and are subject to change to suit the needs of projects managed by DAI.
+
+## Github Actions - Reusable Workflows
+
+(Official Docs)[https://docs.github.com/en/actions/sharing-automations/reusing-workflows]
+
+## Features
+
+- Terraform orchestration
+- Docker image management
+- Lambda builds
+- AWS secrets cloning across AWS accounts.
+
+## Goals
+
+The main goal is to have a single source of truth for all standard workflows, so that they can be easily maintained.
+
+## When to use reusable workflows
+
+- Terraform orchestration
+- Simple docker workflows
+- Running repeatable tasks across multiple projects e.g. Ad hoc scripts
+
+## When not to use reusable workflows
+
+- When you need to customize the workflow for your specific use case.
+- Most of the time application builds and tests are unique to the project and should be maintained in the project repository.
+- Secrets are required to be stored in the project repository. (We recommend using AWS Secrets Manager for workflow secrets)
+
 
 ## Usage
 
@@ -28,15 +53,19 @@ jobs:
       my-input: my-value
 ```
 
-For more usage examples please look for the `_test-*` workflow definition in the [`.github/workflows/`](.github/workflows/) folder.
+For more complete examples see the [examples](docs/examples/) page.
 
-## Quick Start Guide for Reusable Workflows
+<!--intro-end-->
+
+<!--usage-start-->
+
+## Getting started with Reusable Workflows
 
 To get started with using reusable workflows in your repository, follow these steps:
 
 1. Create a `.github/workflows` directory in your repository if it doesn't already exist.
 
-2. Copy an example workflow file from the reusable workflows repository into your `.github/workflows` directory. You can find the workflow example files in the [`.github/workflows/samples`](.github/workflows/samples) folder of this repository.
+2. Copy an example workflow file from the reusable workflows repository into your `.github/workflows` directory. You can find the workflow example files in the [`docs/examples/`](https://github.com/tx-pts-dai/github-workflows/tree/main/docs/examples){:target="_blank"} folder of this repository.
 
 3. Open the workflow file you just copied and customize it according to your needs. Each workflow file contains a set of jobs that define the tasks to be executed.
 
@@ -50,7 +79,7 @@ To get started with using reusable workflows in your repository, follow these st
 
 That's it! You have successfully set up and customized a reusable workflow in your repository. Now you can benefit from the predefined tasks and automation provided by the workflow to streamline your development process.
 
-For the list and documentation of the maintained workflows, please have a look below!
+<!--usage-end-->
 
 ## Maintained workflows
 

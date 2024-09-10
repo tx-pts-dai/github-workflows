@@ -1,6 +1,7 @@
 # Terraform Apply Workflow using the action dflook/terraform-github-actions
 # This workflow is used to apply Terraform changes to an environment.
 # This workflow utilizes either github environments variables or workflow inputs to pass to the terraform actions
+name: Terraform Apply
 on:
   workflow_call:
     inputs:
