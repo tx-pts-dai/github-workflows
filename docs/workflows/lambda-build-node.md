@@ -71,7 +71,34 @@ jobs:
 ```
 <!-- action-docs-usage source=".github/workflows/lambda-build-node.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-build-node.yaml" version="v1" -->
 
-# Example
+## Examples
 
-# FAQ
+```yaml
+on: [push, pull_request]
+jobs:
+  build:
+    uses: ./.github/workflows/lambda-build-node.yaml
+    with:
+      node_version: "20"
+      source_dir: "src"
+      build_dir: "dist"
+      artifact_retention_days: 5
+```
 
+## FAQs
+
+**Q: How do I specify the Node.js version?**
+
+A: The Node.js version is specified using the node_version input. By default, it uses version 20.
+
+**Q: How do I specify the source directory?**
+
+A: The source directory is specified using the source_dir input. By default, it is set to src.
+
+**Q: How do I specify the build directory?**
+
+A: The build directory is specified using the build_dir input. By default, it is set to dist.
+
+**Q: How do I specify the artifact retention days?**
+
+A: The number of days to retain the artifact is specified using the artifact_retention_days input. By default, it is set to 5 days.

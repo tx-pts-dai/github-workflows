@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
-site_name:  Github Reusable Workflows
+site_name: Github Reusable Workflows
 site_description: A collection of reusable GitHub Actions workflows
 docs_dir: docs/
 site_author: DAI

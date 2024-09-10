@@ -135,7 +135,46 @@ jobs:
 ```
 <!-- action-docs-usage source=".github/workflows/docker-build-push-ecr.yaml" project="tx-pts-dai/github-workflows/.github/workflows/docker-build-push-ecr.yaml" version="v1" -->
 
-# Example
+## Examples
 
-# FAQ
+```yaml
+on: [push, pull_request]
+jobs:
+  docker_build_push_ecr:
+    uses: ./.github/workflows/docker-build-push-ecr.yaml
+    with:
+      environment: 'production'
+      aws_region: 'us-west-2'
+      aws_oidc_role_arn: 'arn:aws:iam::123456789012:role/my-aws-role'
+      image_name: 'my-docker-image'
+      image_tag: 'latest'
+      docker_context: '.'
+      dockerfile_path: 'Dockerfile'
+      docker_push: 'true'
+```
 
+## FAQs
+
+**Q: How do I specify the AWS credentials?**
+
+A: The AWS credentials are specified using the aws_account_id, aws_region, aws_role_name, and aws_oidc_role_arn inputs.
+
+**Q: How do I specify the Docker image name and tag?**
+
+A: The Docker image name and tag are specified using the image_name and image_tag inputs. By default, the image name is the repository name.
+
+**Q: How do I specify the build context and Dockerfile path?**
+
+A: The build context and Dockerfile path are specified using the docker_context and dockerfile_path inputs. By default, the build context is . and the Dockerfile path is {docker_context}/Dockerfile.
+
+**Q: How do I control whether the image is pushed to ECR?**
+
+A: Whether the image is pushed to ECR is controlled using the docker_push input. By default, it is set to true.
+
+**Q: Can I only build or only push ?**
+
+A: Yes you can call separately the workflows docker-build.yaml and docker-push-ecr.yaml. Please refer to each individual workflow for informations about inputs.
+
+**Q: Can I pass files and folders from other jobs?**
+
+A: Yes, you can upload them as artifacts and have the docker-build-push-ecr.yaml to download them via `artifact_path` and `artifact_name`. Example [`DND-IT/disco` PR](https://github.com/DND-IT/disco/pull/2836)

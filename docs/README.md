@@ -19,9 +19,8 @@ Once installed, the documentation can be served from the root directory:
 mkdocs serve
 ```
 
-# Generating Documentation
+# Generating Workflow Documentation
 
 ```
-npm install
-node docs/generate_docs.js
+make gen_docs_run
 ```
