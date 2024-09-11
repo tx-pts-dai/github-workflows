@@ -42,7 +42,16 @@ terraform.rc
 node_modules/
 
 # Next.js build / generate output
-dist
+dist/
+package-lock.json
 
 # OSX files
 .DS_Store
+
+# mkdocs
+site/
+
+# Python
+# Virtual environment
+venv/
+.venv/

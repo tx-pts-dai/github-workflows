@@ -1,4 +1,12 @@
-# Quick Start Guide
+---
+title: Github Conventional Commit Release
+---
+
+<!-- action-docs-header source=".github/workflows/gh-release-on-main.yaml" -->
+# Github Conventional Commit Release
+<!-- action-docs-header source=".github/workflows/gh-release-on-main.yaml" -->
+
+# Description
 
 This GitHub Action is designed to automate the process of creating a new release on push to the main branch. It's triggered on a pull_request closed event to the main branch and does not require any inputs.
 
@@ -14,9 +22,23 @@ The options are:
 3. "feat!: Some comment" -> will increment the major version MAJOR+1.0.0
 
 
-## Inputs
+<!-- action-docs-inputs source=".github/workflows/gh-release-on-main.yaml" -->
 
-No inputs.
+<!-- action-docs-inputs source=".github/workflows/gh-release-on-main.yaml" -->
+
+<!-- action-docs-outputs source=".github/workflows/gh-release-on-main.yaml" -->
+
+<!-- action-docs-outputs source=".github/workflows/gh-release-on-main.yaml" -->
+
+<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v1" -->
+## Usage
+
+```yaml
+jobs:
+  job1:
+    uses: tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml@v1
+```
+<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v1" -->
 
 ## Examples
 

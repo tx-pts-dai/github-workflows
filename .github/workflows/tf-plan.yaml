@@ -3,6 +3,7 @@
 # are then used to compare the changes when the apply workflow is run.
 # It also includes terraform validation and formatting steps.
 # This workflow utilizes either github environments variables or workflow inputs to pass to the terraform actions
+name: Terraform Plan
 on:
   workflow_call:
     inputs:

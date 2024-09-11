@@ -1,6 +1,7 @@
 # Terraform feature branch workflow
 # Creates a new terraform workspace based on the branch name
 # This workflow utilizes either github environments variables or workflow inputs to pass to the terraform actions
+name: Terraform Preview Deployment
 on:
   workflow_call:
     inputs:

@@ -1,6 +1,7 @@
 # Workflow to cleanup Terraform workspaces
 # Can be used when a PR is closed or merged
 # This workflow will destroy the Terraform workspace and remove the state file from the backend
+name: Terraform Preview Cleanup
 on:
   workflow_call:
     inputs:
