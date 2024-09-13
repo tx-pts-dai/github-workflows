@@ -47,6 +47,10 @@ on:
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string
+    outputs:
+      tf-outputs:
+        description: "Outputs from terraform"
+        value: ${{ steps.tf-outputs.outputs }}
 jobs:
   plan:
     permissions:
