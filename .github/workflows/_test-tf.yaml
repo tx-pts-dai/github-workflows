@@ -21,13 +21,6 @@ jobs:
       - name: Show Terraform Outputs
         run: echo "${{ needs.test_tf_feature.outputs.tf_outputs }}"
 
-  test_tf_outputs_to_json:
-    needs: test_tf_feature
-    runs-on: ubuntu-latest
-    steps:
-      - name: Show Terraform Outputs
-        run: echo "${{ toJson(needs.test_tf_feature.outputs.tf_outputs) }}"
-
   test_tf_outputs_decode_random_pet:
     needs: test_tf_feature
     runs-on: ubuntu-latest
