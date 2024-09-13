@@ -135,7 +135,10 @@ jobs:
             echo '```terraform'
             echo "${TERRAFORM_OUTPUTS}"
             echo '```'
-            echo "${TERRAFORM_OUTPUTS}"
+            echo ""
+            echo "${TERRAFORM_OUTPUTS}" | jq -r '. | to_entries | .[] | .key + " = " + .value.value' | while read line; do
+              echo "${line}"
+            done
             echo "</details>"
             echo "${delimiter}"
           } >> $GITHUB_OUTPUT
