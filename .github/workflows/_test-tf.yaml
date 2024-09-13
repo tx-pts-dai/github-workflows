@@ -69,7 +69,7 @@ jobs:
       gh_artifact_name: docker-artifacts
       gh_artifact_path: tests/terraform/artifact
       tf_vars: |
-        file_path=tests/terraform/artifact/artifact-sample.txt
+        file_path="tests/terraform/artifact/artifact-sample.txt"
 
   test_tf_artifact_all:
     needs: test_upload_artifact
@@ -79,4 +79,4 @@ jobs:
       tf_dir: tests/terraform/artifact
       gh_artifact_path: tests/terraform/
       tf_vars: |
-        file_path=tests/terraform/docker-artifacts/artifact-sample.txt
+        file_path="tests/terraform/docker-artifacts/artifact-sample.txt"
