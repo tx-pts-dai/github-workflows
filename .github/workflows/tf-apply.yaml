@@ -108,6 +108,7 @@ jobs:
 
 
       - name: Create Summary Output
+        if: steps.tf_apply.outputs != ''
         id: tf_outputs_summary
         run: |
           echo "Summary" >> $GITHUB_STEP_SUMMARY
