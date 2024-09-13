@@ -139,11 +139,13 @@ jobs:
             echo ${{ toJson(steps.tf_apply.outputs) }}
             echo ""
             echo "${{ toJson(steps.tf_apply.outputs) }}"
+            echo ""
+            echo "${{ steps.tf_apply.outputs }}"
             echo "</details>"
             echo "${delimiter}"
           } >> $GITHUB_OUTPUT
 
       - name: Publish Terraform Outputs to Task Summary
         env:
-          SUMMARY: ${{ steps.tf-output-string.outputs }}
+          SUMMARY: ${{ toJson(steps.tf-output-string.outputs) }}
         run: echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
