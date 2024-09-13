@@ -128,7 +128,6 @@ jobs:
           TERRAFORM_OUTPUTS='${{ toJson(steps.tf_apply.outputs) }}'
           delimiter="$(openssl rand -hex 8)"
           {
-            echo "outputs<<${delimiter}"
             echo "$TERRAFORM_SUMMARY_HEADER"
             echo "<details><summary>Click to expand</summary>"
             echo ""
@@ -136,7 +135,6 @@ jobs:
             echo "${TERRAFORM_OUTPUTS}"
             echo '```'
             echo "</details>"
-            echo "${delimiter}"
           } >> $GITHUB_OUTPUT
 
       - name: Publish Terraform Outputs to Task Summary
