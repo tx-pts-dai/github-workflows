@@ -3,9 +3,9 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/_test-tf.yaml'
-      - '.github/workflows/tf-*.yaml'
-      - 'tests/terraform/**'
+      - ".github/workflows/_test-tf.yaml"
+      - ".github/workflows/tf-*.yaml"
+      - "tests/terraform/**"
 
 jobs:
   test_tf_feature:
@@ -47,3 +47,36 @@ jobs:
     with:
       environment: sandbox
       tf_workspace: test/slash/replacement
+
+  test_upload_artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-artifacts
+          path: tests/docker-artifacts/artifact-sample.txt
+
+  test_tf_artifact:
+    needs: test_upload_artifact
+    uses: ./.github/workflows/tf-plan.yaml
+    with:
+      environment: sandbox
+      tf_dir: tests/terraform/artifact
+      gh_artifact_name: docker-artifacts
+      gh_artifact_path: tests/terraform/artifact
+      tf_vars: |
+        file_path=tests/terraform/artifact/artifact-sample.txt
+
+  test_tf_artifact_all:
+    needs: test_upload_artifact
+    uses: ./.github/workflows/tf-plan.yaml
+    with:
+      environment: sandbox
+      tf_dir: tests/terraform/artifact
+      gh_artifact_path: tests/terraform/
+      tf_vars: |
+        file_path=tests/terraform/docker-artifacts/artifact-sample.txt
