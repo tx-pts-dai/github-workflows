@@ -41,8 +41,14 @@ on:
       tf_workspace:
         description: "Terraform workspace"
         type: string
+    outputs:
+      tf_outputs:
+        description: "List of Terraform outputs captured."
+        value: ${{ jobs.feature.outputs.tf_outputs }}
 jobs:
   feature:
+    outputs:
+      tf_outputs: ${{ steps.tf_apply.outputs }}
     permissions:
       contents: read
       id-token: write
@@ -96,6 +102,7 @@ jobs:
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
 
       - name: Deploy Test Infrastructure
+        id: tf_apply
         uses: dflook/terraform-apply@dcda97d729f1843ede471d2fac989cb946f5622a # v1
         env:
           TERRAFORM_PRE_RUN: |

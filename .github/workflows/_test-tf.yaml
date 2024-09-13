@@ -14,6 +14,20 @@ jobs:
       environment: sandbox
       tf_workspace: test/slash/replacement
 
+  test_tf_outputs_to_json:
+    needs: test_tf_feature
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show Terraform Outputs
+        run: echo "${{ toJson(needs.test_tf_feature.outputs.tf_outputs) }}"
+
+  test_tf_outputs_from_json:
+    needs: test_tf_feature
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show Terraform Outputs
+        run: echo "${{ fromJson(needs.test_tf_feature.outputs.tf_outputs) }}"
+
   test_tf_plan:
     needs: test_tf_feature
     uses: ./.github/workflows/tf-plan.yaml
