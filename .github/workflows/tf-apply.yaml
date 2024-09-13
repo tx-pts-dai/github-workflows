@@ -41,8 +41,14 @@ on:
       tf_pre_run:
         description: "Command to run before Terraform is executed."
         type: string
+    outputs:
+      tf_outputs:
+        description: "List of Terraform outputs captured."
+        value: ${{ jobs.apply.outputs.tf_outputs }}
 jobs:
   apply:
+    outputs:
+      tf_outputs: ${{ toJson(steps.tf_apply.outputs) }}
     permissions:
       contents: read
       id-token: write
@@ -81,6 +87,7 @@ jobs:
           path: ${{ env.GH_ARTIFACT_PATH }}
 
       - name: Terraform Apply
+        id: tf_apply
         uses: dflook/terraform-apply@dcda97d729f1843ede471d2fac989cb946f5622a # v1
         env:
           TERRAFORM_PRE_RUN: |
@@ -98,3 +105,16 @@ jobs:
           var_file: ${{ env.TF_VAR_FILES }}
           variables: ${{ env.TF_VARS }}
           auto_approve: true
+
+
+      - name: Create Summary Output
+        id: tf_outputs_summary
+        run: |
+          echo "Summary" >> $GITHUB_STEP_SUMMARY
+          echo "<details>" >> $GITHUB_STEP_SUMMARY
+          echo "<summary>Terraform Outputs</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "${{ toJson(steps.tf_apply.outputs) }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
