@@ -25,7 +25,7 @@ jobs:
     needs: test_tf_feature
     runs-on: ubuntu-latest
     steps:
-      - name: Show Random pets
+      - name: Show random_pet output resource
         run: echo "${{ fromJson(needs.test_tf_feature.outputs.tf_outputs).random_pet }}"
 
   test_tf_plan:
