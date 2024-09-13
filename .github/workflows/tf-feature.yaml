@@ -48,7 +48,7 @@ on:
 jobs:
   feature:
     outputs:
-      tf_outputs: ${{ steps.tf_apply.outputs }}
+      tf_outputs: ${{ fromJson(steps.tf_apply.outputs) }}
     permissions:
       contents: read
       id-token: write
