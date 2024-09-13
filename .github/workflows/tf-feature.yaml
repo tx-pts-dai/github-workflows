@@ -18,7 +18,10 @@ on:
         description: "The AWS account ID."
         type: string
       gh_artifact_path:
-        description: "Path to download artifacts to. If not set, no artifacts will be downloaded."
+        description: "Path to download artifacts to."
+        type: string
+      gh_artifact_name:
+        description: "Name of the artifact to download. If only 'gh_artifact_path' is set, then all artifacts are downloaded."
         type: string
       tf_dir:
         description: "Terraform directory"
@@ -88,10 +91,12 @@ jobs:
       - name: Download Artifacts
         env:
           GH_ARTIFACT_PATH: ${{ inputs.gh_artifact_path || vars.gh_artifact_path || '' }}
+          GH_ARTIFACT_NAME: ${{ inputs.gh_artifact_name || vars.gh_artifact_name || '' }}
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
-        if: env.GH_ARTIFACT_PATH != ''
+        if: env.GH_ARTIFACT_PATH != '' || env.GH_ARTIFACT_NAME != ''
         with:
           path: ${{ env.GH_ARTIFACT_PATH }}
+          name: ${{ env.GH_ARTIFACT_NAME }}
 
       - name: Use Branch Workspace
         uses: dflook/terraform-new-workspace@74ceae9c6f940846d7f498bb45c319421abf1041 # v1
