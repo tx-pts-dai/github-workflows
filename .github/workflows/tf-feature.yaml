@@ -131,7 +131,10 @@ jobs:
             echo "outputs<<${delimiter}"
             echo "$TERRAFORM_SUMMARY_HEADER"
             echo "<details><summary>Click to expand</summary>"
+            echo ""
+            echo '```json'
             echo "${TERRAFORM_OUTPUTS}"
+            echo '```'
             echo "</details>"
             echo "${delimiter}"
           } >> $GITHUB_OUTPUT
