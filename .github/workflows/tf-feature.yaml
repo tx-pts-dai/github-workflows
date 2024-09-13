@@ -135,12 +135,6 @@ jobs:
             echo '```terraform'
             echo "${TERRAFORM_OUTPUTS}"
             echo '```'
-            echo ""
-            echo ${{ toJson(steps.tf_apply.outputs) }}
-            echo ""
-            echo "${{ toJson(steps.tf_apply.outputs) }}"
-            echo ""
-            echo "${{ steps.tf_apply.outputs }}"
             echo "</details>"
             echo "${delimiter}"
           } >> $GITHUB_OUTPUT
