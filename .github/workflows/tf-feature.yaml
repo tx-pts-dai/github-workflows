@@ -121,25 +121,14 @@ jobs:
           variables: ${{ env.TF_VARS }}
           auto_approve: true
 
-      - name: Create String Output
+      - name: Create Summary Output
         id: tf-output-string
         run: |
-          TERRAFORM_SUMMARY_HEADER='Terraform Outputs:'
-          TERRAFORM_OUTPUTS='${{ toJson(steps.tf_apply.outputs) }}'
-          delimiter="$(openssl rand -hex 8)"
-          {
-            echo "outputs<<${delimiter}"
-            echo "$TERRAFORM_SUMMARY_HEADER"
-            echo "<details><summary>Click to expand</summary>"
-            echo ""
-            echo '```json'
-            echo "${TERRAFORM_OUTPUTS}"
-            echo '```'
-            echo "</details>"
-            echo "${delimiter}"
-          } >> $GITHUB_OUTPUT
-
-      - name: Publish Terraform Outputs to Task Summary
-        env:
-          SUMMARY: ${{ toJson(steps.tf-output-string.outputs) }}
-        run: echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
+          echo "Summary" >> $GITHUB_STEP_SUMMARY
+          echo "<details>" >> $GITHUB_STEP_SUMMARY
+          echo "<summary>Terraform Outputs</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "${{ toJson(steps.tf_apply.outputs) }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
