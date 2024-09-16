@@ -23,7 +23,7 @@ on:
         description: "AWS OIDC IAM role to assume"
         type: string
       gh_artifact_path:
-        description: "Path to download artifacts to."
+        description: "Path to download artifacts to. If unset, default action workspace is used"
         type: string
       gh_artifact_name:
         description: "Name of the artifact to download. If only 'gh_artifact_path' is set, then all artifacts are downloaded."
