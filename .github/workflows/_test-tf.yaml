@@ -3,9 +3,9 @@ on:
     branches:
       - main
     paths:
-      - ".github/workflows/_test-tf.yaml"
-      - ".github/workflows/tf-*.yaml"
-      - "tests/terraform/**"
+      - '.github/workflows/_test-tf.yaml'
+      - '.github/workflows/tf-*.yaml'
+      - 'tests/terraform/**'
 
 jobs:
   test_tf_feature:
