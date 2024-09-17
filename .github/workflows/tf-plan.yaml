@@ -23,10 +23,10 @@ on:
         description: "AWS OIDC IAM role to assume"
         type: string
       gh_artifact_path:
-        description: "Path to download artifacts to. If unset, default action workspace is used"
+        description: "Path to download artifacts to. If unset, default action workspace is used. If both 'gh_artifact_path' and 'gh_artifact_name' are unset, artifacts are not downloaded."
         type: string
       gh_artifact_name:
-        description: "Name of the artifact to download. If only 'gh_artifact_path' is set, then all artifacts are downloaded."
+        description: "Name of the artifact to download. If only 'gh_artifact_path' is set, then all artifacts are downloaded. If both 'gh_artifact_path' and 'gh_artifact_name' are unset, artifacts are not downloaded."
         type: string
       gh_comment:
         description: "Whether to post a comment on the PR with the Terraform plan"
