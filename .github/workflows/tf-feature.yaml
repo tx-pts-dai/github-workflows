@@ -126,15 +126,10 @@ jobs:
           variables: ${{ env.TF_VARS }}
           auto_approve: true
 
-      - name: Create Summary Output
+      - name: Summary
         if: steps.tf_apply.outputs != ''
-        id: tf_outputs_summary
-        run: |
-          echo "Summary" >> $GITHUB_STEP_SUMMARY
-          echo "<details>" >> $GITHUB_STEP_SUMMARY
-          echo "<summary>Terraform Outputs</summary>" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "${{ toJson(steps.tf_apply.outputs) }}" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "</details>" >> $GITHUB_STEP_SUMMARY
+        uses: tx-pts-dai/action-summary@v0.0.2
+        with:
+          summary_header: "Terraform Outputs"
+          string: ${{ toJson(steps.tf_apply.outputs) }}
+          data_type: "json"
