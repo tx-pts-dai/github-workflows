@@ -25,7 +25,7 @@ title: ${workflowName}
 
 <!-- action-docs-header source="${workflowFilePath}" -->
 
-# Description
+## Description
 
 <!-- action-docs-inputs source="${workflowFilePath}" -->
 

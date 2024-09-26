@@ -13,7 +13,7 @@ The state of these workflows are considered to be in alpha, and are subject to c
 
 ## Github Actions - Reusable Workflows
 
-(Official Docs)[https://docs.github.com/en/actions/sharing-automations/reusing-workflows]
+[Official Docs](https://docs.github.com/en/actions/sharing-automations/reusing-workflows)
 
 ## Features
 
@@ -56,25 +56,25 @@ For more complete examples see the [examples](docs/examples/) page.
 
 <!--intro-end-->
 
-<!--usage-start-->
-
 ## Getting started with Reusable Workflows
+
+<!--usage-start-->
 
 To get started with using reusable workflows in your repository, follow these steps:
 
-1. Create a `.github/workflows` directory in your repository if it doesn't already exist.
+1. Create a .github/workflows directory in your repository if it doesn't already exist. This is where all your workflow files will be stored.
 
-2. Copy an example workflow file from the reusable workflows repository into your `.github/workflows` directory. You can find the workflow example files in the [`docs/examples/`](https://github.com/tx-pts-dai/github-workflows/tree/main/docs/examples){:target="_blank"} folder of this repository.
 
-3. Open the workflow file you just copied and customize it according to your needs. Each workflow file contains a set of jobs that define the tasks to be executed.
+2. Choose an Example Workflow
+Browse the docs/examples/ folder in the reusable workflows repository and select an example workflow that suits your needs. Copy the file into your .github/workflows directory.
 
-4. Make sure to set the required inputs for the workflow. These inputs are defined in the workflow file and can be customized to match your specific requirements. For example, you might need to provide values for environment variables, AWS credentials, or Docker image details.
+3. Open the copied workflow file and tailor it to your project. Each workflow includes a set of jobs that define tasks to be executed. Adjust these tasks, steps, and settings as needed.
 
-5. Save the modified workflow file.
+4. Ensure all required inputs are set correctly. These inputs may include environment variables, AWS credentials, or Docker image details. The workflow file will specify which inputs are necessary, and you can modify them to match your project’s requirements.
 
-6. Commit and push the changes to your repository.
+5. Once you've customized the workflow, commit and push your changes to the repository.
 
-7. The workflow will now be triggered based on the specified events. For example, if you have configured the workflow to run on every push event, it will automatically start whenever you push changes to your repository.
+6. The workflow will automatically run based on the event triggers defined in the file (e.g., push, pull_request). Ensure the events are configured as needed for your use case.
 
 That's it! You have successfully set up and customized a reusable workflow in your repository. Now you can benefit from the predefined tasks and automation provided by the workflow to streamline your development process.
 

@@ -6,7 +6,7 @@ title: Github Conventional Commit Release
 # Github Conventional Commit Release
 <!-- action-docs-header source=".github/workflows/gh-release-on-main.yaml" -->
 
-# Description
+## Description
 
 This GitHub Action is designed to automate the process of creating a new release on push to the main branch. It's triggered on a pull_request closed event to the main branch and does not require any inputs.
 

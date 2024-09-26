@@ -6,7 +6,7 @@ title: Terraform Destroy
 # Terraform Destroy
 <!-- action-docs-header source=".github/workflows/tf-destroy.yaml" -->
 
-# Description
+## Description
 
 This workflow destroys Terraform resources.
 

@@ -6,7 +6,7 @@ title: Github Release
 # Github Release
 <!-- action-docs-header source=".github/workflows/gh-release.yaml" -->
 
-# Description
+## Description
 
 This workflow creates a release based on the tag.
 
