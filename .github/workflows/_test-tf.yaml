@@ -69,7 +69,7 @@ jobs:
         file_path="artifact-sample.txt"
 
   test_tf_artifact_all:
-    needs: test_upload_artifact
+    needs: test_tf_artifact
     uses: ./.github/workflows/tf-plan.yaml
     with:
       environment: sandbox
