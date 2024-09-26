@@ -1,0 +1,37 @@
+name: Build and Deploy
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/_test-lambda-nodejs.yaml'
+      - '.github/workflows/lambda-nodejs.yaml'
+      - 'lambda/nodejs/**'
+
+jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tests/lambda/nodejs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  build:
+    uses: ./.github/workflows/lambda-nodejs.yaml
+    needs: test
+    with:
+      node_version: "20"
+      source_dir: tests/lambda/nodejs
+      gh_artifact_name: tests-lambda-nodejs
+      gh_artifact_path: tests/lambda/nodejs/lambda.zip
+      gh_artifact_retention_days: 1

@@ -6,7 +6,7 @@ title: Docker Push to ECR
 # Docker Push to ECR
 <!-- action-docs-header source=".github/workflows/docker-push-ecr.yaml" -->
 
-# Description
+## Description
 
 This workflow pushes a Docker artifact to an ECR repository.
 

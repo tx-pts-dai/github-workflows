@@ -6,7 +6,7 @@ title: Docker Build and Push to ECR
 # Docker Build and Push to ECR
 <!-- action-docs-header source=".github/workflows/docker-build-push-ecr.yaml" -->
 
-# Description
+## Description
 
 This workflow builds a Docker image and pushes it to the Elastic Container Registry (ECR).
 

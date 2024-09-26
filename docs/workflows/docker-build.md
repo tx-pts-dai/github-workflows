@@ -6,7 +6,7 @@ title: Docker Build
 # Docker Build
 <!-- action-docs-header source=".github/workflows/docker-build.yaml" -->
 
-# Description
+## Description
 
 This workflow builds a Docker image and the artifact is uploaded to the GitHub artifact store.
 

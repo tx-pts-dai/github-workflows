@@ -6,7 +6,7 @@ title: Build Lambda Layer
 # Build Lambda Layer
 <!-- action-docs-header source=".github/workflows/lambda-build-node.yaml" -->
 
-# Description
+## Description
 
 This workflow builds a Lambda Layer and the artifact is uploaded to the GitHub artifact store.
 
