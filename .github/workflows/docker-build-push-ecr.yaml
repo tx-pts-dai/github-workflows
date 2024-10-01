@@ -47,29 +47,10 @@ on:
       artifact_path:
         description: "Artifact target path"
         type: string
-      image_tag:
-        description: "Tag of the Docker image to build"
-        type: string
-        default: ${{ github.sha }}
-      runner_labels:
-        description: "Runner that the main job shoud run on as JSON String"
-        type: string
-        default: ubuntu-latest
 jobs:
-  prereq:
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    steps:
-      - name: Provision step # at least one step is required in a job
-        run: |
-          echo "Provisioning ${{ github.event.inputs.runner_labels }}"
-    outputs:
-      runner: ${{ github.event.inputs.runner_labels }}
   build:
-    environment: ${{ inputs.environment }}
-    needs: prereq
-    # runs-on: ${{ fromJSON(needs.prereq.runner_labels) }} 
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     permissions:
       id-token: write
       contents: read
