@@ -28,7 +28,7 @@ on:
       runner:
         description: "Runner that the main job shoud run on"
         type: string
-        default: ubuntu-latest
+        default: [ "ubuntu-latest" ]
       
 jobs:
   prereq:
@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "Provisioning ${{ github.event.inputs.runner }}"
     outputs:
-      runner: ${{ github.event.inputs.runner }}
+      runner: ${{ fromJSON(github.event.inputs.runner) }}
   push:
     name: Push to ECR
     needs: prereq
