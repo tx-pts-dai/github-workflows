@@ -26,23 +26,14 @@ on:
         type: string
         default: ${{ github.sha }}
       runner:
-        description: "Runner that the main job shoud run on"
+        description: "Runner that the main job shoud run on as JSON String"
         type: string
-        default: [ "ubuntu-latest" ]
+        default: "[ 'ubuntu-latest' ] "
       
 jobs:
-  prereq:
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Provision step
-        run: |
-          echo "Provisioning ${{ github.event.inputs.runner }}"
-    outputs:
-      runner: ${{ fromJSON(github.event.inputs.runner) }}
   push:
     name: Push to ECR
-    needs: prereq
-    runs-on: ${{ needs.prereq.outputs.runner }} 
+    runs-on: ${{ fromJSON(inputs.runner) }} 
     environment: ${{ inputs.environment }}
     permissions:
       id-token: write
