@@ -54,10 +54,11 @@ on:
       runner_labels:
         description: "Runner that the main job shoud run on as JSON String"
         type: string
-        default: "['ubuntu-latest']"
+        default: ubuntu-latest
 jobs:
   prereq:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - name: Provision step # at least one step is required in a job
         run: |
