@@ -57,7 +57,7 @@ on:
         default: "['ubuntu-latest']"
 jobs:
   build:
-    runs-on: ${{ fromJson(inputs.runner_labels) }} 
+    runs-on: ${{ fromJSON(inputs.runner_labels) }} 
     environment: ${{ inputs.environment }}
     permissions:
       id-token: write
