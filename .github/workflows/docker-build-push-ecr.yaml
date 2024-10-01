@@ -60,7 +60,7 @@ jobs:
         run: |
           echo "Provisioning ${{ github.event.inputs.runner }}"
     outputs:
-      runner: ${{ fromJSON(github.event.inputs.runner_labels) }}
+      runner: ${{ github.event.inputs.runner_labels }}
   build:
     # runs-on: ubuntu-latest
     needs: prereq
