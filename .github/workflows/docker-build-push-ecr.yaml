@@ -52,7 +52,7 @@ on:
         type: string
         default: ${{ github.sha }}
       runner:
-        description: "Runner that the main job shoud run on as JSON String"
+        description: "Runner that the main job shoud run on as JSON String "
         type: string
         default: "['ubuntu-latest']"
 jobs:
