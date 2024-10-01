@@ -56,9 +56,18 @@ on:
         type: string
         default: "['ubuntu-latest']"
 jobs:
+  prereq:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Provision step # at least one step is required in a job
+        run: |
+          echo "Provisioning ${{ github.event.inputs.runner_labels }}"
+    outputs:
+      runner: ${{ github.event.inputs.runner_labels }}
   build:
-    runs-on: ${{ fromJSON(inputs.runner_labels) }} 
     environment: ${{ inputs.environment }}
+    needs: prereq
+    runs-on: ${{ fromJSON(needs.prereq.runner_labels) }} 
     permissions:
       id-token: write
       contents: read
