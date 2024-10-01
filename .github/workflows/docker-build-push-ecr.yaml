@@ -54,10 +54,10 @@ on:
       runner:
         description: "Runner that the main job shoud run on as JSON String"
         type: string
-        default: [ "ubuntu-latest" ]
+        default: "['ubuntu-latest']"
 jobs:
   build:
-    runs-on: ${{ fromJSON(inputs.runner) }} 
+    runs-on: ${{ fromJson(inputs.runner) }} 
     environment: ${{ inputs.environment }}
     permissions:
       id-token: write
