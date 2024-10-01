@@ -27,6 +27,7 @@ on:
         default: ${{ github.sha }}
       runner:
         description: "Runner that the main job shoud run on as JSON String"
+        required: true
         type: string
         default: "['ubuntu-latest']"
       
