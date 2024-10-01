@@ -47,13 +47,15 @@ on:
       artifact_path:
         description: "Artifact target path"
         type: string
-      image_tag:
-        description: "Tag of the Docker image to build"
+      runner_labels:
+        description: "Runner that the main job shoud run on as JSON String"
         type: string
-        
+        default: " ['ubuntu-latest'] "
+      
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
     environment: ${{ inputs.environment }}
     permissions:
       id-token: write
