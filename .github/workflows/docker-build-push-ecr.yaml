@@ -51,11 +51,10 @@ on:
         description: "Tag of the Docker image to build"
         type: string
         default: ${{ github.sha }}
-      # runner_labels:
-      #   description: "Runner that the main job shoud run on as JSON String"
-      #  type: string
-      #   default: "['ubuntu-latest']"
-
+      runner_labels:
+        description: "Runner that the main job shoud run on as JSON String"
+        type: string
+        default: "['ubuntu-latest']"
 jobs:
   prereq:
     runs-on: ubuntu-latest
