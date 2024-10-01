@@ -58,13 +58,13 @@ jobs:
     steps:
       - name: Provision step # at least one step is required in a job
         run: |
-          echo "Provisioning ${{ github.event.inputs.runner }}"
+          echo "Provisioning ${{ github.event.inputs.runner_labels }}"
     outputs:
-      runner: ${{ github.event.inputs.runner_labels }}
+      runner_labels: ${{ github.event.inputs.runner_labels }}
   build:
     # runs-on: ubuntu-latest
     needs: prereq
-    runs-on: ${{ needs.prereq.outputs.runner }}
+    runs-on: ${{ prereq.outputs.runner_labels }}
     environment: ${{ inputs.environment }}
     permissions:
       id-token: write
