@@ -67,7 +67,8 @@ jobs:
   build:
     environment: ${{ inputs.environment }}
     needs: prereq
-    runs-on: ${{ fromJSON(needs.prereq.runner_labels) }} 
+    # runs-on: ${{ fromJSON(needs.prereq.runner_labels) }} 
+    runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
