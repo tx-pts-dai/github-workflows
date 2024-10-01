@@ -25,10 +25,24 @@ on:
         description: "Tag of the Docker image to build"
         type: string
         default: ${{ github.sha }}
+      runner:
+        description: "Runner that the main job shoud run on"
+        type: string
+        default: ubuntu-latest
+      
 jobs:
+  prereq:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Provision step
+        run: |
+          echo "Provisioning ${{ github.event.inputs.runner }}"
+    outputs:
+      runner: ${{ github.event.inputs.runner }}
   push:
     name: Push to ECR
-    runs-on: ubuntu-latest
+    needs: prereq
+    runs-on: ${{ needs.prereq.outputs.runner }} 
     environment: ${{ inputs.environment }}
     permissions:
       id-token: write
