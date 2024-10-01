@@ -47,6 +47,10 @@ on:
       artifact_path:
         description: "Artifact target path"
         type: string
+      image_tag:
+        description: "Tag of the Docker image to build"
+        type: string
+        default: ${{ github.sha }}
 jobs:
   build:
     runs-on: ubuntu-latest
