@@ -47,9 +47,24 @@ on:
       artifact_path:
         description: "Artifact target path"
         type: string
+      runner_labels:
+        description: "Runner that the main job shoud run on as JSON String"
+        type: string
+        default: " ['ubuntu-latest'] "
+      
 jobs:
-  build:
+  prereq:
     runs-on: ubuntu-latest
+    steps:
+      - name: Provision step # at least one step is required in a job
+        run: |
+          echo "Provisioning ${{ inputs.runner_labels }}"
+    outputs:
+      runner_labels: ${{ inputs.runner_labels }}
+  build:
+    # runs-on: ubuntu-latest
+    needs: prereq
+    runs-on: ${{ fromJSON(needs.prereq.outputs.runner_labels) }}
     environment: ${{ inputs.environment }}
     permissions:
       id-token: write
