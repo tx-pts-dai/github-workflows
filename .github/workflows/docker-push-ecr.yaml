@@ -25,6 +25,8 @@ on:
         description: "Tag of the Docker image to build"
         type: string
         default: ${{ github.sha }}
+  
+jobs: 
   push:
     name: Push to ECR
     runs-on: ubuntu-latest
