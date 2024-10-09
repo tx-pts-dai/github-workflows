@@ -56,9 +56,6 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
-    concurrency:
-      group: ${{ github.workflow }}-${{ inputs.environment }}
-      cancel-in-progress: false
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
@@ -130,6 +127,6 @@ jobs:
         if: steps.tf_apply.outputs != ''
         uses: tx-pts-dai/action-summary@v0.0.2
         with:
-          summary_header: "Terraform Outputs"
+          summary_header: "Terraform Outputs | ${{ env.ENVIRONMENT}}"
           string: ${{ toJson(steps.tf_apply.outputs) }}
           data_type: "json"

@@ -56,12 +56,10 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
-    concurrency:
-      group: ${{ github.workflow }}-${{ inputs.environment }}
-      cancel-in-progress: false
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
+      ENVIRONMENT: ${{ inputs.environment }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_DIR: ${{ inputs.tf_dir || vars.tf_dir || '.' }}
       TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
@@ -103,7 +101,7 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
-          label: ${{ inputs.environment }}
+          label: ${{ env.ENVIRONMENT }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
           backend_config_file: ${{ env.TF_BACKEND_CONFIG_FILES }}
@@ -115,6 +113,6 @@ jobs:
         if: steps.tf_apply.outputs != ''
         uses: tx-pts-dai/action-summary@v0.0.2
         with:
-          summary_header: "Terraform Outputs"
+          summary_header: "Terraform Outputs | ${{ env.ENVIRONMENT}}"
           string: ${{ toJson(steps.tf_apply.outputs) }}
           data_type: "json"
