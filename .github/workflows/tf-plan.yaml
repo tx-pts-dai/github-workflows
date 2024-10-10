@@ -56,12 +56,10 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
-    concurrency:
-      group: ${{ github.workflow }}-${{ inputs.environment }}
-      cancel-in-progress: false
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
+      ENVIRONMENT: ${{ inputs.environment }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_DIR: ${{ inputs.tf_dir || vars.tf_dir || '.' }}
       TF_BACKEND_CONFIGS: ${{ inputs.tf_backend_configs || vars.tf_backend_configs }}
@@ -117,7 +115,7 @@ jobs:
               eval "${{ inputs.tf_pre_run }}"
             fi
         with:
-          label: ${{ inputs.environment}}
+          label: ${{ env.ENVIRONMENT }}
           add_github_comment: ${{ inputs.gh_comment }}
           path: ${{ env.TF_DIR}}
           backend_config: ${{ env.TF_BACKEND_CONFIGS }}
@@ -129,6 +127,6 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: tx-pts-dai/action-summary@v0.0.2
         with:
-          summary_header: "Terraform Plan"
+          summary_header: "Terraform Plan | ${{ env.ENVIRONMENT}} "
           path: ${{ steps.plan.outputs.text_plan_path }}
           data_type: "terraform"

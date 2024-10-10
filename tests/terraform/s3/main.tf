@@ -1,5 +1,8 @@
 terraform {
-  backend "s3" {}
+  backend "s3" {
+    dynamodb_table = "terraform-lock"
+    region         = "eu-central-1"
+  }
 }
 
 resource "random_pet" "this" {
