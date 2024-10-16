@@ -65,7 +65,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Destroy
-        uses: dflook/terraform-destroy@65f689138f6e3549c0aa2fd92153fce0bead4ed7 # v1
+        uses: dflook/terraform-destroy@2e74fdc282c2980b12503986b2d8483d7cbfa14a # v1
         id: first_try
         continue-on-error: true
         env:
@@ -84,7 +84,7 @@ jobs:
           variables: ${{ env.TF_VARS }}
 
       - name: Terraform Destroy
-        uses: dflook/terraform-destroy@65f689138f6e3549c0aa2fd92153fce0bead4ed7 # v1
+        uses: dflook/terraform-destroy@2e74fdc282c2980b12503986b2d8483d7cbfa14a # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
