@@ -15,5 +15,5 @@
 <!--- This will highlight breaking/disruptive changes. Once you have checked, deploy your changes to verify -->
 <!--- Please describe how you tested your changes -->
 - [ ] I have executed `pre-commit run -a` on my pull request
-- [ ] I have executed `gen_docs_run` on my pull request
+- [ ] I have executed `make gen_docs_run` on my pull request
 <!--- Please see https://github.com/antonbabenko/pre-commit-terraform#how-to-install for how to install -->
