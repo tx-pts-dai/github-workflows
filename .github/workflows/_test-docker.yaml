@@ -15,7 +15,7 @@ jobs:
       aws_region: ${{ vars.aws_region }}
       aws_role_name: ${{ vars.aws_role_name }}
       image_name: test-docker-build-push
-      image_tag: ${{ github.head_ref }}
+      image_tag: ${{ github.sha }}
       docker_context: tests/docker
       docker_push: false
 
