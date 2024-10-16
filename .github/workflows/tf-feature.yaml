@@ -74,7 +74,7 @@ jobs:
           echo "TF_WORKSPACE=$SANITISED_WORKSPACE" >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
@@ -96,7 +96,7 @@ jobs:
           name: ${{ env.GH_ARTIFACT_NAME }}
 
       - name: Use Branch Workspace
-        uses: dflook/terraform-new-workspace@74ceae9c6f940846d7f498bb45c319421abf1041 # v1
+        uses: dflook/terraform-new-workspace@328d939679a5ddd00425d9cd75ceb6689f54c2bc # v1
         with:
           workspace: ${{ env.TF_WORKSPACE }}
           path: ${{ env.TF_DIR }}
