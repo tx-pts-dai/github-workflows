@@ -18,7 +18,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout main
-        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
         with:
           fetch-depth: 0
 
