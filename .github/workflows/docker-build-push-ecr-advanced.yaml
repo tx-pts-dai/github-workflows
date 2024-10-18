@@ -30,6 +30,10 @@ on:
         description: "JSON object string with image labels"
         type: string
         default: "{}"
+      docker_build_args:
+        description: "JSON array string with build args"
+        type: string
+        default: "[]"
       docker_context:
         description: "Path to the build context"
         type: string
@@ -53,6 +57,7 @@ on:
         description: "Runner that the main job should run on as JSON encoded list."
         type: string
         default: " ['ubuntu-latest'] "
+
 
 jobs:
   prereq: # this job is required to pass the runner_labels to the build job!
