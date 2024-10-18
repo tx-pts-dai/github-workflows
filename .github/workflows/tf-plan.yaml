@@ -93,6 +93,8 @@ jobs:
         with:
           path: ${{ env.GH_ARTIFACT_PATH }}
           name: ${{ env.GH_ARTIFACT_NAME }}
+          pattern: my-artifact-*
+          merge-multiple: true
 
       - name: Terraform Format
         uses: dflook/terraform-fmt-check@c9309dc072b71dded0f23b29e3ffd4406e27c078 # v1

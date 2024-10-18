@@ -99,6 +99,8 @@ jobs:
         with:
           path: ${{ env.GH_ARTIFACT_PATH }}
           name: ${{ env.GH_ARTIFACT_NAME }}
+          pattern: my-artifact-*
+          merge-multiple: true
 
       - name: Use Branch Workspace
         uses: dflook/terraform-new-workspace@328d939679a5ddd00425d9cd75ceb6689f54c2bc # v1

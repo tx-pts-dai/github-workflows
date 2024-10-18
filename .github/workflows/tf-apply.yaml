@@ -93,6 +93,8 @@ jobs:
         with:
           path: ${{ env.GH_ARTIFACT_PATH }}
           name: ${{ env.GH_ARTIFACT_NAME }}
+          pattern: my-artifact-*
+          merge-multiple: true
 
       - name: Terraform Apply
         id: tf_apply
