@@ -1,0 +1,123 @@
+name: Docker Build and Push to ECR
+
+on:
+  workflow_call:
+    secrets:
+      docker_secrets:
+        description: "Comma-delimited list of Github secrets to pass to docker build workflow"
+        required: false
+    inputs:
+      environment:
+        description: "Environment to run the build in"
+        type: string
+      aws_account_id:
+        description: "AWS Account ID"
+        type: string
+      aws_region:
+        description: "AWS Region"
+        type: string
+      aws_role_name:
+        description: "AWS Role Name"
+        type: string
+      aws_oidc_role_arn:
+        description: "AWS OIDC IAM role to assume"
+        type: string
+      image_tags:
+        description: "JSON array string with full repo/image:tag list"
+        type: string
+        required: true
+      image_labels:
+        description: "JSON object string with image labels"
+        type: string
+        default: '{}'
+      docker_context:
+        description: "Path to the build context"
+        type: string
+      dockerfile_path:
+        description: "Path to the Dockerfile. If not defined, will default to {docker_context}/Dockerfile"
+        type: string
+      docker_push:
+        description: "Push Image to ECR"
+        type: boolean
+        default: true
+      docker_target:
+        description: "Build target"
+        type: string
+      artifact_name:
+        description: "Artifact name to be downloaded before building"
+        type: string
+      artifact_path:
+        description: "Artifact target path"
+        type: string
+      runner_labels:
+        description: "Runner that the main job should run on as JSON encoded list."
+        type: string
+        default: " ['ubuntu-latest'] "
+
+jobs:
+  prereq: # this job is required to pass the runner_labels to the build job!
+    runs-on: ubuntu-latest
+    steps:
+      - name: Provision step # at least one step is required in a job
+        run: |
+          echo "Provisioning ${{ inputs.runner_labels }}"
+    outputs:
+      runner_labels: ${{ inputs.runner_labels }}
+  build:
+    needs: prereq
+    runs-on: ${{ fromJSON(needs.prereq.outputs.runner_labels) }}
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Check out code
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+
+      - name: Download artifacts to pass to docker build
+        if: ${{ inputs.artifact_name || inputs.artifact_path }} # avoid downloading artifacts if not needed
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
+        env:
+          ARTIFACT_NAME: ${{ inputs.artifact_name || vars.artifact_name }}
+          ARTIFACT_PATH: ${{ inputs.artifact_path || vars.artifact_path }}
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_PATH }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
+        env:
+          ROLE_TO_ASSUME: ${{ inputs.aws_oidc_role_arn || vars.aws_oidc_role_arn || format('arn:aws:iam::{0}:role/{1}', inputs.aws_account_id, inputs.aws_role_name) }}
+          AWS_REGION: ${{ inputs.aws_region || vars.aws_region || 'eu-central-1' }}
+        with:
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2
+
+      - name: Build and export
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ inputs.image_name || vars.image_name || github.event.repository.name }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
+          DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context || '.' }}
+          DOCKERFILE_PATH: ${{ inputs.dockerfile_path || vars.dockerfile_path }} # upstream defaults to {DOCKER_CTX}/Dockerfile
+          DOCKER_TARGET: ${{ inputs.docker_target || vars.docker_target }}
+        with:
+          context: ${{ env.DOCKER_CTX }}
+          file: ${{ env.DOCKERFILE_PATH }}
+          secrets: ${{ secrets.docker_secrets }}
+          # platforms: linux/amd64,linux/arm64 # TODO add support for multi-arch builds
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: ${{ inputs.docker_push }}
+          target: ${{ env.DOCKER_TARGET }}
+          tags: ${{ fromJSON(inputs.image_tags) }}
+          labels: ${{ fromJSON(inputs.image_labels) }}
+
