@@ -62,16 +62,16 @@ on:
 jobs:
   prereq: # this job is required to pass the runner_labels to the build job!
     runs-on: ubuntu-latest
+
     steps:
-      - name: Provision step # at least one step is required in a job
+      - id: prereq
+        name: Provision step # at least one step is required in a job
         run: |
           echo "image_tags=${{ inputs.image_tags }}" >> $GITHUB_OUTPUT
-          
 
     outputs:
       runner_labels: ${{ inputs.runner_labels }}
-
-
+      image_tags: ${{ steps.prereq.outputs.image_tags }}
 
   build:
     needs: prereq
