@@ -131,5 +131,5 @@ jobs:
           target: ${{ env.DOCKER_TARGET }}
           tags: ${{ fromJSON(needs.prereq.outputs.image_tags) }}
           labels: ${{ fromJSON(needs.prereq.outputs.image_labels) }}
-          build-args: ${{ fromJSON(needs.prereq.outputs.build_args) }}
+          build-args: ${{ needs.prereq.outputs.build_args }}
 
