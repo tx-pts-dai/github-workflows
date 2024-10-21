@@ -69,11 +69,13 @@ jobs:
         run: |
           echo "image tags: ${{ inputs.image_tags }}"
           echo "image labels: ${{ inputs.image_labels }}"
+          echo "build args: ${{ inputs.docker_build_args }}"
 
     outputs:
       runner_labels: ${{ inputs.runner_labels }}
       image_tags: ${{ inputs.image_tags }}
       image_labels: ${{ inputs.image_labels }}
+      build_args: ${{ inputs.docker_build_args }}
 
   build:
     needs: prereq
@@ -129,4 +131,5 @@ jobs:
           target: ${{ env.DOCKER_TARGET }}
           tags: ${{ fromJSON(needs.prereq.outputs.image_tags) }}
           labels: ${{ fromJSON(needs.prereq.outputs.image_labels) }}
+          build-args: ${{ fromJSON(needs.prereq.outputs.build_args) }}
 
