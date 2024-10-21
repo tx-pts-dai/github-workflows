@@ -67,11 +67,11 @@ jobs:
       - id: prereq
         name: Provision step # at least one step is required in a job
         run: |
-          echo "image_tags=${{ inputs.image_tags }}" >> $GITHUB_OUTPUT
+          echo "image tags: ${{ inputs.image_tags }}"
 
     outputs:
       runner_labels: ${{ inputs.runner_labels }}
-      image_tags: ${{ steps.prereq.outputs.image_tags }}
+      image_tags: ${{ inputs.image_tags }}
 
   build:
     needs: prereq
