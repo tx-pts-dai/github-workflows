@@ -68,10 +68,12 @@ jobs:
         name: Provision step # at least one step is required in a job
         run: |
           echo "image tags: ${{ inputs.image_tags }}"
+          echo "image labels: ${{ inputs.image_labels }}"
 
     outputs:
       runner_labels: ${{ inputs.runner_labels }}
       image_tags: ${{ inputs.image_tags }}
+      image_labels: ${{ inputs.image_labels }}
 
   build:
     needs: prereq
@@ -126,5 +128,5 @@ jobs:
           push: ${{ inputs.docker_push }}
           target: ${{ env.DOCKER_TARGET }}
           tags: ${{ fromJSON(needs.prereq.outputs.image_tags) }}
-          # labels: ${{ fromJSON(needs.prereq.outputs.image_labels) }}
+          labels: ${{ fromJSON(needs.prereq.outputs.image_labels) }}
 
