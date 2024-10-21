@@ -124,5 +124,5 @@ jobs:
           push: ${{ inputs.docker_push }}
           target: ${{ env.DOCKER_TARGET }}
           tags: ${{ fromJSON(needs.prereq.outputs.image_tags) }}
-          labels: ${{ fromJSON(needs.prereq.outputs.image_labels) }}
+          # labels: ${{ fromJSON(needs.prereq.outputs.image_labels) }}
 
