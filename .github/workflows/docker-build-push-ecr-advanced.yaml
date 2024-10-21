@@ -65,11 +65,13 @@ jobs:
     steps:
       - name: Provision step # at least one step is required in a job
         run: |
-          echo "Provisioning ${{ inputs.runner_labels }}"
+          echo "image_tags=${{ inputs.runner_tags }}" >> $GITHUB_OUTPUT
+          echo "image_labels=${{ inputs.runner_labels }}" >> $GITHUB_OUTPUT
+
     outputs:
       runner_labels: ${{ inputs.runner_labels }}
-      image_tags: ${{ inputs.image_tags }}
-      image_labels: ${{ inputs.image_labels }}
+
+
 
   build:
     needs: prereq
