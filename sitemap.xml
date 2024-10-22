@@ -2,98 +2,98 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/faq/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/examples/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/examples/docker-terraform/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/examples/lambda-build/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/examples/multiple-releases/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/examples/terraform-multiple/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/examples/terraform-single/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/getting-started/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/getting-started/inputs/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/aws-secrets-copy/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/docker-build-push-ecr/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/docker-build/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/docker-push-ecr/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/gh-release-on-main/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/gh-release/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/lambda-build-node/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/lambda-nodejs/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/tf-apply/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/tf-cleanup/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/tf-destroy/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/tf-feature/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
          <loc>https://tx-pts-dai.github.io/github-workflows/workflows/tf-plan/</loc>
-         <lastmod>2024-10-16</lastmod>
+         <lastmod>2024-10-22</lastmod>
     </url>
 </urlset>
