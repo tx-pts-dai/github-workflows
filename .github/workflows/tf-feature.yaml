@@ -128,5 +128,5 @@ jobs:
         uses: tx-pts-dai/action-summary@v0.0.2
         with:
           summary_header: "Terraform Outputs | ${{ env.ENVIRONMENT}}"
-          string: ${{ toJson(steps.tf_apply.outputs) }}
+          string: ${{ fromJson(steps.tf_apply.outputs) }}
           data_type: "json"

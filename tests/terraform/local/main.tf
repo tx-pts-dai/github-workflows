@@ -16,6 +16,15 @@ resource "null_resource" "test" {
   }
 }
 
+variable "var1" {
+  type = string
+}
+
+variable "var2" {
+  type    = string
+  default = "baz"
+}
+
 output "random_pet" {
   value = random_pet.this.id
 }
@@ -24,11 +33,16 @@ output "random_id" {
   value = random_id.this.id
 }
 
-variable "var1" {
-  type = string
+output "map_map" {
+  value = {
+    foo = {
+      bar = "baz"
+    }
+  }
 }
 
-variable "var2" {
-  type    = string
-  default = "baz"
+output "map_array" {
+  value = {
+    foo = ["bar", "baz"]
+  }
 }
