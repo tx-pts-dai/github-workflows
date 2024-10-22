@@ -47,7 +47,7 @@ on:
       artifact_path:
         description: "Artifact target path"
         type: string
-      artifact_pattern: 
+      artifact_pattern:
         description: "A glob pattern to the artifacts that should be downloaded. Ignored if name is specified."
         type: string
       artifact_merge_multiple:
