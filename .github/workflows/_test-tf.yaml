@@ -88,3 +88,15 @@ jobs:
       gh_artifact_path: tests/terraform/artifact/
       tf_vars: |
         file_path="docker-artifacts/artifact-sample.txt"
+
+  test_tf_checkout_ref:
+    uses: ./.github/workflows/tf-plan.yaml
+    with:
+      environment: sandbox
+      gh_checkout_ref: refs/heads/main
+      tf_dir: tests/terraform/s3
+      tf_backend_configs: |
+        bucket=tf-state-911453050078
+        key=sandbox-checkout-ref.tfstate
+        workspace_key_prefix=github-workflows
+      tf_var_files: tests/terraform/s3/environment/sandbox.tfvars

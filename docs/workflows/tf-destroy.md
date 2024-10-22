@@ -20,6 +20,7 @@ This workflow destroys Terraform resources.
 | `aws_region` | <p>The AWS region.</p> | `string` | `false` | `""` |
 | `aws_role_name` | <p>The name of the role to assume with OIDC.</p> | `string` | `false` | `""` |
 | `aws_oidc_role_arn` | <p>AWS OIDC IAM role to assume</p> | `string` | `false` | `""` |
+| `gh_checkout_ref` | <p>The branch, tag or SHA to checkout.</p> | `string` | `false` | `""` |
 | `tf_dir` | <p>Path to the Terraform root module to apply.</p> | `string` | `false` | `""` |
 | `tf_backend_configs` | <p>List of Terraform backend config values, one per line.</p> | `string` | `false` | `""` |
 | `tf_backend_config_files` | <p>List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace.</p> | `string` | `false` | `""` |
@@ -70,6 +71,13 @@ jobs:
 
       aws_oidc_role_arn:
       # AWS OIDC IAM role to assume
+      #
+      # Type: string
+      # Required: false
+      # Default: ""
+
+      gh_checkout_ref:
+      # The branch, tag or SHA to checkout.
       #
       # Type: string
       # Required: false
