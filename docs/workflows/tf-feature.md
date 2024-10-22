@@ -21,6 +21,7 @@ This workflow deploys a Terraform configuration to a preview environment.
 | `aws_account_id` | <p>The AWS account ID.</p> | `string` | `false` | `""` |
 | `gh_artifact_path` | <p>Path to download artifacts to. If unset, default action workspace is used. If both 'gh<em>artifact</em>path' and 'gh<em>artifact</em>name' are unset, artifacts are not downloaded.</p> | `string` | `false` | `""` |
 | `gh_artifact_name` | <p>Name of the artifact to download. If only 'gh<em>artifact</em>path' is set, then all artifacts are downloaded. If both 'gh<em>artifact</em>path' and 'gh<em>artifact</em>name' are unset, artifacts are not downloaded.</p> | `string` | `false` | `""` |
+| `gh_checkout_ref` | <p>The branch, tag or SHA to checkout.</p> | `string` | `false` | `""` |
 | `tf_dir` | <p>Terraform directory</p> | `string` | `false` | `""` |
 | `tf_backend_configs` | <p>Terraform backend config cli arguments</p> | `string` | `false` | `""` |
 | `tf_backend_config_files` | <p>List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace.</p> | `string` | `false` | `""` |
@@ -83,6 +84,13 @@ jobs:
 
       gh_artifact_name:
       # Name of the artifact to download. If only 'gh_artifact_path' is set, then all artifacts are downloaded. If both 'gh_artifact_path' and 'gh_artifact_name' are unset, artifacts are not downloaded.
+      #
+      # Type: string
+      # Required: false
+      # Default: ""
+
+      gh_checkout_ref:
+      # The branch, tag or SHA to checkout.
       #
       # Type: string
       # Required: false
