@@ -22,12 +22,9 @@ This workflow runs `terraform plan` and uploads the plan to Github Action summar
 | `aws_oidc_role_arn` | <p>AWS OIDC IAM role to assume</p> | `string` | `false` | `""` |
 | `gh_artifact_path` | <p>Path to download artifacts to. If unset, default action workspace is used. If both 'gh<em>artifact</em>path' and 'gh<em>artifact</em>name' are unset, artifacts are not downloaded.</p> | `string` | `false` | `""` |
 | `gh_artifact_name` | <p>Name of the artifact to download. If only 'gh<em>artifact</em>path' is set, then all artifacts are downloaded. If both 'gh<em>artifact</em>path' and 'gh<em>artifact</em>name' are unset, artifacts are not downloaded.</p> | `string` | `false` | `""` |
-<<<<<<< HEAD
 | `gh_checkout_ref` | <p>The branch, tag or SHA to checkout.</p> | `string` | `false` | `""` |
-=======
 | `gh_artifact_pattern` | <p>A glob pattern to the artifacts that should be downloaded. Ignored if name is specified.</p> | `string` | `false` | `""` |
 | `gh_artifact_merge_multiple` | <p>When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. Optional. Default is 'false'.</p> | `boolean` | `false` | `""` |
->>>>>>> e4f901b (docs)
 | `gh_comment` | <p>Whether to post a comment on the PR with the Terraform plan</p> | `string` | `false` | `changes-only` |
 | `tf_dir` | <p>Path to the Terraform root module to apply.</p> | `string` | `false` | `""` |
 | `tf_backend_configs` | <p>List of Terraform backend config values, one per line.</p> | `string` | `false` | `""` |
@@ -98,20 +95,20 @@ jobs:
       # Required: false
       # Default: ""
 
-<<<<<<< HEAD
       gh_checkout_ref:
       # The branch, tag or SHA to checkout.
-=======
-      gh_artifact_pattern:
-      # A glob pattern to the artifacts that should be downloaded. Ignored if name is specified.
->>>>>>> e4f901b (docs)
       #
       # Type: string
       # Required: false
       # Default: ""
 
-<<<<<<< HEAD
-=======
+      gh_artifact_pattern:
+      # A glob pattern to the artifacts that should be downloaded. Ignored if name is specified.
+      #
+      # Type: string
+      # Required: false
+      # Default: ""
+
       gh_artifact_merge_multiple:
       # When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. Optional. Default is 'false'.
       #
@@ -119,7 +116,6 @@ jobs:
       # Required: false
       # Default: ""
 
->>>>>>> e4f901b (docs)
       gh_comment:
       # Whether to post a comment on the PR with the Terraform plan
       #

@@ -26,7 +26,7 @@ on:
       gh_checkout_ref:
         description: "The branch, tag or SHA to checkout."
         type: string
-      gh_artifact_pattern: 
+      gh_artifact_pattern:
         description: "A glob pattern to the artifacts that should be downloaded. Ignored if name is specified."
         type: string
       gh_artifact_merge_multiple:
