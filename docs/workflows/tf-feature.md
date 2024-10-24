@@ -22,6 +22,8 @@ This workflow deploys a Terraform configuration to a preview environment.
 | `gh_artifact_path` | <p>Path to download artifacts to. If unset, default action workspace is used. If both 'gh<em>artifact</em>path' and 'gh<em>artifact</em>name' are unset, artifacts are not downloaded.</p> | `string` | `false` | `""` |
 | `gh_artifact_name` | <p>Name of the artifact to download. If only 'gh<em>artifact</em>path' is set, then all artifacts are downloaded. If both 'gh<em>artifact</em>path' and 'gh<em>artifact</em>name' are unset, artifacts are not downloaded.</p> | `string` | `false` | `""` |
 | `gh_checkout_ref` | <p>The branch, tag or SHA to checkout.</p> | `string` | `false` | `""` |
+| `gh_artifact_pattern` | <p>A glob pattern to the artifacts that should be downloaded. Ignored if name is specified.</p> | `string` | `false` | `""` |
+| `gh_artifact_merge_multiple` | <p>When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. Optional. Default is 'false'.</p> | `boolean` | `false` | `""` |
 | `tf_dir` | <p>Terraform directory</p> | `string` | `false` | `""` |
 | `tf_backend_configs` | <p>Terraform backend config cli arguments</p> | `string` | `false` | `""` |
 | `tf_backend_config_files` | <p>List of Terraform backend config files to use, one per line. Paths should be relative to the GitHub Actions workspace.</p> | `string` | `false` | `""` |
@@ -93,6 +95,20 @@ jobs:
       # The branch, tag or SHA to checkout.
       #
       # Type: string
+      # Required: false
+      # Default: ""
+
+      gh_artifact_pattern:
+      # A glob pattern to the artifacts that should be downloaded. Ignored if name is specified.
+      #
+      # Type: string
+      # Required: false
+      # Default: ""
+
+      gh_artifact_merge_multiple:
+      # When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. Optional. Default is 'false'.
+      #
+      # Type: boolean
       # Required: false
       # Default: ""
 

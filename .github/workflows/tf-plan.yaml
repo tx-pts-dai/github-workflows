@@ -31,6 +31,12 @@ on:
       gh_checkout_ref:
         description: "The branch, tag or SHA to checkout."
         type: string
+      gh_artifact_pattern:
+        description: "A glob pattern to the artifacts that should be downloaded. Ignored if name is specified."
+        type: string
+      gh_artifact_merge_multiple:
+        description: "When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. Optional. Default is 'false'."
+        type: boolean
       gh_comment:
         description: "Whether to post a comment on the PR with the Terraform plan"
         type: string
@@ -86,13 +92,17 @@ jobs:
 
       - name: Download Artifacts
         env:
-          GH_ARTIFACT_PATH: ${{ inputs.gh_artifact_path || vars.gh_artifact_path || '' }}
-          GH_ARTIFACT_NAME: ${{ inputs.gh_artifact_name || vars.gh_artifact_name || '' }}
+          GH_ARTIFACT_PATH: ${{ inputs.gh_artifact_path || vars.gh_artifact_path }}
+          GH_ARTIFACT_NAME: ${{ inputs.gh_artifact_name || vars.gh_artifact_name }}
+          GH_ARTIFACT_PATTERN: ${{ inputs.gh_artifact_pattern || vars.gh_artifact_pattern }}
+          GH_ARTIFACT_MERGE_MULTIPLE: ${{ inputs.gh_artifact_merge_multiple || vars.gh_artifact_merge_multiple || false }}
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
         if: env.GH_ARTIFACT_PATH != '' || env.GH_ARTIFACT_NAME != ''
         with:
           path: ${{ env.GH_ARTIFACT_PATH }}
           name: ${{ env.GH_ARTIFACT_NAME }}
+          pattern: ${{ env.GH_ARTIFACT_PATTERN }}
+          merge-multiple: ${{ env.GH_ARTIFACT_MERGE_MULTIPLE }}
 
       - name: Terraform Format
         uses: dflook/terraform-fmt-check@c9309dc072b71dded0f23b29e3ffd4406e27c078 # v1
