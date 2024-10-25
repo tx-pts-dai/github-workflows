@@ -6,6 +6,7 @@ on:
       - ".github/workflows/_test-docker.yaml"
       - ".github/workflows/docker-*.yaml"
       - "tests/docker/**"
+      - "docker/metadata-action/**"
 
 jobs:
   test_docker_build_push_ecr:
