@@ -28,6 +28,8 @@ This workflow builds a Docker image and pushes it to the Elastic Container Regis
 | `docker_target` | <p>Build target</p> | `string` | `false` | `""` |
 | `artifact_name` | <p>Artifact name to be downloaded before building</p> | `string` | `false` | `""` |
 | `artifact_path` | <p>Artifact target path</p> | `string` | `false` | `""` |
+| `artifact_pattern` | <p>A glob pattern to the artifacts that should be downloaded. Ignored if name is specified.</p> | `string` | `false` | `""` |
+| `artifact_merge_multiple` | <p>When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. Optional. Default is 'false'.</p> | `boolean` | `false` | `""` |
 <!-- action-docs-inputs source=".github/workflows/docker-build-push-ecr.yaml" -->
 
 <!-- action-docs-outputs source=".github/workflows/docker-build-push-ecr.yaml" -->
@@ -130,6 +132,20 @@ jobs:
       # Artifact target path
       #
       # Type: string
+      # Required: false
+      # Default: ""
+
+      artifact_pattern:
+      # A glob pattern to the artifacts that should be downloaded. Ignored if name is specified.
+      #
+      # Type: string
+      # Required: false
+      # Default: ""
+
+      artifact_merge_multiple:
+      # When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. Optional. Default is 'false'.
+      #
+      # Type: boolean
       # Required: false
       # Default: ""
 ```
