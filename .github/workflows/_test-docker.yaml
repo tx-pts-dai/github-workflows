@@ -75,21 +75,24 @@ jobs:
       artifact_name: docker-artifacts
 
   prep_test_docker_build_push_ecr_advanced:
-    id: docker_meta
-    uses: docker/metadata-action@v5
-    with:
-      images: 488017668515.dkr.ecr.eu-central-1.amazonaws.com/sam
-      tags: |
-        type=ref,event=pr
-        type=semver,pattern={{version}}
-        type=semver,pattern={{major}}.{{minor}}
-        type=raw,${{ steps.current-time.outputs.formattedTime }}.${{ github.run_number }}
-        type=raw,{{branch}}.${{ github.run_number }}
-      labels: |
-        org.opencontainers.image.title=Feed Sam Service
-        org.opencontainers.image.description=Feed image rendering service
-        org.opencontainers.image.vendor=tx.group
-        org.opencontainers.image.authors=Christian Jürges
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build meta and tags
+        id: docker_meta
+        uses: docker/metadata-action@v5
+        with:
+          images: 488017668515.dkr.ecr.eu-central-1.amazonaws.com/sam
+          tags: |
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,${{ steps.current-time.outputs.formattedTime }}.${{ github.run_number }}
+            type=raw,{{branch}}.${{ github.run_number }}
+          labels: |
+            org.opencontainers.image.title=Feed Sam Service
+            org.opencontainers.image.description=Feed image rendering service
+            org.opencontainers.image.vendor=tx.group
+            org.opencontainers.image.authors=Christian Jürges
     outputs:
       tags: ${{ steps.docker_meta.outputs.tags }}
       labels: ${{ steps.docker_meta.outputs.labels }}
