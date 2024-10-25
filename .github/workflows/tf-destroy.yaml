@@ -17,6 +17,9 @@ on:
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
+      gh_checkout_ref:
+        description: "The branch, tag or SHA to checkout."
+        type: string
       tf_dir:
         description: "Path to the Terraform root module to apply."
         type: string
@@ -54,6 +57,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+        with:
+          ref: ${{ inputs.gh_checkout_ref }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
