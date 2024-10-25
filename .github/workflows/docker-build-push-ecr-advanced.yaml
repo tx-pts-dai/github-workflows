@@ -1,4 +1,5 @@
 name: Docker Build and Push to ECR
+run-name: Docker Build and Push to ECR run by ${{ github.actor }}
 
 on:
   workflow_call:
@@ -23,15 +24,15 @@ on:
         description: "AWS OIDC IAM role to assume"
         type: string
       image_tags:
-        description: "JSON array string with full repo/image:tag list"
+        description: "toJSON() string with full repo/image:tag list"
         type: string
         required: true
       image_labels:
-        description: "JSON object string with image labels"
+        description: "toJSON() JSON string with image labels"
         type: string
         default: "{}"
       docker_build_args:
-        description: "JSON array string with build args"
+        description: "array string with build args"
         type: string
         default: "[]"
       docker_context:
@@ -62,7 +63,6 @@ on:
 jobs:
   prereq: # this job is required to pass the runner_labels to the build job!
     runs-on: ubuntu-latest
-
     steps:
       - id: prereq
         name: Provision step # at least one step is required in a job
@@ -70,7 +70,6 @@ jobs:
           echo "image tags: ${{ inputs.image_tags }}"
           echo "image labels: ${{ inputs.image_labels }}"
           echo "build args: ${{ inputs.docker_build_args }}"
-
     outputs:
       runner_labels: ${{ inputs.runner_labels }}
       image_tags: ${{ inputs.image_tags }}
@@ -132,4 +131,3 @@ jobs:
           tags: ${{ fromJSON(needs.prereq.outputs.image_tags) }}
           labels: ${{ fromJSON(needs.prereq.outputs.image_labels) }}
           build-args: ${{ needs.prereq.outputs.build_args }}
-
