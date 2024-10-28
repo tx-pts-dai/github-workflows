@@ -80,10 +80,7 @@ jobs:
     needs: prereq
     runs-on: ${{ fromJSON(needs.prereq.outputs.runner_labels) }}
     environment: ${{ inputs.environment }}
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
+    permissions: write-all
     steps:
       - name: Check out code
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
