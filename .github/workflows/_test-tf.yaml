@@ -28,6 +28,40 @@ jobs:
       - name: Show random_pet output resource
         run: echo "${{ fromJson(needs.test_tf_feature.outputs.tf_outputs).random_pet }}"
 
+  test_tf_cleanup:
+    needs: [test_tf_feature, test_tf_outputs, test_tf_outputs_decode_random_pet]
+    uses: ./.github/workflows/tf-cleanup.yaml
+    with:
+      environment: sandbox
+      tf_workspace: test/slash/replacement
+
+  test_tf_feature_no_environment:
+    uses: ./.github/workflows/tf-feature.yaml
+    with:
+      aws_oidc_role_arn: arn:aws:iam::911453050078:role/cicd-iac
+      aws_region: eu-central-1
+      tf_dir: tests/terraform/s3
+      tf_workspace: feature-no-environment
+      tf_backend_configs: |
+        bucket=tf-state-911453050078
+        key=test-tf-feature-no-environment.tfstate
+        workspace_key_prefix=github-workflows
+      tf_var_files: tests/terraform/s3/environment/sandbox.tfvars
+
+  test_tf_cleanup_no_environment:
+    needs: test_tf_feature_no_environment
+    uses: ./.github/workflows/tf-cleanup.yaml
+    with:
+      aws_oidc_role_arn: arn:aws:iam::911453050078:role/cicd-iac
+      aws_region: eu-central-1
+      tf_dir: tests/terraform/s3
+      tf_workspace: feature-no-environment
+      tf_backend_configs: |
+        bucket=tf-state-911453050078
+        key=test-tf-feature-no-environment.tfstate
+        workspace_key_prefix=github-workflows
+      tf_var_files: tests/terraform/s3/environment/sandbox.tfvars
+
   test_tf_plan:
     uses: ./.github/workflows/tf-plan.yaml
     with:
@@ -38,13 +72,6 @@ jobs:
     with:
       environment: sandbox
       tf_pre_run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip -qq awscliv2.zip && ./aws/install
-
-  test_tf_cleanup:
-    needs: test_tf_apply
-    uses: ./.github/workflows/tf-cleanup.yaml
-    with:
-      environment: sandbox
-      tf_workspace: test/slash/replacement
 
   test_tf_plan_no_environment:
     uses: ./.github/workflows/tf-plan.yaml
