@@ -72,7 +72,6 @@ jobs:
       - name: Terraform Destroy
         uses: dflook/terraform-destroy@2e74fdc282c2980b12503986b2d8483d7cbfa14a # v1
         id: first_try
-        continue-on-error: true
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
@@ -90,6 +89,7 @@ jobs:
 
       - name: Terraform Destroy
         uses: dflook/terraform-destroy@2e74fdc282c2980b12503986b2d8483d7cbfa14a # v1
+        if: ${{ failure() && steps.first_try.outputs.failure-reason == 'destroy-failed' }}
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
