@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Retrieve Merge Commit Message
         id: merge_commit_message
@@ -59,7 +59,7 @@ jobs:
 
       - name: Release
         if: steps.version_increment.outputs.RELEASE == 'true'
-        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2
         with:
           tag_name: ${{ steps.version_increment.outputs.NEW_TAG }}
           generate_release_notes: true
