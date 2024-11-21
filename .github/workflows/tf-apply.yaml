@@ -126,7 +126,7 @@ jobs:
 
       - name: Summary
         if: steps.tf_apply.outputs != ''
-        uses: tx-pts-dai/action-summary@v0.0.2
+        uses: tx-pts-dai/action-summary@v1.0.0
         with:
           summary_header: "Terraform Outputs | ${{ env.ENVIRONMENT}}"
           string: ${{ toJson(steps.tf_apply.outputs) }}
