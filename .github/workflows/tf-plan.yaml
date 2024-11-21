@@ -140,7 +140,7 @@ jobs:
 
       - name: Summary
         if: github.event_name == 'pull_request'
-        uses: tx-pts-dai/action-summary@v1.0.0
+        uses: tx-pts-dai/action-summary@v1.1.0
         with:
           summary_header: "Terraform Plan | ${{ env.ENVIRONMENT}} "
           path: ${{ steps.plan.outputs.text_plan_path }}
