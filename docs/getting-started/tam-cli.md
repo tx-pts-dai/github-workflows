@@ -1,4 +1,4 @@
-# Generic Workflows deployment through TAM cli
+# TAM cli
 
 Generic workflows can be deployed to your repository using the TAM CLI tool. This ensures that all required inputs and GitHub environments are correctly generated and added for you.
 
