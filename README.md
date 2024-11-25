@@ -3,6 +3,7 @@
 <!--intro-start-->
 
 <!-- TODO: change to release badge -->
+
 ![GitHub Workflow Status](https://github.com/tx-pts-dai/github-workflows/actions/workflows/gh-release-on-main.yaml/badge.svg)
 
 Github Actions is a powerful tool for automating workflows in your repository. This repository contains a collection of GitHub workflows that are reusable across projects.
@@ -64,9 +65,8 @@ To get started with using reusable workflows in your repository, follow these st
 
 1. Create a .github/workflows directory in your repository if it doesn't already exist. This is where all your workflow files will be stored.
 
-
 2. Choose an Example Workflow
-Browse the docs/examples/ folder in the reusable workflows repository and select an example workflow that suits your needs. Copy the file into your .github/workflows directory.
+   Browse the docs/examples/ folder in the reusable workflows repository and select an example workflow that suits your needs. Copy the file into your .github/workflows directory.
 
 3. Open the copied workflow file and tailor it to your project. Each workflow includes a set of jobs that define tasks to be executed. Adjust these tasks, steps, and settings as needed.
 
@@ -77,6 +77,13 @@ Browse the docs/examples/ folder in the reusable workflows repository and select
 6. The workflow will automatically run based on the event triggers defined in the file (e.g., push, pull_request). Ensure the events are configured as needed for your use case.
 
 That's it! You have successfully set up and customized a reusable workflow in your repository. Now you can benefit from the predefined tasks and automation provided by the workflow to streamline your development process.
+
+### Deploy workflows through [Tam CLI tool](https://github.com/DND-IT/tam-cli)
+
+Generic workflows can be seamlessly deployed to your repository using the [Tam CLI tool](https://github.com/DND-IT/tam-cli).
+This tool simplifies the process by automatically creating a pull request in your repository, ensuring that all required inputs and GitHub environments are generated and configured for you.
+Tam CLI leverages templates defined in the [Templates](https://github.com/tx-pts-dai/templates/tree/main/addons/github-workflows) repository.
+For more details refer to the [Tam CLI](docs/getting-started/tam-cli.md) page.
 
 <!--usage-end-->
 
