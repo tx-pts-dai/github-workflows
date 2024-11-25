@@ -482,6 +482,8 @@
       
         
       
+        
+      
     
     
       
@@ -538,6 +540,27 @@
   
   <span class="md-ellipsis">
     Workflow Inputs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tam-cli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tam CLI
   </span>
   
 
@@ -1130,6 +1153,23 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-workflows-through-tam-cli-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy workflows through Tam CLI tool
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1156,7 +1196,7 @@
 </li>
 <li>
 <p>Choose an Example Workflow
-Browse the docs/examples/ folder in the reusable workflows repository and select an example workflow that suits your needs. Copy the file into your .github/workflows directory.</p>
+   Browse the docs/examples/ folder in the reusable workflows repository and select an example workflow that suits your needs. Copy the file into your .github/workflows directory.</p>
 </li>
 <li>
 <p>Open the copied workflow file and tailor it to your project. Each workflow includes a set of jobs that define tasks to be executed. Adjust these tasks, steps, and settings as needed.</p>
@@ -1172,6 +1212,11 @@ Browse the docs/examples/ folder in the reusable workflows repository and select
 </li>
 </ol>
 <p>That's it! You have successfully set up and customized a reusable workflow in your repository. Now you can benefit from the predefined tasks and automation provided by the workflow to streamline your development process.</p>
+<h3 id="deploy-workflows-through-tam-cli-tool">Deploy workflows through <a href="https://github.com/DND-IT/tam-cli">Tam CLI tool</a><a class="headerlink" href="#deploy-workflows-through-tam-cli-tool" title="Permanent link">&para;</a></h3>
+<p>Generic workflows can be seamlessly deployed to your repository using the <a href="https://github.com/DND-IT/tam-cli">Tam CLI tool</a>.
+This tool simplifies the process by automatically creating a pull request in your repository, ensuring that all required inputs and GitHub environments are generated and configured for you.
+Tam CLI leverages templates defined in the <a href="https://github.com/tx-pts-dai/templates/tree/main/addons/github-workflows">Templates</a> repository.
+For more details refer to the <a href="tam-cli/">Tam CLI</a> page.</p>
 <!-- END INCLUDE -->
 
 
