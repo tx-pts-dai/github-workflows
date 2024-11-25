@@ -1,8 +1,8 @@
-# TAM cli
+# Tam CLI
 
-Generic workflows can be deployed to your repository using the TAM CLI tool. This ensures that all required inputs and GitHub environments are correctly generated and added for you.
+Generic workflows can be deployed to your repository using the Tam CLI tool. This ensures that all required inputs and GitHub environments are correctly generated and added for you.
 
-**Note**: TAM CLI is a tool designed to deploy various types of templates. The template for workflows can be selected during tool execution by choosing the option: _Addons/GithubWorkflows_
+**Note**: Tam CLI is a tool designed to deploy various types of templates. The template for workflows can be selected during tool execution by choosing the option: _Addons/GithubWorkflows_
 
 ```
 tam template init your-destination-repository

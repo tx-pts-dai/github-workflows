@@ -78,12 +78,12 @@ To get started with using reusable workflows in your repository, follow these st
 
 That's it! You have successfully set up and customized a reusable workflow in your repository. Now you can benefit from the predefined tasks and automation provided by the workflow to streamline your development process.
 
-### Deploy workflows through TAM cli
+### Deploy workflows through Tam CLI
 
-Generic workflows can be seamlessly deployed to your repository using the [TAM cli tool](https://github.com/DND-IT/tam-cli).
+Generic workflows can be seamlessly deployed to your repository using the [Tam CLI tool](https://github.com/DND-IT/tam-cli).
 This tool simplifies the process by automatically creating a pull request in your repository, ensuring that all required inputs and GitHub environments are generated and configured for you.
-Tam cli leverages templates defined in the [Templates](https://github.com/tx-pts-dai/templates/tree/main/addons/github-workflows) repository.
-For more details refer to the [tam cli](docs/getting-started/tam-cli.md) page.
+Tam CLI leverages templates defined in the [Templates](https://github.com/tx-pts-dai/templates/tree/main/addons/github-workflows) repository.
+For more details refer to the [Tam CLI](docs/getting-started/tam-cli.md) page.
 
 <!--usage-end-->
 
