@@ -6,6 +6,7 @@ on:
       - ".github/workflows/_test-docker.yaml"
       - ".github/workflows/docker-*.yaml"
       - "tests/docker/**"
+      - "docker/metadata-action/**"
 
 jobs:
   test_docker_build_push_ecr:
@@ -72,3 +73,41 @@ jobs:
       docker_context: tests/docker
       docker_push: false
       artifact_name: docker-artifacts
+
+  prep_test_docker_build_push_ecr_advanced:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build meta and tags
+        id: docker_meta
+        uses: docker/metadata-action@v5
+        with:
+          images: 488017668515.dkr.ecr.eu-central-1.amazonaws.com/sam
+          tags: |
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,${{ steps.current-time.outputs.formattedTime }}.${{ github.run_number }}
+            type=raw,{{branch}}.${{ github.run_number }}
+          labels: |
+            org.opencontainers.image.title=Feed Sam Service
+            org.opencontainers.image.description=Feed image rendering service
+            org.opencontainers.image.vendor=tx.group
+            org.opencontainers.image.authors=Christian Jürges
+    outputs:
+      tags: ${{ steps.docker_meta.outputs.tags }}
+      labels: ${{ steps.docker_meta.outputs.labels }}
+      docker_build_args: |
+        GO_VERSION=${{ env.GO_VERSION }}
+        ALPINE_VERSION=${{ env.ALPINE_VERSION }}
+
+  test_docker_build_push_ecr_advanced:
+    needs: prep_test_docker_build_push_ecr_advanced
+    uses: ./.github/workflows/docker-build-push-ecr-advanced.yaml
+    with:
+      aws_account_id: ${{ vars.aws_account_id }}
+      aws_region: ${{ vars.aws_region }}
+      aws_role_name: ${{ vars.aws_role_name }}
+      dockerfile_path: tests/docker/alpine/build/Dockerfile
+      image_tags: ${{ toJSON(needs.prep_test_docker_build_push_ecr_advanced.outputs.tags) }}
+      image_labels: ${{ toJSON(needs.prep_test_docker_build_push_ecr_advanced.outputs.labels) }}
+      docker_build_args: ${{ needs.prep_test_docker_build_push_ecr_advanced.outputs.docker_build_args }}
