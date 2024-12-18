@@ -24,7 +24,7 @@ jobs:
     uses: ./.github/workflows/lambda-python.yaml
     needs: test
     with:
-      python_version: "1.12"
+      python_version: "3.12"
       source_dir: tests/lambda/python
       gh_artifact_name: tests-lambda-python
       gh_artifact_path: tests/lambda/python/python.zip
