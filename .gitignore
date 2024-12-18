@@ -55,3 +55,5 @@ site/
 # Virtual environment
 venv/
 .venv/
+# cache
+__pycache__
