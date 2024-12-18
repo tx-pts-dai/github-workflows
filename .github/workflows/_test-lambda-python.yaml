@@ -1,0 +1,31 @@
+name: Build and Deploy Python
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/_test-lambda-python.yaml'
+      - '.github/workflows/lambda-python.yaml'
+      - 'lambda/python/**'
+
+jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tests/lambda/python
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+  build:
+    uses: ./.github/workflows/lambda-python.yaml
+    needs: test
+    with:
+      python_version: "1.12"
+      source_dir: tests/lambda/python
+      gh_artifact_name: tests-lambda-python
+      gh_artifact_path: tests/lambda/python/python.zip
+      gh_artifact_retention_days: 1
