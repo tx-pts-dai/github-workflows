@@ -62,7 +62,7 @@ jobs:
       #
       # Type: string
       # Required: false
-      # Default: **/lambda.zip
+      # Default: **/*.zip
 
       gh_artifact_retention_days:
       # Number of days to retain the artifact
