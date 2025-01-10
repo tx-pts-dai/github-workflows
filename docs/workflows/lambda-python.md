@@ -1,7 +1,3 @@
----
-title: Build Python Lambda
----
-
 <!-- action-docs-header source=".github/workflows/lambda-python.yaml" -->
 # Build Python Lambda
 <!-- action-docs-header source=".github/workflows/lambda-python.yaml" -->
@@ -74,9 +70,9 @@ jobs:
 ```
 <!-- action-docs-usage source=".github/workflows/lambda-python.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml" version="v1" -->
 
-# Example
+## Example
 
-```
+```yaml
 name: Build
 
 on:
@@ -91,6 +87,8 @@ jobs:
     with:
       python_version: "3.12"
       source_dir: lambdas/first_lambda
+      zip_filename: first_lambda.zip
+      gh_artifact_name: first_lambda
 ```
 
-# FAQ
+## FAQ
