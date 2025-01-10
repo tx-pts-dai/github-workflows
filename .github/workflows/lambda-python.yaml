@@ -45,12 +45,12 @@ jobs:
       - name: Download Python modules and zip
         run: |
           pip install -r requirements.txt -t .
-          zip -r ${{ input.zip_filename }} .
+          zip -r ${{ inputs.zip_filename }} .
 
       - name: Archive
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: ${{ inputs.gh_artifact_name }}
-          path: ${{ input.zip_filename }}
+          path: ${{ inputs.zip_filename }}
           if-no-files-found: error
           retention-days: ${{ inputs.gh_artifact_retention_days }}
