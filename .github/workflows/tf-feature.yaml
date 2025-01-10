@@ -111,7 +111,7 @@ jobs:
           merge-multiple: ${{ env.GH_ARTIFACT_MERGE_MULTIPLE }}
 
       - name: Use Branch Workspace
-        uses: dflook/terraform-new-workspace@328d939679a5ddd00425d9cd75ceb6689f54c2bc # v1
+        uses: dflook/terraform-new-workspace@38261154e6b6e8124972ca5a1009d6157c9e0952 # v1
         with:
           workspace: ${{ env.TF_WORKSPACE }}
           path: ${{ env.TF_DIR }}
@@ -120,7 +120,7 @@ jobs:
 
       - name: Deploy Test Infrastructure
         id: tf_apply
-        uses: dflook/terraform-apply@7d435d4d115a11e5db1e710ac969f5382f0f6f9f # v1
+        uses: dflook/terraform-apply@8ffcf535ca17dd84586bcda5b072f3d7bde0a97c # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
