@@ -8,9 +8,10 @@ title: Build Python Lambda
 
 ## Description
 
-Simple workflow to build a Python Lambda function and upload the artifact to the GitHub artifact store.
+Simple workflow to prepare a zip file with the python code an dependent libraries defined in `requirements.txt`.
+The zip file will be saved as a github artifact.
 
-All modules defined in the `packages.txt` file will be installed and packaged into a zip file.
+Usefull to deploy a lambda function.
 
 <!-- action-docs-inputs source=".github/workflows/lambda-python.yaml" -->
 ## Inputs

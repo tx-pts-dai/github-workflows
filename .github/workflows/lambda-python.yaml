@@ -1,22 +1,24 @@
+# Create a zip file from python code and requirements.txt. Zip will be stored in a github artifact
 name: Build Python Lambda
 on:
   workflow_call:
     inputs:
       python_version:
-        description: "Python version"
+        description: "Python version. Check https://github.com/actions/setup-python for valid values"
         type: string
         default: "3.12"
       source_dir:
-        description: "Directory of the Lambda source code"
+        description: "Directory of the Python source code. Should contain the requirements.txt file"
+        type: string
+        required: true
+      zip_filename:
+        description: "The name of the zip file to create. It's relativ to source_dir"
         type: string
         required: true
       gh_artifact_name:
         description: "Name of the artifact to upload"
         type: string
-      gh_artifact_path:
-        description: "A file, directory or wildcard pattern that describes what to upload"
-        type: string
-        default: "**/*.zip"
+        required: true
       gh_artifact_retention_days:
         description: "Number of days to retain the artifact"
         type: number
@@ -43,12 +45,12 @@ jobs:
       - name: Download Python modules and zip
         run: |
           pip install -r requirements.txt -t .
-          zip -r $(basename $PWD).zip .
+          zip -r ${{ input.zip_filename }} .
 
       - name: Archive
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: ${{ inputs.gh_artifact_name }}
-          path: ${{ inputs.gh_artifact_path }}
+          path: ${{ input.zip_filename }}
           if-no-files-found: error
           retention-days: ${{ inputs.gh_artifact_retention_days }}

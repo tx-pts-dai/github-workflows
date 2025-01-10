@@ -27,5 +27,5 @@ jobs:
       python_version: "3.12"
       source_dir: tests/lambda/python
       gh_artifact_name: tests-lambda-python
-      gh_artifact_path: tests/lambda/python/python.zip
+      zip_filename: python.zip
       gh_artifact_retention_days: 1
