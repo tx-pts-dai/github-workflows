@@ -18,10 +18,10 @@ Usefull to deploy a lambda function.
 
 | name | description | type | required | default |
 | --- | --- | --- | --- | --- |
-| `python_version` | <p>Python version</p> | `string` | `false` | `3.12` |
-| `source_dir` | <p>Directory of the Lambda source code</p> | `string` | `true` | `""` |
-| `gh_artifact_name` | <p>Name of the artifact to upload</p> | `string` | `false` | `""` |
-| `gh_artifact_path` | <p>A file, directory or wildcard pattern that describes what to upload</p> | `string` | `false` | `**/*.zip` |
+| `python_version` | <p>Python version. Check https://github.com/actions/setup-python for valid values</p> | `string` | `false` | `3.12` |
+| `source_dir` | <p>Directory of the Python source code. Should contain the requirements.txt file</p> | `string` | `true` | `""` |
+| `zip_filename` | <p>The name of the zip file to create. It's relativ to source_dir</p> | `string` | `true` | `""` |
+| `gh_artifact_name` | <p>Name of the artifact to upload</p> | `string` | `true` | `""` |
 | `gh_artifact_retention_days` | <p>Number of days to retain the artifact</p> | `number` | `false` | `30` |
 <!-- action-docs-inputs source=".github/workflows/lambda-python.yaml" -->
 
@@ -38,14 +38,21 @@ jobs:
     uses: tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml@v1
     with:
       python_version:
-      # Python version
+      # Python version. Check https://github.com/actions/setup-python for valid values
       #
       # Type: string
       # Required: false
       # Default: 3.12
 
       source_dir:
-      # Directory of the Lambda source code
+      # Directory of the Python source code. Should contain the requirements.txt file
+      #
+      # Type: string
+      # Required: true
+      # Default: ""
+
+      zip_filename:
+      # The name of the zip file to create. It's relativ to source_dir
       #
       # Type: string
       # Required: true
@@ -55,15 +62,8 @@ jobs:
       # Name of the artifact to upload
       #
       # Type: string
-      # Required: false
+      # Required: true
       # Default: ""
-
-      gh_artifact_path:
-      # A file, directory or wildcard pattern that describes what to upload
-      #
-      # Type: string
-      # Required: false
-      # Default: **/*.zip
 
       gh_artifact_retention_days:
       # Number of days to retain the artifact
