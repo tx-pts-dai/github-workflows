@@ -45,15 +45,13 @@ jobs:
       - name: Download Python modules
         run: |
           pip install -r requirements.txt -t .
+
       - name: Create Zipfile
         working-directory: .
         run: |
-          set -x
-          DIR=$PWD
-          cd $SOURCE_DIR
+          DIR="$PWD"
+          cd "$SOURCE_DIR"
           zip -r "$DIR/${{ inputs.zip_filename }}" .
-          pwd
-          ls -l
       - name: Archive
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
