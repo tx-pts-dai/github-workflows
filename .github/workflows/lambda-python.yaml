@@ -48,8 +48,10 @@ jobs:
       - name: Create Zipfile
         working-directory: .
         run: |
-          DIR=$CWD
-          zip -r "$CWD/${{ inputs.zip_filename }}" .
+          set -x
+          DIR=$PWD
+          cd $SOURCE_DIR
+          zip -r "$DIR/${{ inputs.zip_filename }}" .
           pwd
           ls -l
       - name: Archive
