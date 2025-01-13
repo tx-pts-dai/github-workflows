@@ -12,9 +12,9 @@ on:
         type: string
         required: true
       zip_filename:
-        description: "The name of the zip file to create. It's relativ to source_dir"
+        description: "The zip file to create. It's relativ to the repository root"
         type: string
-        required: true
+        default: "python_package.zip"
       gh_artifact_name:
         description: "Name of the artifact to upload"
         type: string
@@ -52,7 +52,7 @@ jobs:
           DIR="$PWD"
           cd "$SOURCE_DIR"
           zip -r "$DIR/${{ inputs.zip_filename }}" .
-      - name: Archive
+      - name: Save artifact
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: ${{ inputs.gh_artifact_name }}
