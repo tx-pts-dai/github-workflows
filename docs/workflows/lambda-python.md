@@ -7,7 +7,7 @@
 Simple workflow to prepare a zip file with the python code an dependent libraries defined in `requirements.txt`.
 The zip file will be saved as a github artifact.
 
-Usefull to deploy a lambda function.
+Usefull to deploy an AWS lambda function or layer.
 
 <!-- action-docs-inputs source=".github/workflows/lambda-python.yaml" -->
 ## Inputs
