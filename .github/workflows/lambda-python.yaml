@@ -1,0 +1,63 @@
+# Create a zip file from python code and requirements.txt. Zip will be stored in a github artifact
+name: Build Python Lambda
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        description: "Python version. Check https://github.com/actions/setup-python for valid values"
+        type: string
+        default: "3.12"
+      source_dir:
+        description: "Directory of the Python source code. Should contain the requirements.txt file"
+        type: string
+        required: true
+      zip_filename:
+        description: "The zip file to create. It's relativ to the repository root"
+        type: string
+        default: "python_package.zip"
+      gh_artifact_name:
+        description: "Name of the artifact to upload"
+        type: string
+        required: true
+      gh_artifact_retention_days:
+        description: "Number of days to retain the artifact"
+        type: number
+        default: 30
+jobs:
+  build:
+    name: Build Python
+    runs-on: ubuntu-latest
+    env:
+      PYTHON_VERSION: ${{ inputs.python_version }}
+      SOURCE_DIR: ${{ inputs.source_dir }}
+    defaults:
+      run:
+        working-directory: ${{ env.SOURCE_DIR }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Download Python modules
+        run: |
+          mkdir package
+          pip install -r requirements.txt -t package
+      - name: Create Zipfile
+        working-directory: .
+        run: |
+          DIR="$PWD"
+          cd "$SOURCE_DIR"/package
+          zip -r "$DIR/${{ inputs.zip_filename }}" .
+          cd ..
+          zip -r "$DIR/${{ inputs.zip_filename }}" . -x 'package/*'
+      - name: Save artifact
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
+        with:
+          name: ${{ inputs.gh_artifact_name }}
+          path: ${{ inputs.zip_filename }}
+          if-no-files-found: error
+          retention-days: ${{ inputs.gh_artifact_retention_days }}
