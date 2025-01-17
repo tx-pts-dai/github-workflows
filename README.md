@@ -111,7 +111,15 @@ Documentation: [GitHub Actions - Documentation GitHub](https://docs.github.com/e
 
 ## Releases
 
-Release pipeline is triggered on each PR merged to main, which creates a new release incrementing automatically minor version.
+Release pipeline is triggered on each PR merged to main. Depending on the commit message (see [Conventional Commit Message](https://www.conventionalcommits.org/en/v1.0.0/)) a new github release will be created.
+
+If the commit message starts with:
+
+- `feat!:`, a new major release will be created
+- `feat:`, a new minor release will be created
+- `fix:`, a new patch release will be created
+
+otherwise no new release will be created.
 
 ## Contributing
 
