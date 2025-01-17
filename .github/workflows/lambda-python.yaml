@@ -53,7 +53,7 @@ jobs:
           cd "$SOURCE_DIR"/package
           zip -r "$DIR/${{ inputs.zip_filename }}" .
           cd ..
-          zip -r -x package "$DIR/${{ inputs.zip_filename }}" .
+          zip -r "$DIR/${{ inputs.zip_filename }}" . -x package
       - name: Save artifact
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
