@@ -1,4 +1,5 @@
 name: Docker Build and Push to ECR
+run-name: Docker Build and Push to ECR run by ${{ github.actor }}
 
 on:
   workflow_call:
@@ -22,12 +23,18 @@ on:
       aws_oidc_role_arn:
         description: "AWS OIDC IAM role to assume"
         type: string
-      image_name:
-        description: "Name of the Docker image to build"
+      image_tags:
+        description: "toJSON() string with full repo/image:tag list"
         type: string
-      image_tag:
-        description: "Tag of the Docker image to build"
+        required: true
+      image_labels:
+        description: "toJSON() JSON string with image labels"
         type: string
+        default: "{}"
+      docker_build_args:
+        description: "array string with build args"
+        type: string
+        default: "[]"
       docker_context:
         description: "Path to the build context"
         type: string
@@ -47,15 +54,31 @@ on:
       artifact_path:
         description: "Artifact target path"
         type: string
-      artifact_pattern:
-        description: "A glob pattern to the artifacts that should be downloaded. Ignored if name is specified."
+      runner_labels:
+        description: "Runner that the main job should run on as JSON encoded list."
         type: string
-      artifact_merge_multiple:
-        description: "When multiple artifacts are matched, this changes the behavior of the destination directories. If true, the downloaded artifacts will be in the same directory specified by path. If false, the downloaded artifacts will be extracted into individual named directories within the specified path. Optional. Default is 'false'."
-        type: boolean
+        default: " ['ubuntu-latest'] "
+
+
 jobs:
-  build:
+  prereq: # this job is required to pass the runner_labels to the build job!
     runs-on: ubuntu-latest
+    steps:
+      - id: prereq
+        name: Provision step # at least one step is required in a job
+        run: |
+          echo "image tags: ${{ inputs.image_tags }}"
+          echo "image labels: ${{ inputs.image_labels }}"
+          echo "build args: ${{ inputs.docker_build_args }}"
+    outputs:
+      runner_labels: ${{ inputs.runner_labels }}
+      image_tags: ${{ inputs.image_tags }}
+      image_labels: ${{ inputs.image_labels }}
+      build_args: ${{ inputs.docker_build_args }}
+
+  build:
+    needs: prereq
+    runs-on: ${{ fromJSON(needs.prereq.outputs.runner_labels) }}
     environment: ${{ inputs.environment }}
     permissions:
       id-token: write
@@ -63,24 +86,20 @@ jobs:
       pull-requests: write
     steps:
       - name: Check out code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
 
-      - name: Download Artifacts
-        env:
-          ARTIFACT_PATH: ${{ inputs.artifact_path || vars.artifact_path }}
-          ARTIFACT_NAME: ${{ inputs.artifact_name || vars.artifact_name }}
-          ARTIFACT_PATTERN: ${{ inputs.artifact_pattern || vars.artifact_pattern }}
-          ARTIFACT_MERGE_MULTIPLE: ${{ inputs.artifact_merge_multiple || vars.artifact_merge_multiple || false}}
+      - name: Download artifacts to pass to docker build
+        if: ${{ inputs.artifact_name || inputs.artifact_path }} # avoid downloading artifacts if not needed
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
-        if: env.ARTIFACT_PATH != '' || env.ARTIFACT_NAME != ''
+        env:
+          ARTIFACT_NAME: ${{ inputs.artifact_name || vars.artifact_name }}
+          ARTIFACT_PATH: ${{ inputs.artifact_path || vars.artifact_path }}
         with:
-          path: ${{ env.ARTIFACT_PATH }}
           name: ${{ env.ARTIFACT_NAME }}
-          pattern: ${{ env.ARTIFACT_PATTERN }}
-          merge-multiple: ${{ env.ARTIFACT_MERGE_MULTIPLE }}
+          path: ${{ env.ARTIFACT_PATH }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@6524bf65af31da8d45b59e8c27de4bd072b392f5 # v3
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
@@ -96,11 +115,8 @@ jobs:
         uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2
 
       - name: Build and export
-        uses: docker/build-push-action@b32b51a8eda65d6793cd0494a773d4f6bcef32dc # v6
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6
         env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ inputs.image_name || vars.image_name || github.event.repository.name }}
-          IMAGE_TAG: ${{ inputs.image_tag }}
           DOCKER_CTX: ${{ inputs.docker_context || vars.docker_context || '.' }}
           DOCKERFILE_PATH: ${{ inputs.dockerfile_path || vars.dockerfile_path }} # upstream defaults to {DOCKER_CTX}/Dockerfile
           DOCKER_TARGET: ${{ inputs.docker_target || vars.docker_target }}
@@ -113,6 +129,6 @@ jobs:
           cache-to: type=gha,mode=max
           push: ${{ inputs.docker_push }}
           target: ${{ env.DOCKER_TARGET }}
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}
-            ${{ (env.IMAGE_TAG != '' && format('{0}/{1}:{2}', env.REGISTRY, env.REPOSITORY, env.IMAGE_TAG)) || '' }}
+          tags: ${{ fromJSON(needs.prereq.outputs.image_tags) }}
+          labels: ${{ fromJSON(needs.prereq.outputs.image_labels) }}
+          build-args: ${{ needs.prereq.outputs.build_args }}
