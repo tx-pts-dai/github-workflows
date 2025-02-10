@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.96.3
+    rev: v1.97.3
     hooks:
       - id: terraform_fmt
         args:
@@ -12,7 +12,7 @@ repos:
       - id: check-merge-conflict
       - id: end-of-file-fixer
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 39.100.1
+    rev: 39.164.1
     hooks:
       - id: renovate-config-validator
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
