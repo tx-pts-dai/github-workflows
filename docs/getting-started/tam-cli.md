@@ -4,12 +4,12 @@ Generic workflows can be deployed to your repository using the Tam CLI tool. Thi
 
 **Note**: Tam CLI is a tool designed to deploy various types of templates. The template for workflows can be selected during tool execution by choosing the option: _Addons/GithubWorkflows_
 
-```
+```sh
 tam template init your-destination-repository
 
 Enter team/account to include configurations (20minuten, dai, disco, discovery,
 ness, pmd, sfmc, test, titan, unity): select the team/account
-Enter the template to use [tx-pts-dai/templates]:
+Enter the template to use [DND-IT/templates]:
 You've downloaded .cookiecutters/templates before.
 Is it okay to delete and re-download it? [y/n] (y): y
 Select a template
