@@ -62,6 +62,41 @@ jobs:
         workspace_key_prefix=github-workflows
       tf_var_files: tests/terraform/s3/environment/sandbox.tfvars
 
+  # Test a cleanup with a workspace that does not exist. It should pass without errors.
+  test_tf_cleanup_no_workspace:
+    uses: ./.github/workflows/tf-cleanup.yaml
+    with:
+      aws_oidc_role_arn: arn:aws:iam::911453050078:role/cicd-iac
+      aws_region: eu-central-1
+      tf_dir: tests/terraform/s3
+      tf_workspace: this-workspace-does-not-exist
+      tf_backend_configs: |
+        bucket=tf-state-911453050078
+        key=test-tf-feature-no-environment.tfstate
+        workspace_key_prefix=github-workflows
+      tf_var_files: tests/terraform/s3/environment/sandbox.tfvars
+
+  test_tf_feature_backend_file:
+    uses: ./.github/workflows/tf-feature.yaml
+    with:
+      aws_oidc_role_arn: arn:aws:iam::911453050078:role/cicd-iac
+      aws_region: eu-central-1
+      tf_dir: tests/terraform/s3
+      tf_workspace: tf_feature_backend_file
+      tf_backend_config_files: tests/terraform/s3/test.tfbackend
+      tf_var_files: tests/terraform/s3/environment/sandbox.tfvars
+
+  test_tf_cleanup_backend_file:
+    needs: test_tf_feature_backend_file
+    uses: ./.github/workflows/tf-cleanup.yaml
+    with:
+      aws_oidc_role_arn: arn:aws:iam::911453050078:role/cicd-iac
+      aws_region: eu-central-1
+      tf_dir: tests/terraform/s3
+      tf_workspace: tf_feature_backend_file
+      tf_backend_config_files: tests/terraform/s3/test.tfbackend
+      tf_var_files: tests/terraform/s3/environment/sandbox.tfvars
+
   test_tf_plan:
     uses: ./.github/workflows/tf-plan.yaml
     with:
