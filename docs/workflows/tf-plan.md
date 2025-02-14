@@ -3,7 +3,7 @@ title: Terraform Plan
 ---
 
 <!-- action-docs-header source=".github/workflows/tf-plan.yaml" -->
-# Terraform Plan
+## Terraform Plan
 <!-- action-docs-header source=".github/workflows/tf-plan.yaml" -->
 
 ## Description
@@ -11,7 +11,7 @@ title: Terraform Plan
 This workflow runs `terraform plan` and uploads the plan to Github Action summary and creates a PR comment.
 
 <!-- action-docs-inputs source=".github/workflows/tf-plan.yaml" -->
-## Inputs
+### Inputs
 
 | name | description | type | required | default |
 | --- | --- | --- | --- | --- |
@@ -38,13 +38,13 @@ This workflow runs `terraform plan` and uploads the plan to Github Action summar
 
 <!-- action-docs-outputs source=".github/workflows/tf-plan.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/tf-plan.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml" version="v1" -->
-## Usage
+<!-- action-docs-usage source=".github/workflows/tf-plan.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml" version="v2" -->
+### Usage
 
 ```yaml
 jobs:
   job1:
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml@v2
     with:
       environment:
       # Environment to deploy.
@@ -165,7 +165,7 @@ jobs:
       # Required: false
       # Default: ""
 ```
-<!-- action-docs-usage source=".github/workflows/tf-plan.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/tf-plan.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-plan.yaml" version="v2" -->
 
 # Example
 

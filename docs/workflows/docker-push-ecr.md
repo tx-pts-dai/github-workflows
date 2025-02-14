@@ -3,7 +3,7 @@ title: Docker Push to ECR
 ---
 
 <!-- action-docs-header source=".github/workflows/docker-push-ecr.yaml" -->
-# Docker Push to ECR
+## Docker Push to ECR
 <!-- action-docs-header source=".github/workflows/docker-push-ecr.yaml" -->
 
 ## Description
@@ -11,7 +11,7 @@ title: Docker Push to ECR
 This workflow pushes a Docker artifact to an ECR repository.
 
 <!-- action-docs-inputs source=".github/workflows/docker-push-ecr.yaml" -->
-## Inputs
+### Inputs
 
 | name | description | type | required | default |
 | --- | --- | --- | --- | --- |
@@ -28,13 +28,13 @@ This workflow pushes a Docker artifact to an ECR repository.
 
 <!-- action-docs-outputs source=".github/workflows/docker-push-ecr.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/docker-push-ecr.yaml" project="tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml" version="v1" -->
-## Usage
+<!-- action-docs-usage source=".github/workflows/docker-push-ecr.yaml" project="tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml" version="v2" -->
+### Usage
 
 ```yaml
 jobs:
   job1:
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml@v2
     with:
       environment:
       # Environment to deploy
@@ -85,7 +85,7 @@ jobs:
       # Required: false
       # Default: ${{ github.sha }}
 ```
-<!-- action-docs-usage source=".github/workflows/docker-push-ecr.yaml" project="tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/docker-push-ecr.yaml" project="tx-pts-dai/github-workflows/.github/workflows/docker-push-ecr.yaml" version="v2" -->
 
 # Example
 

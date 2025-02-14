@@ -3,7 +3,7 @@ title: Docker Build
 ---
 
 <!-- action-docs-header source=".github/workflows/docker-build.yaml" -->
-# Docker Build
+## Docker Build
 <!-- action-docs-header source=".github/workflows/docker-build.yaml" -->
 
 ## Description
@@ -11,7 +11,7 @@ title: Docker Build
 This workflow builds a Docker image and the artifact is uploaded to the GitHub artifact store.
 
 <!-- action-docs-inputs source=".github/workflows/docker-build.yaml" -->
-## Inputs
+### Inputs
 
 | name | description | type | required | default |
 | --- | --- | --- | --- | --- |
@@ -26,13 +26,13 @@ This workflow builds a Docker image and the artifact is uploaded to the GitHub a
 
 <!-- action-docs-outputs source=".github/workflows/docker-build.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/docker-build.yaml" project="tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml" version="v1" -->
-## Usage
+<!-- action-docs-usage source=".github/workflows/docker-build.yaml" project="tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml" version="v2" -->
+### Usage
 
 ```yaml
 jobs:
   job1:
-    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml@v2
     with:
       environment:
       # Environment to deploy
@@ -69,7 +69,7 @@ jobs:
       # Required: false
       # Default: ""
 ```
-<!-- action-docs-usage source=".github/workflows/docker-build.yaml" project="tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/docker-build.yaml" project="tx-pts-dai/github-workflows/.github/workflows/docker-build.yaml" version="v2" -->
 
 # Example
 

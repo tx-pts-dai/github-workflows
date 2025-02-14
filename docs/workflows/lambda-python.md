@@ -1,5 +1,9 @@
+---
+title: Build Python Lambda
+---
+
 <!-- action-docs-header source=".github/workflows/lambda-python.yaml" -->
-# Build Python Lambda
+## Build Python Lambda
 <!-- action-docs-header source=".github/workflows/lambda-python.yaml" -->
 
 ## Description
@@ -10,7 +14,7 @@ The zip file will be saved as a github artifact.
 Usefull to deploy an AWS lambda function or layer.
 
 <!-- action-docs-inputs source=".github/workflows/lambda-python.yaml" -->
-## Inputs
+### Inputs
 
 | name | description | type | required | default |
 | --- | --- | --- | --- | --- |
@@ -25,13 +29,13 @@ Usefull to deploy an AWS lambda function or layer.
 
 <!-- action-docs-outputs source=".github/workflows/lambda-python.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/lambda-python.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml" version="v1" -->
-## Usage
+<!-- action-docs-usage source=".github/workflows/lambda-python.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml" version="v2" -->
+### Usage
 
 ```yaml
 jobs:
   job1:
-    uses: tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml@v2
     with:
       python_version:
       # Python version. Check https://github.com/actions/setup-python for valid values
@@ -68,7 +72,7 @@ jobs:
       # Required: false
       # Default: 30
 ```
-<!-- action-docs-usage source=".github/workflows/lambda-python.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/lambda-python.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml" version="v2" -->
 
 ## Example
 
@@ -83,7 +87,7 @@ on:
 
 jobs:
   build:
-    uses: tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml@v2
     with:
       python_version: "3.12"
       source_dir: lambdas/first_lambda
