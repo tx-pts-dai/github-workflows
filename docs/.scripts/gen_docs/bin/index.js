@@ -10,7 +10,7 @@ const staticWorkflowsPath = '.github/workflows';
 const outputDir = path.resolve('docs', 'workflows');
 const githubOrg = 'tx-pts-dai';
 const githubRepo = 'github-workflows';
-const currentMajorVersion = 'v1';
+const currentMajorVersion = 'v2';
 
 // Ensure the output directory exists
 if (!fs.existsSync(outputDir)) {
@@ -23,8 +23,6 @@ function generateMarkdownContent(workflowName, workflowFilePath) {
 title: ${workflowName}
 ---
 
-<!-- action-docs-header source="${workflowFilePath}" -->
-
 ## Description
 
 <!-- action-docs-inputs source="${workflowFilePath}" -->
@@ -33,9 +31,9 @@ title: ${workflowName}
 
 <!-- action-docs-usage source="${workflowFilePath}" project="${githubOrg}/${githubRepo}/${workflowFilePath}" version="${currentMajorVersion}" -->
 
-# Example
+## Example
 
-# FAQ
+## FAQ
 `;
 }
 
@@ -84,7 +82,7 @@ async function generateDocs() {
         console.log(`Generating action documentation for ${file}`);
         await generateActionMarkdownDocs({
           sourceFile: workflowFilePath,
-          tocLevel: 1,
+          tocLevel: 2,
           updateReadme: true,
           readmeFile: outputFilePath,
           includeNameHeader: true,

@@ -3,7 +3,7 @@ title: Terraform Preview Deployment
 ---
 
 <!-- action-docs-header source=".github/workflows/tf-feature.yaml" -->
-# Terraform Preview Deployment
+## Terraform Preview Deployment
 <!-- action-docs-header source=".github/workflows/tf-feature.yaml" -->
 
 ## Description
@@ -11,7 +11,7 @@ title: Terraform Preview Deployment
 This workflow deploys a Terraform configuration to a preview environment.
 
 <!-- action-docs-inputs source=".github/workflows/tf-feature.yaml" -->
-## Inputs
+### Inputs
 
 | name | description | type | required | default |
 | --- | --- | --- | --- | --- |
@@ -34,20 +34,20 @@ This workflow deploys a Terraform configuration to a preview environment.
 <!-- action-docs-inputs source=".github/workflows/tf-feature.yaml" -->
 
 <!-- action-docs-outputs source=".github/workflows/tf-feature.yaml" -->
-## Outputs
+### Outputs
 
 | name | description |
 | --- | --- |
 | `tf_outputs` | <p>List of Terraform outputs captured.</p> |
 <!-- action-docs-outputs source=".github/workflows/tf-feature.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/tf-feature.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-feature.yaml" version="v1" -->
-## Usage
+<!-- action-docs-usage source=".github/workflows/tf-feature.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-feature.yaml" version="v2" -->
+### Usage
 
 ```yaml
 jobs:
   job1:
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-feature.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-feature.yaml@v2
     with:
       environment:
       # Environment to deploy
@@ -161,7 +161,7 @@ jobs:
       # Required: false
       # Default: ""
 ```
-<!-- action-docs-usage source=".github/workflows/tf-feature.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-feature.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/tf-feature.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-feature.yaml" version="v2" -->
 
 # Example
 

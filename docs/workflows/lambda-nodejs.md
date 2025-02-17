@@ -3,7 +3,7 @@ title: Build NodeJS Lambda
 ---
 
 <!-- action-docs-header source=".github/workflows/lambda-nodejs.yaml" -->
-# Build NodeJS Lambda
+## Build NodeJS Lambda
 <!-- action-docs-header source=".github/workflows/lambda-nodejs.yaml" -->
 
 ## Description
@@ -13,7 +13,7 @@ Simple workflow to build a NodeJS Lambda function and upload the artifact to the
 All packages defined in the `package.json` file will be installed and packaged into a zip file.
 
 <!-- action-docs-inputs source=".github/workflows/lambda-nodejs.yaml" -->
-## Inputs
+### Inputs
 
 | name | description | type | required | default |
 | --- | --- | --- | --- | --- |
@@ -28,13 +28,13 @@ All packages defined in the `package.json` file will be installed and packaged i
 
 <!-- action-docs-outputs source=".github/workflows/lambda-nodejs.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/lambda-nodejs.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-nodejs.yaml" version="v1" -->
-## Usage
+<!-- action-docs-usage source=".github/workflows/lambda-nodejs.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-nodejs.yaml" version="v2" -->
+### Usage
 
 ```yaml
 jobs:
   job1:
-    uses: tx-pts-dai/github-workflows/.github/workflows/lambda-nodejs.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/lambda-nodejs.yaml@v2
     with:
       node_version:
       # NodeJS version
@@ -71,11 +71,11 @@ jobs:
       # Required: false
       # Default: 30
 ```
-<!-- action-docs-usage source=".github/workflows/lambda-nodejs.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-nodejs.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/lambda-nodejs.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-nodejs.yaml" version="v2" -->
 
-# Example
+## Example
 
-```
+```yaml
 name: Build
 
 on:
@@ -92,4 +92,4 @@ jobs:
       source_dir: src/lambda
 ```
 
-# FAQ
+## FAQ
