@@ -672,8 +672,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -702,8 +700,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -712,15 +708,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#aws-secrets-copy" class="md-nav__link">
     <span class="md-ellipsis">
-      Description
+      AWS Secrets Copy
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#inputs" class="md-nav__link">
     <span class="md-ellipsis">
       Inputs
@@ -728,8 +734,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       Usage
@@ -737,20 +743,25 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
-      Examples
+      Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#faqs" class="md-nav__link">
+  <a href="#faq" class="md-nav__link">
     <span class="md-ellipsis">
-      FAQs
+      FAQ
     </span>
   </a>
   
@@ -932,7 +943,7 @@
         
   
   <span class="md-ellipsis">
-    Lambda python
+    Build Python Lambda
   </span>
   
 
@@ -1267,8 +1278,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1277,15 +1286,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#aws-secrets-copy" class="md-nav__link">
     <span class="md-ellipsis">
-      Description
+      AWS Secrets Copy
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#inputs" class="md-nav__link">
     <span class="md-ellipsis">
       Inputs
@@ -1293,8 +1312,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       Usage
@@ -1302,20 +1321,25 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
-      Examples
+      Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#faqs" class="md-nav__link">
+  <a href="#faq" class="md-nav__link">
     <span class="md-ellipsis">
-      FAQs
+      FAQ
     </span>
   </a>
   
@@ -1348,14 +1372,16 @@
   
 
 
+  <h1>AWS Secrets Copy</h1>
+
 <!-- action-docs-header source=".github/workflows/aws-secrets-copy.yaml" -->
-<h1 id="aws-secrets-copy">AWS Secrets Copy<a class="headerlink" href="#aws-secrets-copy" title="Permanent link">&para;</a></h1>
+<h2 id="aws-secrets-copy">AWS Secrets Copy<a class="headerlink" href="#aws-secrets-copy" title="Permanent link">&para;</a></h2>
 <!-- action-docs-header source=".github/workflows/aws-secrets-copy.yaml" -->
 
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>This workflow copies an AWS secret from one account to another.</p>
 <!-- action-docs-inputs source=".github/workflows/aws-secrets-copy.yaml" -->
-<h2 id="inputs">Inputs<a class="headerlink" href="#inputs" title="Permanent link">&para;</a></h2>
+<h3 id="inputs">Inputs<a class="headerlink" href="#inputs" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1431,11 +1457,11 @@
 
 <!-- action-docs-outputs source=".github/workflows/aws-secrets-copy.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/aws-secrets-copy.yaml" project="tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml" version="v1" -->
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<!-- action-docs-usage source=".github/workflows/aws-secrets-copy.yaml" project="tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml" version="v2" -->
+<h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">jobs</span><span class="p">:</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">job1</span><span class="p">:</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml@v1</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml@v2</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">source_aws_region</span><span class="p">:</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="c1"># AWS region</span>
@@ -1493,9 +1519,9 @@
 </span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="w">      </span><span class="c1"># Required: false</span>
 </span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a><span class="w">      </span><span class="c1"># Default: &quot;&quot;</span>
 </span></code></pre></div>
-<!-- action-docs-usage source=".github/workflows/aws-secrets-copy.yaml" project="tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/aws-secrets-copy.yaml" project="tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml" version="v2" -->
 
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">jobs</span><span class="p">:</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">copy_secret</span><span class="p">:</span>
@@ -1507,7 +1533,7 @@
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">destination_aws_region</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;us-west-1&#39;</span>
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="nt">destination_aws_oidc_role_arn</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;arn:aws:iam::012345678901:role/my-aws-role&#39;</span>
 </span></code></pre></div>
-<h2 id="faqs">FAQs<a class="headerlink" href="#faqs" title="Permanent link">&para;</a></h2>
+<h2 id="faq">FAQ<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h2>
 <p><strong>Q: What happen if the destination secret already exists ?</strong></p>
 <p>A: The destination AWS secret value will be updated to the value of the source secret</p>
 <h2 id="workflow">Workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h2>

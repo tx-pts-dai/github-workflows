@@ -26,7 +26,7 @@
     
     
       
-        <title>Lambda python - Github Reusable Workflows</title>
+        <title>Build Python Lambda - Github Reusable Workflows</title>
       
     
     
@@ -164,7 +164,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lambda python
+              Build Python Lambda
             
           </span>
         </div>
@@ -840,14 +840,12 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
   
   <span class="md-ellipsis">
-    Lambda python
+    Build Python Lambda
   </span>
   
 
@@ -858,7 +856,7 @@
         
   
   <span class="md-ellipsis">
-    Lambda python
+    Build Python Lambda
   </span>
   
 
@@ -870,8 +868,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -880,15 +876,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#build-python-lambda" class="md-nav__link">
     <span class="md-ellipsis">
-      Description
+      Build Python Lambda
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#inputs" class="md-nav__link">
     <span class="md-ellipsis">
       Inputs
@@ -896,13 +902,18 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       Usage
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1258,8 +1269,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1268,15 +1277,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#build-python-lambda" class="md-nav__link">
     <span class="md-ellipsis">
-      Description
+      Build Python Lambda
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#inputs" class="md-nav__link">
     <span class="md-ellipsis">
       Inputs
@@ -1284,13 +1303,18 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       Usage
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1330,8 +1354,10 @@
   
 
 
+  <h1>Build Python Lambda</h1>
+
 <!-- action-docs-header source=".github/workflows/lambda-python.yaml" -->
-<h1 id="build-python-lambda">Build Python Lambda<a class="headerlink" href="#build-python-lambda" title="Permanent link">&para;</a></h1>
+<h2 id="build-python-lambda">Build Python Lambda<a class="headerlink" href="#build-python-lambda" title="Permanent link">&para;</a></h2>
 <!-- action-docs-header source=".github/workflows/lambda-python.yaml" -->
 
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
@@ -1339,7 +1365,7 @@
 The zip file will be saved as a github artifact.</p>
 <p>Usefull to deploy an AWS lambda function or layer.</p>
 <!-- action-docs-inputs source=".github/workflows/lambda-python.yaml" -->
-<h2 id="inputs">Inputs<a class="headerlink" href="#inputs" title="Permanent link">&para;</a></h2>
+<h3 id="inputs">Inputs<a class="headerlink" href="#inputs" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1394,11 +1420,11 @@ The zip file will be saved as a github artifact.</p>
 
 <!-- action-docs-outputs source=".github/workflows/lambda-python.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/lambda-python.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml" version="v1" -->
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<!-- action-docs-usage source=".github/workflows/lambda-python.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml" version="v2" -->
+<h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">jobs</span><span class="p">:</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">job1</span><span class="p">:</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml@v1</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml@v2</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">python_version</span><span class="p">:</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="c1"># Python version. Check https://github.com/actions/setup-python for valid values</span>
@@ -1435,7 +1461,7 @@ The zip file will be saved as a github artifact.</p>
 </span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">      </span><span class="c1"># Required: false</span>
 </span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="w">      </span><span class="c1"># Default: 30</span>
 </span></code></pre></div>
-<!-- action-docs-usage source=".github/workflows/lambda-python.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/lambda-python.yaml" project="tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml" version="v2" -->
 
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build</span>
@@ -1448,7 +1474,7 @@ The zip file will be saved as a github artifact.</p>
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nt">jobs</span><span class="p">:</span>
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">build</span><span class="p">:</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml@v1</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/lambda-python.yaml@v2</span>
 </span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
 </span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="nt">python_version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.12&quot;</span>
 </span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="nt">source_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lambdas/first_lambda</span>
@@ -1462,6 +1488,9 @@ The zip file will be saved as a github artifact.</p>
 
 
 
+
+  
+  
 
 
 

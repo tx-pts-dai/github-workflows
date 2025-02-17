@@ -756,8 +756,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -786,8 +784,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -796,15 +792,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#github-conventional-commit-release" class="md-nav__link">
     <span class="md-ellipsis">
-      Description
+      Github Conventional Commit Release
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       Usage
@@ -812,20 +818,25 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
-      Examples
+      Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#faqs" class="md-nav__link">
+  <a href="#faq" class="md-nav__link">
     <span class="md-ellipsis">
-      FAQs
+      FAQ
     </span>
   </a>
   
@@ -914,7 +925,7 @@
         
   
   <span class="md-ellipsis">
-    Lambda python
+    Build Python Lambda
   </span>
   
 
@@ -1249,8 +1260,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1259,15 +1268,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#github-conventional-commit-release" class="md-nav__link">
     <span class="md-ellipsis">
-      Description
+      Github Conventional Commit Release
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       Usage
@@ -1275,20 +1294,25 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+  <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
-      Examples
+      Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#faqs" class="md-nav__link">
+  <a href="#faq" class="md-nav__link">
     <span class="md-ellipsis">
-      FAQs
+      FAQ
     </span>
   </a>
   
@@ -1312,8 +1336,10 @@
   
 
 
+  <h1>Github Conventional Commit Release</h1>
+
 <!-- action-docs-header source=".github/workflows/gh-release-on-main.yaml" -->
-<h1 id="github-conventional-commit-release">Github Conventional Commit Release<a class="headerlink" href="#github-conventional-commit-release" title="Permanent link">&para;</a></h1>
+<h2 id="github-conventional-commit-release">Github Conventional Commit Release<a class="headerlink" href="#github-conventional-commit-release" title="Permanent link">&para;</a></h2>
 <!-- action-docs-header source=".github/workflows/gh-release-on-main.yaml" -->
 
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
@@ -1321,10 +1347,12 @@
 <p>However, it requires specific naming convention for the commit message in order to release the right version.</p>
 <p>The release automatically increases the patch, minor or major version, but also tags the <em>MAJOR</em> and <em>MAJOR.MINOR</em> versions to point to the latest commit.</p>
 <p>The workflow pays attention to the title of the latest commit and check what it starts with. Which means that when squashing and merging your PR, you need to add the proper key words.</p>
-<p>The options are:
-1. "fix: Some comment" -&gt; will increment the patch version x.x.PATCH+1
-2. "feat: Some comment" -&gt; will increment the minor version x.MINOR+1.0
-3. "feat!: Some comment" -&gt; will increment the major version MAJOR+1.0.0</p>
+<p>The options are:</p>
+<ol>
+<li>"fix: Some comment" -&gt; will increment the patch version x.x.PATCH+1</li>
+<li>"feat: Some comment" -&gt; will increment the minor version x.MINOR+1.0</li>
+<li>"feat!: Some comment" -&gt; will increment the major version MAJOR+1.0.0</li>
+</ol>
 <!-- action-docs-inputs source=".github/workflows/gh-release-on-main.yaml" -->
 
 <!-- action-docs-inputs source=".github/workflows/gh-release-on-main.yaml" -->
@@ -1333,15 +1361,15 @@
 
 <!-- action-docs-outputs source=".github/workflows/gh-release-on-main.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v1" -->
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v2" -->
+<h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">jobs</span><span class="p">:</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">job1</span><span class="p">:</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml@v1</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml@v2</span>
 </span></code></pre></div>
-<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v2" -->
 
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p>we currently are at version v1.1.1. . Squashing/merging a PR with a "fix:" prefix will increase the patch version (-&gt; v1.1.2), and also will renew tagging so that workflows already calling @v1 or @v1.1 would target the new release v1.1.2.</p>
@@ -1350,7 +1378,7 @@
 <p>we currently are at version v1.1.9. Squashing/merging a PR with a "feat:" prefix will increase the minor version (-&gt; v1.2.0), and also will renew tagging so that workflows already calling @v1 or @v1.2 would target the new release v1.2.0.</p>
 </li>
 </ul>
-<h2 id="faqs">FAQs<a class="headerlink" href="#faqs" title="Permanent link">&para;</a></h2>
+<h2 id="faq">FAQ<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h2>
 <p><strong>Q: How is the version number determined?</strong></p>
 <p>A: The version number is determined by fetching all tags, sorting them, and retrieving the latest version. If no tags are found, it defaults to v0.0.1.</p>
 <p><strong>Q: How are the release notes generated?</strong></p>
