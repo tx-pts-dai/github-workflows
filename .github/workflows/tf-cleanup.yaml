@@ -61,12 +61,6 @@ jobs:
       TF_VAR_FILES: ${{ inputs.tf_var_files || vars.tf_var_files }}
       TF_VARS: ${{ inputs.tf_vars || vars.tf_vars }}
     steps:
-      - name: Sanitise Environment Variables
-        run: |
-          WORKSPACE="${{ inputs.tf_workspace || vars.tf_workspace || github.head_ref || github.ref_name }}"
-          SANITISED_WORKSPACE="${WORKSPACE//\//-}"
-          echo "TF_WORKSPACE=$SANITISED_WORKSPACE" >> $GITHUB_ENV
-
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
@@ -81,8 +75,58 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false # Important: disable the wrapper to avoid conflicts with dflook action
+
+      - name: Terraform workspace list
+        id: workspace_list
+        run: |
+          # if TF_BACKEND_CONFIGS is defined as a multiline string we need to convert it to a file
+          cat <<EOT > ${{ env.TF_DIR }}/tf-cleanup-workflow.tmp
+          ${{ env.TF_BACKEND_CONFIGS }} 
+          EOT
+          # if the file tf-cleanup-workflow.tmp is empty we need to use TF_BACKEND_CONFIG_FILES.
+          # This doesn't support TF_BACKEND_CONFIG_FILES defined as multiline.
+          # otherwise we need to add quotes to the values in tf-cleanup-workflow.tmp
+          # and we need to put a key value on each line (in case the TF_BACKEND_CONFIGS was a single liner)
+          if [[ $(wc -m <  "${{ env.TF_DIR }}/tf-cleanup-workflow.tmp") -lt 4 ]]; then
+            # since we use chdir we need to remove the path. dflook requires the full path.
+            STRING="${{ env.TF_BACKEND_CONFIG_FILES }}"
+            PREFIX_TO_REMOVE="${{ env.TF_DIR }}/"
+            NEW_STRING="${STRING#"$PREFIX_TO_REMOVE"}"
+            BACKEND_CONFIG="-backend-config=$NEW_STRING"
+          else
+            tr ' ' '\n' < ${{ env.TF_DIR }}/tf-cleanup-workflow.tmp > ${{ env.TF_DIR }}/tf-cleanup-workflow-2.tmp
+            sed 's/^\(.*\)=\(.*\)$/\1="\2"\n/' ${{ env.TF_DIR }}/tf-cleanup-workflow-2.tmp >> ${{ env.TF_DIR }}/tf-cleanup-workflow.tfbackend
+            BACKEND_CONFIG="-backend-config=tf-cleanup-workflow.tfbackend"
+          fi
+          terraform -chdir=${{ env.TF_DIR }} init $BACKEND_CONFIG
+          terraform -chdir=${{ env.TF_DIR }} workspace list > workspaces.txt
+
+      - name: Sanitise Environment Variables
+        run: |
+          WORKSPACE="${{ inputs.tf_workspace || vars.tf_workspace || github.head_ref || github.ref_name }}"
+          SANITISED_WORKSPACE="${WORKSPACE//\//-}"
+          echo "TF_WORKSPACE=$SANITISED_WORKSPACE" >> $GITHUB_ENV
+
+      - name: Check if workspace exists
+        id: check_workspace
+        run: |
+          if grep -q "${{ env.TF_WORKSPACE}}" workspaces.txt; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Workspace '${{ env.TF_WORKSPACE }}' exists." && cat workspaces.txt
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Workspace '${{ env.TF_WORKSPACE }}' does not exist. Skipping destroy." && cat workspaces.txt
+          fi
+
+        shell: bash
+
       - name: Terraform Destroy
         uses: dflook/terraform-destroy-workspace@54fa37554f3e3f0d1353d864e61d4340b461fcb0 # v1
+        if: ${{ steps.check_workspace.outputs.exists == 'true' }}
         id: first_try
         env:
           TERRAFORM_PRE_RUN: |
@@ -102,7 +146,7 @@ jobs:
 
       - name: Retry Terraform Destroy
         uses: dflook/terraform-destroy-workspace@54fa37554f3e3f0d1353d864e61d4340b461fcb0 # v1
-        if: ${{ failure() && steps.first_try.outputs.failure-reason == 'destroy-failed' }}
+        if: ${{ steps.check_workspace.outputs.exists == 'true' && failure() && steps.first_try.outputs.failure-reason == 'destroy-failed' }}
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
