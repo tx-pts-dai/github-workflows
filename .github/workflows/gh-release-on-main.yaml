@@ -7,7 +7,6 @@ on:
         description: "File path containing the extra metadata to append to the release version, if not specified the standard semver is applied"
         type: string
         default: ""
-        required: false
 jobs:
   release:
     runs-on: ubuntu-latest
