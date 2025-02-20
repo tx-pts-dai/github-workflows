@@ -1,9 +1,13 @@
-name: Github Conventional Commit Release
+name: Github Conventional Commit Release With Metadata
 
 on:
   workflow_call:
     inputs: 
-      
+      metadata_file:
+        description: "File path containing the extra metadata"
+        type: string
+        required: true
+        
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -20,9 +24,17 @@ jobs:
           COMMIT_MESSAGE=$(git log -1 --pretty=%B | head -n 1)
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
 
+      - name: Read metadata from file
+        id: metadata
+        run: |
+          echo "METADATA_CONTENT=$(cat k8s_version.txt)" >> $GITHUB_ENV
+
       - name: Determine version increment
         id: version_increment
         run: |
+          # Retrieve cluster version from Terraform output
+          METADATA_CONTENT=${{ env.METADATA_CONTENT }}
+
           git fetch --tags
           CURRENT_TAG=$(git tag | sort -V | tail -1)
           if [ "$CURRENT_TAG" = "" ]; then
@@ -34,6 +46,7 @@ jobs:
           PATCH=$(echo $CURRENT_TAG | awk -F. '{print $3}')
 
           COMMIT_MESSAGE="${{ env.COMMIT_MESSAGE }}"
+          echo "$COMMIT_MESSAGE"
           if [[ "$COMMIT_MESSAGE" =~ ^feat!: ]]; then
             MAJOR=$((MAJOR + 1))
             MINOR=0
@@ -49,10 +62,10 @@ jobs:
             exit 0
           fi
 
-          NEW_TAG="v$MAJOR.$MINOR.$PATCH"
-          MAJOR_VERSION=$(echo $NEW_TAG | awk -F. '{print $1}')
-          MINOR_VERSION=$(echo $NEW_TAG | awk -F. '{print $1"."$2}')
-
+          NEW_TAG="v$MAJOR.$MINOR.$PATCH+$METADATA_CONTENT"
+          MAJOR_VERSION="v$MAJOR"
+          MINOR_VERSION="v$MAJOR.$MINOR"
+          echo "TAG $NEW_TAG"
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_OUTPUT
           echo "MAJOR_VERSION=$MAJOR_VERSION" >> $GITHUB_ENV
           echo "MINOR_VERSION=$MINOR_VERSION" >> $GITHUB_ENV
