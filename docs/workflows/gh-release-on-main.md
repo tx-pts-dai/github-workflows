@@ -23,7 +23,11 @@ The options are:
 3. "feat!: Some comment" -> will increment the major version MAJOR+1.0.0
 
 <!-- action-docs-inputs source=".github/workflows/gh-release-on-main.yaml" -->
+### Inputs
 
+| name | description | type | required | default |
+| --- | --- | --- | --- | --- |
+| `metadata_file` | <p>File path containing the extra metadata to append to the release version, if not specified the standard semver is applied</p> | `string` | `false` | `""` |
 <!-- action-docs-inputs source=".github/workflows/gh-release-on-main.yaml" -->
 
 <!-- action-docs-outputs source=".github/workflows/gh-release-on-main.yaml" -->
@@ -37,6 +41,13 @@ The options are:
 jobs:
   job1:
     uses: tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml@v2
+    with:
+      metadata_file:
+      # File path containing the extra metadata to append to the release version, if not specified the standard semver is applied
+      #
+      # Type: string
+      # Required: false
+      # Default: ""
 ```
 <!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v2" -->
 
