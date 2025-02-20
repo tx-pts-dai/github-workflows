@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs: 
       metadata_file:
-        description: "File path containing the extra metadata"
+        description: "File path containing the extra metadata to append to the release version"
         type: string
         required: true
         
@@ -27,14 +27,13 @@ jobs:
       - name: Read metadata from file
         id: metadata
         run: |
-          echo "METADATA_CONTENT=$(cat k8s_version.txt)" >> $GITHUB_ENV
+          echo "METADATA_CONTENT=$(cat ${{ inputs.metadata_file }})" >> $GITHUB_ENV
 
       - name: Determine version increment
         id: version_increment
         run: |
-          # Retrieve cluster version from Terraform output
           METADATA_CONTENT=${{ env.METADATA_CONTENT }}
-
+          
           git fetch --tags
           CURRENT_TAG=$(git tag | sort -V | tail -1)
           if [ "$CURRENT_TAG" = "" ]; then
