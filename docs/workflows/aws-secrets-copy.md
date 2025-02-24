@@ -3,7 +3,7 @@ title: AWS Secrets Copy
 ---
 
 <!-- action-docs-header source=".github/workflows/aws-secrets-copy.yaml" -->
-# AWS Secrets Copy
+## AWS Secrets Copy
 <!-- action-docs-header source=".github/workflows/aws-secrets-copy.yaml" -->
 
 ## Description
@@ -11,7 +11,7 @@ title: AWS Secrets Copy
 This workflow copies an AWS secret from one account to another.
 
 <!-- action-docs-inputs source=".github/workflows/aws-secrets-copy.yaml" -->
-## Inputs
+### Inputs
 
 | name | description | type | required | default |
 | --- | --- | --- | --- | --- |
@@ -29,13 +29,13 @@ This workflow copies an AWS secret from one account to another.
 
 <!-- action-docs-outputs source=".github/workflows/aws-secrets-copy.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/aws-secrets-copy.yaml" project="tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml" version="v1" -->
-## Usage
+<!-- action-docs-usage source=".github/workflows/aws-secrets-copy.yaml" project="tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml" version="v2" -->
+### Usage
 
 ```yaml
 jobs:
   job1:
-    uses: tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml@v2
     with:
       source_aws_region:
       # AWS region
@@ -93,11 +93,9 @@ jobs:
       # Required: false
       # Default: ""
 ```
-<!-- action-docs-usage source=".github/workflows/aws-secrets-copy.yaml" project="tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/aws-secrets-copy.yaml" project="tx-pts-dai/github-workflows/.github/workflows/aws-secrets-copy.yaml" version="v2" -->
 
-
-
-## Examples
+## Example
 
 ```yaml
 on: [push, pull_request]
@@ -112,7 +110,7 @@ jobs:
       destination_aws_oidc_role_arn: 'arn:aws:iam::012345678901:role/my-aws-role'
 ```
 
-## FAQs
+## FAQ
 
 **Q: What happen if the destination secret already exists ?**
 

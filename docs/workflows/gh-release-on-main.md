@@ -3,7 +3,7 @@ title: Github Conventional Commit Release
 ---
 
 <!-- action-docs-header source=".github/workflows/gh-release-on-main.yaml" -->
-# Github Conventional Commit Release
+## Github Conventional Commit Release
 <!-- action-docs-header source=".github/workflows/gh-release-on-main.yaml" -->
 
 ## Description
@@ -17,36 +17,47 @@ The release automatically increases the patch, minor or major version, but also 
 The workflow pays attention to the title of the latest commit and check what it starts with. Which means that when squashing and merging your PR, you need to add the proper key words.
 
 The options are:
+
 1. "fix: Some comment" -> will increment the patch version x.x.PATCH+1
 2. "feat: Some comment" -> will increment the minor version x.MINOR+1.0
 3. "feat!: Some comment" -> will increment the major version MAJOR+1.0.0
 
-
 <!-- action-docs-inputs source=".github/workflows/gh-release-on-main.yaml" -->
+### Inputs
 
+| name | description | type | required | default |
+| --- | --- | --- | --- | --- |
+| `metadata_file` | <p>File path containing the extra metadata to append to the release version, if not specified the standard semver is applied</p> | `string` | `false` | `""` |
 <!-- action-docs-inputs source=".github/workflows/gh-release-on-main.yaml" -->
 
 <!-- action-docs-outputs source=".github/workflows/gh-release-on-main.yaml" -->
 
 <!-- action-docs-outputs source=".github/workflows/gh-release-on-main.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v1" -->
-## Usage
+<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v2" -->
+### Usage
 
 ```yaml
 jobs:
   job1:
-    uses: tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml@v2
+    with:
+      metadata_file:
+      # File path containing the extra metadata to append to the release version, if not specified the standard semver is applied
+      #
+      # Type: string
+      # Required: false
+      # Default: ""
 ```
-<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/gh-release-on-main.yaml" project="tx-pts-dai/github-workflows/.github/workflows/gh-release-on-main.yaml" version="v2" -->
 
-## Examples
+## Example
 
 - we currently are at version v1.1.1. . Squashing/merging a PR with a "fix:" prefix will increase the patch version (-> v1.1.2), and also will renew tagging so that workflows already calling @v1 or @v1.1 would target the new release v1.1.2.
 
 - we currently are at version v1.1.9. Squashing/merging a PR with a "feat:" prefix will increase the minor version (-> v1.2.0), and also will renew tagging so that workflows already calling @v1 or @v1.2 would target the new release v1.2.0.
 
-## FAQs
+## FAQ
 
 **Q: How is the version number determined?**
 

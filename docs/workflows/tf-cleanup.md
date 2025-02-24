@@ -3,7 +3,7 @@ title: Terraform Preview Cleanup
 ---
 
 <!-- action-docs-header source=".github/workflows/tf-cleanup.yaml" -->
-# Terraform Preview Cleanup
+## Terraform Preview Cleanup
 <!-- action-docs-header source=".github/workflows/tf-cleanup.yaml" -->
 
 ## Description
@@ -11,7 +11,7 @@ title: Terraform Preview Cleanup
 This workflow cleans up the Terraform preview deployments.
 
 <!-- action-docs-inputs source=".github/workflows/tf-cleanup.yaml" -->
-## Inputs
+### Inputs
 
 | name | description | type | required | default |
 | --- | --- | --- | --- | --- |
@@ -34,13 +34,13 @@ This workflow cleans up the Terraform preview deployments.
 
 <!-- action-docs-outputs source=".github/workflows/tf-cleanup.yaml" -->
 
-<!-- action-docs-usage source=".github/workflows/tf-cleanup.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-cleanup.yaml" version="v1" -->
-## Usage
+<!-- action-docs-usage source=".github/workflows/tf-cleanup.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-cleanup.yaml" version="v2" -->
+### Usage
 
 ```yaml
 jobs:
   job1:
-    uses: tx-pts-dai/github-workflows/.github/workflows/tf-cleanup.yaml@v1
+    uses: tx-pts-dai/github-workflows/.github/workflows/tf-cleanup.yaml@v2
     with:
       environment:
       # Environment to deploy
@@ -133,7 +133,7 @@ jobs:
       # Required: false
       # Default: ""
 ```
-<!-- action-docs-usage source=".github/workflows/tf-cleanup.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-cleanup.yaml" version="v1" -->
+<!-- action-docs-usage source=".github/workflows/tf-cleanup.yaml" project="tx-pts-dai/github-workflows/.github/workflows/tf-cleanup.yaml" version="v2" -->
 
 # Example
 
