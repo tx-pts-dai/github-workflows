@@ -106,7 +106,7 @@ jobs:
 
       - name: Terraform Apply
         id: tf_apply
-        uses: dflook/terraform-apply@8ffcf535ca17dd84586bcda5b072f3d7bde0a97c # v1
+        uses: dflook/terraform-apply@61432ffb5b94226bdfc9cd68a1702a2c40e0db8b # v1
         env:
           TERRAFORM_PRE_RUN: |
             AWS_CLI_VERSION=2.15.36
